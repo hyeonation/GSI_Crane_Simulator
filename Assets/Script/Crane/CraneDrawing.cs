@@ -34,7 +34,7 @@ public class CraneDrawing : MonoBehaviour
 
     const float target20feet = 3; // 3m shift
     const float target40feet = 0; // default
-    const float spreaderFeetVel = 3.3f / 23;
+    const float spreaderFeetVel = 3.3f / 23;    // 어떤 계산식이지?
     const float landedHeight = 0.36f;   // spreader 바닥 landed 높이. flipper로 공중에 뜨기 때문.
 
     bool[] cmdTwlLock, cmdTwlUnlock;
