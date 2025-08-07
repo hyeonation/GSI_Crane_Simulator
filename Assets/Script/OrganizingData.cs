@@ -16,7 +16,6 @@ using UnityEngine;
 // }
 // }
 
-
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
@@ -24,7 +23,7 @@ public class OrganizingData : MonoBehaviour
     float[,] ReadfloatValue;
 
     float keyGantrySpeed = 0.5f;
-    float keyTrolleySpeed = 0.5f;
+    float keyTrolleySpeed = 1f;
     float keySpreaderSpeed = 0.5f;
     float keyMMSpeed = 0.05f;
 
@@ -69,7 +68,7 @@ public class OrganizingData : MonoBehaviour
     void Update()
     {
 
-        Debug.Log($"loop time = {Time.deltaTime} sec");
+        // Debug.Log($"loop time = {Time.deltaTime} sec");
 
         // Using PLC data
         if (GM.cmdWithPLC)
@@ -94,20 +93,42 @@ public class OrganizingData : MonoBehaviour
             if (Input.anyKeyDown)
             {
                 // toggle boolean
-                toggleQ = (Input.GetKeyDown(KeyCode.Q)) ? !toggleQ : toggleQ;
-                toggleA = (Input.GetKeyDown(KeyCode.A)) ? !toggleA : toggleA;
-                toggleW = (Input.GetKeyDown(KeyCode.W)) ? !toggleW : toggleW;
-                toggleS = (Input.GetKeyDown(KeyCode.S)) ? !toggleS : toggleS;
-                toggleE = (Input.GetKeyDown(KeyCode.E)) ? !toggleE : toggleE;
-                toggleD = (Input.GetKeyDown(KeyCode.D)) ? !toggleD : toggleD;
-                toggleR = (Input.GetKeyDown(KeyCode.R)) ? !toggleR : toggleR;
-                toggleF = (Input.GetKeyDown(KeyCode.F)) ? !toggleF : toggleF;
-                toggleT = (Input.GetKeyDown(KeyCode.T)) ? !toggleT : toggleT;
-                toggleG = (Input.GetKeyDown(KeyCode.G)) ? !toggleG : toggleG;
-                toggleY = (Input.GetKeyDown(KeyCode.Y)) ? !toggleY : toggleY;
-                toggleH = (Input.GetKeyDown(KeyCode.H)) ? !toggleH : toggleH;
-                toggleU = (Input.GetKeyDown(KeyCode.U)) ? !toggleU : toggleU;
-                toggleJ = (Input.GetKeyDown(KeyCode.J)) ? !toggleJ : toggleJ;
+                toggleQ = Input.GetKeyDown(KeyCode.Q) ? !toggleQ : toggleQ;
+                toggleA = Input.GetKeyDown(KeyCode.A) ? !toggleA : toggleA;
+                toggleW = Input.GetKeyDown(KeyCode.W) ? !toggleW : toggleW;
+                toggleS = Input.GetKeyDown(KeyCode.S) ? !toggleS : toggleS;
+                toggleE = Input.GetKeyDown(KeyCode.E) ? !toggleE : toggleE;
+                toggleD = Input.GetKeyDown(KeyCode.D) ? !toggleD : toggleD;
+                toggleR = Input.GetKeyDown(KeyCode.R) ? !toggleR : toggleR;
+                toggleF = Input.GetKeyDown(KeyCode.F) ? !toggleF : toggleF;
+                toggleT = Input.GetKeyDown(KeyCode.T) ? !toggleT : toggleT;
+                toggleG = Input.GetKeyDown(KeyCode.G) ? !toggleG : toggleG;
+                toggleY = Input.GetKeyDown(KeyCode.Y) ? !toggleY : toggleY;
+                toggleH = Input.GetKeyDown(KeyCode.H) ? !toggleH : toggleH;
+                toggleU = Input.GetKeyDown(KeyCode.U) ? !toggleU : toggleU;
+                toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
+
+                // 버튼 하나만 동작하도록
+                toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
+                toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
+
+                toggleW = toggleW && toggleS && Input.GetKeyDown(KeyCode.S) ? false : toggleW;
+                toggleS = toggleW && toggleS && Input.GetKeyDown(KeyCode.W) ? false : toggleS;
+
+                toggleE = toggleE && toggleD && Input.GetKeyDown(KeyCode.D) ? false : toggleE;
+                toggleD = toggleE && toggleD && Input.GetKeyDown(KeyCode.E) ? false : toggleD;
+
+                toggleR = toggleR && toggleF && Input.GetKeyDown(KeyCode.F) ? false : toggleR;
+                toggleF = toggleR && toggleF && Input.GetKeyDown(KeyCode.R) ? false : toggleF;
+
+                toggleT = toggleT && toggleG && Input.GetKeyDown(KeyCode.G) ? false : toggleT;
+                toggleG = toggleT && toggleG && Input.GetKeyDown(KeyCode.T) ? false : toggleG;
+
+                toggleY = toggleY && toggleH && Input.GetKeyDown(KeyCode.H) ? false : toggleY;
+                toggleH = toggleY && toggleH && Input.GetKeyDown(KeyCode.Y) ? false : toggleH;
+
+                toggleU = toggleU && toggleJ && Input.GetKeyDown(KeyCode.J) ? false : toggleU;
+                toggleJ = toggleU && toggleJ && Input.GetKeyDown(KeyCode.U) ? false : toggleJ;
 
                 // input velocity
                 GM.cmdGantryVelFWD[iCrane] = toggleQ ? keyGantrySpeed : 0;

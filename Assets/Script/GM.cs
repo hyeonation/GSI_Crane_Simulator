@@ -13,14 +13,14 @@ public class GM : MonoBehaviour
 
     [Header("Container_Preset")]
     public static short bay = 16;
-    public static short row = 6;
+    public static short row = 5;
     public static short tier = 5;
 
     public const float yard_start_val = 8.32f;
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public static short num_containers = 1;
+    public static short num_containers = 10000;
 
     // command data
     [HideInInspector] public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;

@@ -27,8 +27,8 @@ public class Container : MonoBehaviour
         // 랜덤한 위치에서 게임 오브젝트 스폰
         // SpawnContainers();
         mkContainers();     // 초기 시작 때 컨테이너 뜨는 현상 제거
-        StartCoroutine(RotationUncheck());
-        StartCoroutine(kinematicCheck());
+        // StartCoroutine(RotationUncheck());
+        // StartCoroutine(kinematicCheck());
     }
 
     void init()
@@ -54,29 +54,29 @@ public class Container : MonoBehaviour
         list_stack_profile = new List<List<int>>();
     }
 
-    IEnumerator RotationUncheck()
-    {
+    // IEnumerator RotationUncheck()
+    // {
 
-        yield return new WaitForSeconds(20f);
-        for (int i = 0; i < num_containers; i++)
-        {
-            GameObject Containers = GameObject.Find($"{name_container}{i}");
-            Rigidbody rb = Containers.GetComponent<Rigidbody>();
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
-    }
+    //     yield return new WaitForSeconds(20f);
+    //     for (int i = 0; i < num_containers; i++)
+    //     {
+    //         GameObject Containers = GameObject.Find($"{name_container}{i}");
+    //         Rigidbody rb = Containers.GetComponent<Rigidbody>();
+    //         rb.constraints = RigidbodyConstraints.FreezeAll;
+    //     }
+    // }
 
-    IEnumerator kinematicCheck()
-    {
+    // IEnumerator kinematicCheck()
+    // {
 
-        yield return new WaitForSeconds(11f);
-        for (int i = 0; i < num_containers; i++)
-        {
-            GameObject Containers = GameObject.Find($"{name_container}{i}");
-            Rigidbody rb = Containers.GetComponent<Rigidbody>();
-            rb.drag = 0.4f;
-        }
-    }
+    //     yield return new WaitForSeconds(11f);
+    //     for (int i = 0; i < num_containers; i++)
+    //     {
+    //         GameObject Containers = GameObject.Find($"{name_container}{i}");
+    //         Rigidbody rb = Containers.GetComponent<Rigidbody>();
+    //         rb.drag = 0.4f;
+    //     }
+    // }
 
     void SpawnContainers()
     {
@@ -209,7 +209,7 @@ public class Container : MonoBehaviour
         int i_tier = idx_pos[2];
 
         Vector3 spawnPosition = new Vector3((i_row * x_interval) + start_val,
-                                            (i_tier + 0.5f) * y_interval,
+                                            (i_tier * y_interval) - y_interval / 2 + 0.1f,
                                             (i_bay * z_interval) + 7.75f);
 
         GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];

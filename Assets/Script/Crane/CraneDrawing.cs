@@ -26,10 +26,13 @@ public class CraneDrawing : MonoBehaviour
     string nameSelf;
     int iSelf;
     Transform rtg, trolley, spreader, rtg_B, rtg_F, spreaderCam;
+    
     Transform[] disc, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     GameObject[] cable;
+    GameObject container;
+    Rigidbody containerRigidbody;
 
-    bool Feet20_ack, Feet40_ack, fifthup, fifthdown, landed, locked, unlocked;
+    bool Feet20_ack, Feet40_ack, fifthup, fifthdown, landedContainer, landedFloor, locked, unlocked;
     float hoistPos, gantryLength;
 
     const float target20feet = 3; // 3m shift
@@ -37,9 +40,9 @@ public class CraneDrawing : MonoBehaviour
     const float spreaderFeetVel = 3.3f / 23;    // 어떤 계산식이지?
     const float landedHeight = 0.36f;   // spreader 바닥 landed 높이. flipper로 공중에 뜨기 때문.
 
-    bool[] cmdTwlLock, cmdTwlUnlock;
+    bool[] cmdTwlLockOld, cmdTwlUnlockOld;
 
-    bool landedOld;
+    bool landedContainerOld, landedFloorOld;
 
     void Start()
     {
@@ -65,8 +68,8 @@ public class CraneDrawing : MonoBehaviour
         gantryLength = Vector3.Magnitude(rtg_F.position - rtg_B.position);
 
         // 중복 계산 방지를 위한 배열 복사
-        cmdTwlLock = (bool[])GM.cmdTwlLock.Clone();
-        cmdTwlUnlock = (bool[])GM.cmdTwlUnlock.Clone();
+        cmdTwlLockOld = (bool[])GM.cmdTwlLock.Clone();
+        cmdTwlUnlockOld = (bool[])GM.cmdTwlUnlock.Clone();
     }
 
     void Update()
@@ -207,7 +210,7 @@ public class CraneDrawing : MonoBehaviour
 
         //var con_force = 0.0065f;
 
-        force = (landed) ? 0 : force;
+        force = (landedContainer) ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
         for (short j = 0; j < disc.Length; j++)
@@ -242,7 +245,7 @@ public class CraneDrawing : MonoBehaviour
         {
             spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
             spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
-            hoistPos = landed ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
+            hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
             {
                 // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * speed * force);
@@ -252,8 +255,8 @@ public class CraneDrawing : MonoBehaviour
         {
             spreader.Translate(Vector3.up * Time.deltaTime * 0);
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
-            hoistPos = (landed) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
-            if (!landed)
+            hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
+            if (!landedContainer)
             {
                 spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
             }
@@ -319,43 +322,73 @@ public class CraneDrawing : MonoBehaviour
     
     void TwistLock_OP()
     {
-        for (int j = 0; j < twlLand.Length; j++)
+        // Lock. 반복실행 방지 코드 추가.
+        if (GM.cmdTwlLock[iSelf] && (cmdTwlLockOld[iSelf] != GM.cmdTwlLock[iSelf]))
         {
-            if (GM.cmdTwlLock[iSelf] && (cmdTwlLock[iSelf]) != GM.cmdTwlLock[iSelf])
+            Debug.Log("Lock");
+
+            // update value
+            cmdTwlLockOld[iSelf] = GM.cmdTwlLock[iSelf];
+            cmdTwlUnlockOld[iSelf] = false;
+            GM.cmdTwlUnlock[iSelf] = false;
+
+            // landedContainer == true 시 Container 체결
+            if (landedContainer)
             {
-                Debug.Log("Lock");
-                cmdTwlLock[iSelf] = GM.cmdTwlLock[iSelf];
+                container = twlLand[0].GetComponent<Landed>().container;   // 컨테이너 정보 가져오기
+                Debug.Log($"Container: {container.name}");
+                // container.AddComponent<FixedJoint>(); // FixedJoint 추가
+                // containerFixedJoint = container.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
+                // containerFixedJoint.connectedBody = spreader.transform.Find("BODY").GetComponent<Rigidbody>(); // spreader와 연결
+                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
+                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
 
-                // 물리적 상호작용 끄기
-                twlLock[j].GetComponent<MeshCollider>().isTrigger = false;
+                // spreader.transform.Find("BODY").AddComponent<FixedJoint>(); // spreader BODY에 FixedJoint 추가
+                // containerFixedJoint = spreader.transform.Find("BODY").GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
+                // containerFixedJoint.connectedBody = container.GetComponent<Rigidbody>(); // spreader와 연결
+                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
+                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
 
-                locked = true;
-                unlocked = false;
+                // spreader.AddComponent<FixedJoint>(); // FixedJoint 추가
+                // containerFixedJoint = spreader.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
+                // containerFixedJoint.connectedBody = container.GetComponent<Rigidbody>(); // spreader와 연결
+                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
+                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
 
-                //// 컨테이너 spreader와 연결하는 작업?
-                // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
-                // {
-                //     Container_inf[i].GetComponent<GetContainerInf>().enabled = true;
-                //     trolley.GetComponent<GetContainerInf>().enabled = false;
-                // }
+                Destroy(container.GetComponent<Rigidbody>());
+                container.transform.SetParent(spreader.transform); // spreader와 연결
+
             }
 
-            else if (GM.cmdTwlUnlock[iSelf] && (cmdTwlUnlock[iSelf]) != GM.cmdTwlUnlock[iSelf])
-            {
-                Debug.Log("Unlock");
-                cmdTwlUnlock[iSelf] = GM.cmdTwlUnlock[iSelf];
+            //// 컨테이너 spreader와 연결하는 작업?
+            // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
+            // {
+            //     Container_inf[i].GetComponent<GetContainerInf>().enabled = true;
+            //     trolley.GetComponent<GetContainerInf>().enabled = false;
+            // }
+        }
 
-                // 물리적 상호작용 켜기
-                twlLock[j].GetComponent<MeshCollider>().isTrigger = true;
-                unlocked = true;
-                locked = false;
+        else if (GM.cmdTwlUnlock[iSelf] && (cmdTwlUnlockOld[iSelf] != GM.cmdTwlUnlock[iSelf]))
+        {
+            Debug.Log("Unlock");
 
-                // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
-                // {
-                //     Container_inf[i].GetComponent<GetContainerInf>().enabled = false;
-                //     trolley.GetComponent<GetContainerInf>().enabled = true;
-                // }
-            }
+            cmdTwlUnlockOld[iSelf] = GM.cmdTwlUnlock[iSelf];
+            cmdTwlLockOld[iSelf] = false;
+            GM.cmdTwlLock[iSelf] = false;
+
+            // 컨테이너와 spreader 연결 해제
+            // Destroy(containerFixedJoint);
+
+            container.transform.SetParent(GameObject.Find("Containers").transform); // spreader와 연결 해제
+            container.AddComponent<Rigidbody>(); // Rigidbody 추가
+            containerRigidbody = container.GetComponent<Rigidbody>(); // Rigidbody kinematic 설정
+            containerRigidbody.mass = 10000; // 컨테이너 질량 설정
+
+            // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
+            // {
+            //     Container_inf[i].GetComponent<GetContainerInf>().enabled = false;
+            //     trolley.GetComponent<GetContainerInf>().enabled = true;
+            // }
         }
     }
 
@@ -372,18 +405,23 @@ public class CraneDrawing : MonoBehaviour
             }
         }
 
-        // Landed 여부
-        landed = (landedCount == twlLand.Length) || (spreader.position.y < 0.43f);
+        //// Landed 여부
+
+        // twlLand의 개수가 4개이므로, 모두 landed 되면 true
+        landedContainer = landedCount == twlLand.Length;
+
+        // spreader position y값이 landedHeight보다 낮으면 spreader 바닥이 지면에 닿았다고 판단
+        landedFloor = spreader.position.y < landedHeight;
 
         // Landed 값 바뀌었을 때
-        if (landed != landedOld)
+        if ((landedContainer != landedContainerOld) || (landedFloor != landedFloorOld))
         {
-            Debug.Log("landed");
-
             // update value
-            landedOld = landed;
+            landedContainerOld = landedContainer;
+            landedFloorOld = landedFloor;
 
-            if (landed)
+            // 하나라도 landed 되면 cable 늘어짐 효과 주기
+            if (landedContainer || landedFloor)
             {
                 for (int j = 0; j < cable.Length; j++)
                 {
@@ -398,7 +436,7 @@ public class CraneDrawing : MonoBehaviour
                     cable[j].GetComponent<Cable>().loosenessScale = 0;
                 }
             }
-        }
+        }        
     }
 
     void InitLaserPos(float gqp, float ygap)
