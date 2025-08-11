@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 6621811059625450537}
   - component: {fileID: 3858765753277853304}
   - component: {fileID: 8877866895334163644}
-  - component: {fileID: 6809414924785901842}
   m_Layer: 0
   m_Name: Container_W
   m_TagString: Untagged
@@ -190,7 +189,7 @@ Rigidbody:
   m_GameObject: {fileID: 2143971142302484452}
   serializedVersion: 4
   m_Mass: 10000
-  m_Drag: 5
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -206,7 +205,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &1408339461563756338
 BoxCollider:
@@ -439,22 +438,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.15, y: 0.02, z: 0.15}
   m_Center: {x: 1.14, y: 1.435, z: -5.99}
---- !u!114 &6809414924785901842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143971142302484452}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55b63266aaae02649b785082b2c37cc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  laserLength: 20
-  Con_PosX: 0
-  Con_PosY: 0
-  Con_Ang: 0
 --- !u!1 &6480510386247229097
 GameObject:
   m_ObjectHideFlags: 0
