@@ -20,10 +20,10 @@ public class CommPLC
         info.ip = ip;
         info.rack = 0;
         info.slot = 1;
-        info.readDBNum = 0;
+        info.readDBNum = 1000;
         info.readStartIdx = 0;
-        info.readLength = 0;
-        info.writeDBNum = 0;
+        info.readLength = 36;
+        info.writeDBNum = 1000;
         info.writeStartIdx = 0;
     }
 
@@ -64,8 +64,8 @@ public class CommPLC
         plc.Write($"DB{info.writeDBNum}.DBX254.6", false);
         plc.Write($"DB{info.writeDBNum}.DBX44.0", false);
         plc.Write($"DB{info.writeDBNum}.DBX44.1", true);
-        plc.Write($"DB{info.writeDBNum}.DBX268.0", false);
-        plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
+        // plc.Write($"DB{info.writeDBNum}.DBX268.0", false);
+        // plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
     }
 
     public byte[] ReadToPLC()

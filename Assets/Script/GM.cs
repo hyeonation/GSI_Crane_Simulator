@@ -7,7 +7,7 @@ public class GM : MonoBehaviour
 {
 
     // command with PLC
-    public static bool cmdWithPLC = false;
+    public bool cmdWithPLC = false;
     public List<string> listIP;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
