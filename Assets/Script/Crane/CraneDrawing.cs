@@ -28,7 +28,7 @@ public class CraneDrawing : MonoBehaviour
     Transform rtg, trolley, spreader, rtg_B, rtg_F, spreaderCam;
     
     Transform[] disc, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
-    GameObject[] cable;
+    GameObject[] cables;
     GameObject container;
     Rigidbody containerRigidbody;
 
@@ -43,12 +43,13 @@ public class CraneDrawing : MonoBehaviour
     bool[] cmdTwlLockOld, cmdTwlUnlockOld;
 
     bool landedContainerOld, landedFloorOld;
+    private FixedJoint containerFixedJoint;
 
     void Start()
     {
 
         // init array
-        cable = new GameObject[8];
+        cables = new GameObject[8];
         disc = new Transform[13];
         SPSS = new Transform[4];
         twlLand = new Transform[4];
@@ -96,10 +97,10 @@ public class CraneDrawing : MonoBehaviour
         rtg_F = gantry.transform.Find("F_Position");
 
         var cable = rtg.transform.Find($"Cable");
-        for (short j = 0; j < this.cable.Length; j++)
+        for (short j = 0; j < cables.Length; j++)
         {
             var cableTransform = cable.transform.Find($"Disc{j}_Cable");
-            this.cable[j] = cableTransform.gameObject;
+            cables[j] = cableTransform.gameObject;
         }
 
         // Get Objects From Trolley
@@ -210,7 +211,7 @@ public class CraneDrawing : MonoBehaviour
 
         //var con_force = 0.0065f;
 
-        force = (landedContainer) ? 0 : force;
+        force = landedContainer ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
         for (short j = 0; j < disc.Length; j++)
@@ -243,7 +244,7 @@ public class CraneDrawing : MonoBehaviour
 
         if (speed < 0)
         {
-            spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
+            // spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
             spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
@@ -253,7 +254,7 @@ public class CraneDrawing : MonoBehaviour
         }
         else
         {
-            spreader.Translate(Vector3.up * Time.deltaTime * 0);
+            // spreader.Translate(Vector3.up * Time.deltaTime * 0);
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
             if (!landedContainer)
@@ -337,35 +338,12 @@ public class CraneDrawing : MonoBehaviour
             {
                 container = twlLand[0].GetComponent<Landed>().container;   // 컨테이너 정보 가져오기
                 Debug.Log($"Container: {container.name}");
-                // container.AddComponent<FixedJoint>(); // FixedJoint 추가
-                // containerFixedJoint = container.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
-                // containerFixedJoint.connectedBody = spreader.transform.Find("BODY").GetComponent<Rigidbody>(); // spreader와 연결
-                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
-                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
-
-                // spreader.transform.Find("BODY").AddComponent<FixedJoint>(); // spreader BODY에 FixedJoint 추가
-                // containerFixedJoint = spreader.transform.Find("BODY").GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
-                // containerFixedJoint.connectedBody = container.GetComponent<Rigidbody>(); // spreader와 연결
-                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
-                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
-
-                // spreader.AddComponent<FixedJoint>(); // FixedJoint 추가
-                // containerFixedJoint = spreader.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
-                // containerFixedJoint.connectedBody = container.GetComponent<Rigidbody>(); // spreader와 연결
-                // containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
-                // containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
-
-                Destroy(container.GetComponent<Rigidbody>());
-                container.transform.SetParent(spreader.transform); // spreader와 연결
-
+                container.AddComponent<FixedJoint>(); // FixedJoint 추가
+                containerFixedJoint = container.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
+                containerFixedJoint.connectedBody = spreader.GetComponent<Rigidbody>(); // spreader와 연결
+                containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
+                containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
             }
-
-            //// 컨테이너 spreader와 연결하는 작업?
-            // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
-            // {
-            //     Container_inf[i].GetComponent<GetContainerInf>().enabled = true;
-            //     trolley.GetComponent<GetContainerInf>().enabled = false;
-            // }
         }
 
         else if (GM.cmdTwlUnlock[iSelf] && (cmdTwlUnlockOld[iSelf] != GM.cmdTwlUnlock[iSelf]))
@@ -377,18 +355,7 @@ public class CraneDrawing : MonoBehaviour
             GM.cmdTwlLock[iSelf] = false;
 
             // 컨테이너와 spreader 연결 해제
-            // Destroy(containerFixedJoint);
-
-            container.transform.SetParent(GameObject.Find("Containers").transform); // spreader와 연결 해제
-            container.AddComponent<Rigidbody>(); // Rigidbody 추가
-            containerRigidbody = container.GetComponent<Rigidbody>(); // Rigidbody kinematic 설정
-            containerRigidbody.mass = 10000; // 컨테이너 질량 설정
-
-            // if (Container_inf[i].GetComponent<GetContainerInf>() != null)
-            // {
-            //     Container_inf[i].GetComponent<GetContainerInf>().enabled = false;
-            //     trolley.GetComponent<GetContainerInf>().enabled = true;
-            // }
+            Destroy(containerFixedJoint);
         }
     }
 
@@ -423,17 +390,17 @@ public class CraneDrawing : MonoBehaviour
             // 하나라도 landed 되면 cable 늘어짐 효과 주기
             if (landedContainer || landedFloor)
             {
-                for (int j = 0; j < cable.Length; j++)
+                for (int j = 0; j < cables.Length; j++)
                 {
-                    cable[j].GetComponent<Cable>().loosenessScale = 1;
+                    cables[j].GetComponent<Cable>().loosenessScale = 1;
                 }
             }
 
             else
             {
-                for (int j = 0; j < cable.Length; j++)
+                for (int j = 0; j < cables.Length; j++)
                 {
-                    cable[j].GetComponent<Cable>().loosenessScale = 0;
+                    cables[j].GetComponent<Cable>().loosenessScale = 0;
                 }
             }
         }        

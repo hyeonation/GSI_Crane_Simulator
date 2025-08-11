@@ -23,7 +23,7 @@ public class OrganizingData : MonoBehaviour
     float[,] ReadfloatValue;
 
     float keyGantrySpeed = 0.5f;
-    float keyTrolleySpeed = 1f;
+    float keyTrolleySpeed = 0.5f;
     float keySpreaderSpeed = 0.5f;
     float keyMMSpeed = 0.05f;
 
