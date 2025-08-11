@@ -19,6 +19,7 @@ using UnityEngine;
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
+    GM gm;
     CommPLC[] plc;
     float[,] ReadfloatValue;
 
@@ -44,16 +45,17 @@ public class OrganizingData : MonoBehaviour
 
     void Start()
     {
+        gm = GameObject.Find("GameManager").GetComponent<GM>();
         
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-            if (GM.listIP != null)
+            if (gm.listIP != null)
             {
                 // connect
-                for (int i = 0; i < GM.listIP.Count; i++)
+                for (int i = 0; i < gm.listIP.Count; i++)
                 {
-                    plc[i] = new CommPLC(GM.listIP[i]);
+                    plc[i] = new CommPLC(gm.listIP[i]);
                     // plc[i].Connect();
                 }
             }
@@ -73,7 +75,7 @@ public class OrganizingData : MonoBehaviour
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-            for (int i = 0; i < GM.listIP.Count; i++)
+            for (int i = 0; i < gm.listIP.Count; i++)
             {
                 // Read PLC DB
                 // data = plc[i].ReadToPLC();

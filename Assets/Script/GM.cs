@@ -8,7 +8,7 @@ public class GM : MonoBehaviour
 
     // command with PLC
     public static bool cmdWithPLC = false;
-    public static List<string> listIP;
+    public List<string> listIP;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
     [Header("Container_Preset")]
