@@ -20,23 +20,12 @@ public class GM : MonoBehaviour
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public static short num_containers = 100;
+    public static short num_containers = 10;
 
     // command data
-    [HideInInspector] public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
-    [HideInInspector] public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
-    [HideInInspector] public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
-
-    // PLC DB float order
-    public const int idxGantryVelBWD = 0;
-    public const int idxGantryVelFWD = 1;
-    public const int idxTrolleyVelVel = 2;
-    public const int idxHoistVel = 3;
-    public const int idxMM1Vel = 4;
-    public const int idxMM2Vel = 5;
-    public const int idxMM3Vel = 6;
-    public const int idxMM4Vel = 7;
-
+    public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
+    public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
+    public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
     void Awake()
     {

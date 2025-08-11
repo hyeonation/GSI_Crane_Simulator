@@ -1,22 +1,6 @@
 using System;
 using UnityEngine;
 
-
-///////// 나중에 이 부분 따로 추가하기
-/// </summary>
-// // Read Bool
-// for (int j = 0; j < 3; j++)
-// {
-//     ftcom[i, j] = ((data[32] & (1 << j)) != 0); // 각 비트를 확인하고 출력
-//     if (j < 2)
-//     {
-//         TwistLockcom[i, j] = ((data[34] & (1 << j)) != 0);
-//         trailercom[i, j] = ((data[44] & (1 << j)) != 0);
-//         conelock[i,j] = ((data[44] & (1 << j+2)) != 0);
-//     }
-// }
-// }
-
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
@@ -101,15 +85,17 @@ public class OrganizingData : MonoBehaviour
 
     void ReadPLCdata()
     {
-        const int floatDataIdxGantryVelBWD = 0;
-        const int floatDataIdxGantryVelFWD = 4;
-        const int floatDataIdxTrolleyVel = 8;
-        const int floatDataIdxSpreaderVel = 12;
-        const int floatDataIdxMM0Vel = 16;
-        const int floatDataIdxMM1Vel = 20;
-        const int floatDataIdxMM2Vel = 24;
-        const int floatDataIdxMM3Vel = 28;
+        // PLC에서 읽어온 float data idx
+        const int floatStartIdxGantryVelBWD = 0;
+        const int floatStartIdxGantryVelFWD = 4;
+        const int floatStartIdxTrolleyVel = 8;
+        const int floatStartIdxSpreaderVel = 12;
+        const int floatStartIdxMM0Vel = 16;
+        const int floatStartIdxMM1Vel = 20;
+        const int floatStartIdxMM2Vel = 24;
+        const int floatStartIdxMM3Vel = 28;
 
+        // PLC에서 읽어온 boolean data idx
         const int boolStartIdxTwistLock = 34;
         const int boolBitTwlLock = 0;
         const int boolBitTwlUnlock = 1;
@@ -120,14 +106,14 @@ public class OrganizingData : MonoBehaviour
             var rawData = plc[iCrane].ReadToPLC();
 
             // Read float data
-            GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatDataIdxGantryVelFWD);
-            GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatDataIdxGantryVelBWD);
-            GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatDataIdxTrolleyVel);
-            GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatDataIdxSpreaderVel);
-            GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM0Vel);
-            GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM1Vel);
-            GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM2Vel);
-            GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM3Vel);
+            GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+            GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+            GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
+            GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
+            GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
+            GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
+            GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
+            GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
             
             // Read boolean data
             GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);

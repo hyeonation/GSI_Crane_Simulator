@@ -130,7 +130,6 @@ public class Container : MonoBehaviour
             int num_containers_tmp = 0;
             while (num_containers_tmp < num_containers)
             {
-
                 // random idx 추출
                 // Debug.Log(list_sp_idx.Count);
                 random_i = Random.Range(0, list_sp_idx.Count);
@@ -145,12 +144,12 @@ public class Container : MonoBehaviour
                 if (tier < tier_max)
                 {
                     // list_stack_profile
-                    i_tier = tier++;
+                    i_tier = ++tier;
                     List<int> sp = new List<int> { i_row, i_bay, i_tier };
                     list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
-                    stack_profile[i_row, i_bay]++;
+                    stack_profile[i_row, i_bay] = tier;
                     num_containers_tmp++;
                 }
 
