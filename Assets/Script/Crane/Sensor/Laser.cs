@@ -5,11 +5,15 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     // parameters
-    private float maxDistance = 12.0f;  // maximum distance for laser detection
-    private float laserWidth = 0.01f;   // Width of the laser ray for visualization
+    [HideInInspector] public float maxDistance = 12.0f;  // maximum distance for laser detection
 
-    // Output distance
+    // outputs
     [HideInInspector] public float distance;
+    [HideInInspector] public bool boolHit;
+
+    // Width of the laser ray for visualization
+    private float laserWidthDrawing = 0.01f;
+
 
     private void Update()
     {
@@ -24,8 +28,11 @@ public class Laser : MonoBehaviour
         Vector3 dir = gameObject.transform.forward;
         Color color;
 
+        // Did u hit something?
+        boolHit = Physics.Raycast(point_src, dir, out hit, maxDistance);
+
         // Perform a raycast to detect objects in the direction of the laser
-        if (Physics.Raycast(point_src, dir, out hit, maxDistance))
+        if (boolHit)
         {
             color = Color.blue;
             output = hit.distance;
@@ -39,7 +46,7 @@ public class Laser : MonoBehaviour
         }
 
         // Draw the laser ray in the scene view for debugging
-        Debug.DrawRay(point_src, dir * output, color, laserWidth);
+        Debug.DrawRay(point_src, dir * output, color, laserWidthDrawing);
 
         return output;
     }

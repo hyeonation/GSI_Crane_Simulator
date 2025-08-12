@@ -71,6 +71,7 @@
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CablePoint.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Utils.cs" />
     <Compile Include="Assets\Script\Yard\Yard_Infra.cs" />
+    <Compile Include="Assets\Script\Crane\Sensor\LiDAR2D.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableJoint.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\PlatformController.cs" />
     <Compile Include="Assets\Script\GM.cs" />

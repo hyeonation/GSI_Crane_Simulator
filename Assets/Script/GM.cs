@@ -20,7 +20,7 @@ public class GM : MonoBehaviour
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public static short num_containers = 10;
+    public static short num_containers = 100;
 
     // command data
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
