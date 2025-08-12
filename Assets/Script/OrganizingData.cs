@@ -1,22 +1,6 @@
 using System;
 using UnityEngine;
 
-
-///////// ³ªÁß¿¡ ÀÌ ºÎºÐ µû·Î Ãß°¡ÇÏ±â
-/// </summary>
-// // Read Bool
-// for (int j = 0; j < 3; j++)
-// {
-//     ftcom[i, j] = ((data[32] & (1 << j)) != 0); // °¢ ºñÆ®¸¦ È®ÀÎÇÏ°í Ãâ·Â
-//     if (j < 2)
-//     {
-//         TwistLockcom[i, j] = ((data[34] & (1 << j)) != 0);
-//         trailercom[i, j] = ((data[44] & (1 << j)) != 0);
-//         conelock[i,j] = ((data[44] & (1 << j+2)) != 0);
-//     }
-// }
-// }
-
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
@@ -67,7 +51,7 @@ public class OrganizingData : MonoBehaviour
 
             else
             {
-                Debug.Log("ÀÔ·ÂµÈ IP°¡ ¾ø½À´Ï´Ù.");
+                Debug.Log("ï¿½Ô·Âµï¿½ IPï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             }
         }
     }
@@ -85,8 +69,8 @@ public class OrganizingData : MonoBehaviour
                 ReadPLCdata();
 
                 // Write PLC DB
-                // ÀÐ°í ¾²´Â °Í µ¿½Ã¿¡.
-                // ÀÐ°í ¹Ý¿µÇÏ°í ¾²´Â °Í°ú Å©°Ô Â÷ÀÌ ¾øÀ» °Å¶ó ºÁ¼­.
+                // ï¿½Ð°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¿ï¿½.
+                // ï¿½Ð°ï¿½ ï¿½Ý¿ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Í°ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¶ï¿½ ï¿½ï¿½ï¿½ï¿½.
                 // plc[i].WriteToPLC();
             }
         }
@@ -101,15 +85,18 @@ public class OrganizingData : MonoBehaviour
 
     void ReadPLCdata()
     {
-        const int floatDataIdxGantryVelBWD = 0;
-        const int floatDataIdxGantryVelFWD = 4;
-        const int floatDataIdxTrolleyVel = 8;
-        const int floatDataIdxSpreaderVel = 12;
-        const int floatDataIdxMM0Vel = 16;
-        const int floatDataIdxMM1Vel = 20;
-        const int floatDataIdxMM2Vel = 24;
-        const int floatDataIdxMM3Vel = 28;
 
+        // PLCï¿½ï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½ï¿½ float data idx
+        const int floatStartIdxGantryVelBWD = 0;
+        const int floatStartIdxGantryVelFWD = 4;
+        const int floatStartIdxTrolleyVel = 8;
+        const int floatStartIdxSpreaderVel = 12;
+        const int floatStartIdxMM0Vel = 16;
+        const int floatStartIdxMM1Vel = 20;
+        const int floatStartIdxMM2Vel = 24;
+        const int floatStartIdxMM3Vel = 28;
+
+        // PLCï¿½ï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½ï¿½ boolean data idx
         const int boolStartIdxTwistLock = 34;
         const int boolBitTwlLock = 0;
         const int boolBitTwlUnlock = 1;
@@ -120,14 +107,15 @@ public class OrganizingData : MonoBehaviour
             var rawData = plc[iCrane].ReadToPLC();
 
             // Read float data
-            GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatDataIdxGantryVelFWD);
-            GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatDataIdxGantryVelBWD);
-            GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatDataIdxTrolleyVel);
-            GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatDataIdxSpreaderVel);
-            GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM0Vel);
-            GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM1Vel);
-            GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM2Vel);
-            GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatDataIdxMM3Vel);
+
+            GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+            GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+            GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
+            GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
+            GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
+            GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
+            GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
+            GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
             
             // Read boolean data
             GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);
@@ -137,18 +125,18 @@ public class OrganizingData : MonoBehaviour
 
     float ReadFloatData(byte[] rawData, int startIndex) {
 
-        // 4¹ÙÀÌÆ®¾¿ ÀÐ¾î¼­ float·Î º¯È¯
+        // 4ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ð¾î¼­ floatï¿½ï¿½ ï¿½ï¿½È¯
         byte[] bytes = new byte[4];
 
-        // °ª µÚÁý¾î¾ß Á¤»ó Ãâ·Â
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         for (int i = 0; i < 4; i++)
         {
-            int revIdx = 3 - i; // ¿ª¼øÀ¸·Î ÀÐ±â
+            int revIdx = 3 - i; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð±ï¿½
             bytes[i] = rawData[startIndex + revIdx];
         }
 
         // Convert byte array to float
-        return BitConverter.ToSingle(bytes, 0); // 0Àº byte ½ÃÀÛ °ª;
+        return BitConverter.ToSingle(bytes, 0); // 0ï¿½ï¿½ byte ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½;
     }
 
     bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
@@ -180,7 +168,7 @@ public class OrganizingData : MonoBehaviour
             toggleU = Input.GetKeyDown(KeyCode.U) ? !toggleU : toggleU;
             toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
 
-            // ¹öÆ° ÇÏ³ª¸¸ µ¿ÀÛÇÏµµ·Ï
+            // ï¿½ï¿½Æ° ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½
             toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
             toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
 
