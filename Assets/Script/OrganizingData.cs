@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class OrganizingData : MonoBehaviour
 
             else
             {
-                Debug.Log("�Էµ� IP�� �����ϴ�.");
+                Debug.Log("???? IP?? ???????.");
             }
         }
     }
@@ -69,8 +70,8 @@ public class OrganizingData : MonoBehaviour
                 ReadPLCdata();
 
                 // Write PLC DB
-                // �а� ���� �� ���ÿ�.
-                // �а� �ݿ��ϰ� ���� �Ͱ� ũ�� ���� ���� �Ŷ� ����.
+                // ?��? ???? ?? ?????.
+                // ?��? ?????? ???? ??? ??? ???? ???? ??? ????.
                 // plc[i].WriteToPLC();
             }
         }
@@ -85,8 +86,6 @@ public class OrganizingData : MonoBehaviour
 
     void ReadPLCdata()
     {
-
-        // PLC���� �о�� float data idx
         const int floatStartIdxGantryVelBWD = 0;
         const int floatStartIdxGantryVelFWD = 4;
         const int floatStartIdxTrolleyVel = 8;
@@ -96,7 +95,6 @@ public class OrganizingData : MonoBehaviour
         const int floatStartIdxMM2Vel = 24;
         const int floatStartIdxMM3Vel = 28;
 
-        // PLC���� �о�� boolean data idx
         const int boolStartIdxTwistLock = 34;
         const int boolBitTwlLock = 0;
         const int boolBitTwlUnlock = 1;
@@ -107,7 +105,6 @@ public class OrganizingData : MonoBehaviour
             var rawData = plc[iCrane].ReadToPLC();
 
             // Read float data
-
             GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
             GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
             GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
@@ -125,18 +122,18 @@ public class OrganizingData : MonoBehaviour
 
     float ReadFloatData(byte[] rawData, int startIndex) {
 
-        // 4����Ʈ�� �о float�� ��ȯ
+        // 4??????? ?��? float?? ???
         byte[] bytes = new byte[4];
 
-        // �� ������� ���� ���
+        // ?? ??????? ???? ???
         for (int i = 0; i < 4; i++)
         {
-            int revIdx = 3 - i; // �������� �б�
+            int revIdx = 3 - i; // ???????? ?��?
             bytes[i] = rawData[startIndex + revIdx];
         }
 
         // Convert byte array to float
-        return BitConverter.ToSingle(bytes, 0); // 0�� byte ���� ��;
+        return BitConverter.ToSingle(bytes, 0); // 0?? byte ???? ??;
     }
 
     bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
@@ -168,7 +165,7 @@ public class OrganizingData : MonoBehaviour
             toggleU = Input.GetKeyDown(KeyCode.U) ? !toggleU : toggleU;
             toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
 
-            // ��ư �ϳ��� �����ϵ���
+            // ??? ????? ?????????
             toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
             toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
 
