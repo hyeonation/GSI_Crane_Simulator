@@ -1,5 +1,3 @@
-using S7.Net;
-using S7.Net.Types;
 using UnityEngine;
 
 public class Laser : MonoBehaviour

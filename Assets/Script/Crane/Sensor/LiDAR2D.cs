@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LiDAR2D : MonoBehaviour
@@ -50,7 +49,7 @@ public class LiDAR2D : MonoBehaviour
         
         // determine standard vector
         Vector3 point_src = transform.position;
-        Vector3 dir_std = transform.forward;
+        Vector3 dir_std = transform.right; // Use right vector for horizontal sweep
         Vector3 dir_rotate = transform.up;
 
         for (int count = 0; count < arrDistance.Length; count++)
