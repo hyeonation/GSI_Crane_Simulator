@@ -52,7 +52,7 @@ public class OrganizingData : MonoBehaviour
 
             else
             {
-                Debug.Log("???? IP?? ???????.");
+                Debug.Log("GM.listIP is null. Please check the GameManager settings.");
             }
         }
     }
@@ -70,8 +70,6 @@ public class OrganizingData : MonoBehaviour
                 ReadPLCdata();
 
                 // Write PLC DB
-                // ?¬Ñ? ???? ?? ?????.
-                // ?¬Ñ? ?????? ???? ??? ??? ???? ???? ??? ????.
                 // plc[i].WriteToPLC();
             }
         }
@@ -122,18 +120,19 @@ public class OrganizingData : MonoBehaviour
 
     float ReadFloatData(byte[] rawData, int startIndex) {
 
-        // 4??????? ?¬à? float?? ???
+        // float 4 bytes
         byte[] bytes = new byte[4];
 
-        // ?? ??????? ???? ???
+        // Reverse the byte order for little-endian to big-endian conversion
+        // Assuming rawData is in little-endian format, we need to reverse it
         for (int i = 0; i < 4; i++)
         {
-            int revIdx = 3 - i; // ???????? ?¬Ò?
+            int revIdx = 3 - i; // Reverse index
             bytes[i] = rawData[startIndex + revIdx];
         }
 
         // Convert byte array to float
-        return BitConverter.ToSingle(bytes, 0); // 0?? byte ???? ??;
+        return BitConverter.ToSingle(bytes, 0); // Convert to float
     }
 
     bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
@@ -165,7 +164,7 @@ public class OrganizingData : MonoBehaviour
             toggleU = Input.GetKeyDown(KeyCode.U) ? !toggleU : toggleU;
             toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
 
-            // ??? ????? ?????????
+            // toggle boolean with key combinations
             toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
             toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
 
@@ -221,5 +220,4 @@ public class OrganizingData : MonoBehaviour
             GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlUnlock[iCrane];
         }
     }
-    
 }
