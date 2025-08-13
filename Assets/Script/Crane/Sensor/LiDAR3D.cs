@@ -5,7 +5,7 @@ using System.IO;
 public class LiDAR3D : MonoBehaviour
 {
     [Header("LiDAR Settings")]
-    public float maxDistance = 100f;
+    public float maxDistance = 10f;
     public float horizontalFOV = 90f; // 수평 시야각 Field of View
     public float verticalFOV = 20f;   // 수직 시야각
     public float horizontalResolution = 1f; // 수평 각도 간격(도)

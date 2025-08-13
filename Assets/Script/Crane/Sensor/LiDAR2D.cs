@@ -13,11 +13,10 @@ public class LiDAR2D : MonoBehaviour
     [HideInInspector] public float resolution = 0.1f;  // resolution
     [HideInInspector] public int max_angle = 90;  // maximum angle for LiDAR sweep
     [HideInInspector] public int min_angle = -90;  // minimum angle for LiDAR sweep
-
+    [HideInInspector] public float scanTime = 1f;  // time interval for scanning [sec]
 
     // Width of the laser ray for visualization
     private float laserWidthDrawing = 0.01f;
-
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +32,7 @@ public class LiDAR2D : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(scanTime);
             GetLaserDistance(maxDistance);
         }
     }
