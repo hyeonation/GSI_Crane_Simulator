@@ -58,7 +58,8 @@ public class SafeAreaFitter : MonoBehaviour
         rt.offsetMax = Vector2.zero;
 
         // 여백 만들기
-        rt.offsetMin = new Vector2(Screen.width / 2.5f, 0);    // 예시: 왼쪽 여백을 1/4 화면 너비로 설정
-        rt.offsetMax = new Vector2(-Screen.width / 2.5f, 0); // 오른쪽 여백도 동일하게 설정
+        float margin = Screen.width / 2.5f; // 여백
+        rt.offsetMin = new Vector2(margin, 0);    // 예시: 왼쪽 여백을 1/4 화면 너비로 설정
+        rt.offsetMax = new Vector2(-margin, 0); // 오른쪽 여백도 동일하게 설정
     }
 }

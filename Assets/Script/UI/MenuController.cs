@@ -17,10 +17,11 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Button btnPLC;               // "PLC Mode" 버튼
     [SerializeField] private Button btnSetting;           // "Setting" 버튼
     [SerializeField] private Button btnQuit;              // "Quit" 버튼
+    [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
 
     [Header("Behaviour Config")]
     [Tooltip("모드 선택 시 로드할 시뮬레이터 씬 이름 (Build Settings에 등록 필요)")]
-    [SerializeField] private string simulatorSceneName = "Simulator";
+    [SerializeField] private string simulatorSceneName = "ARMG";
 
     [Tooltip("모드 선택 시 즉시 시뮬레이터 씬을 로드할지 여부")]
     [SerializeField] private bool loadSceneOnModeSelect = true;
@@ -43,19 +44,6 @@ public class MenuController : MonoBehaviour
         if (btnPLC)      btnPLC.onClick.RemoveListener(OnPLCMode);
         if (btnSetting)  btnSetting.onClick.RemoveListener(OnSetting);
         if (btnQuit)     btnQuit.onClick.RemoveListener(OnQuit);
-    }
-
-    /// <summary>
-    /// 버튼에 달린 TextMeshProUGUI 자식 라벨을 찾아 텍스트를 설정.
-    /// Button 하위에 Label(TMP)이 있다는 전제입니다.
-    /// </summary>
-    private void SetButtonLabel(Button b, string text)
-    {
-        if (!b) return;
-
-        // GetComponentInChildren(true): 비활성 자식도 검색
-        var tmp = b.GetComponentInChildren<TextMeshProUGUI>(true);
-        if (tmp) tmp.text = text;
     }
 
     /// <summary>
@@ -88,6 +76,16 @@ public class MenuController : MonoBehaviour
     {
         // 예: SettingsPanel.SetActive(true);
         Debug.Log("Open Settings (TODO: 연결할 패널/팝업)");
+
+        gameObject.SetActive(false); // 현재 메뉴 숨김
+        if (settingPanel)
+        {
+            settingPanel.SetActive(true); // 설정 패널 활성화
+        }
+        else
+        {
+            Debug.LogWarning("Setting panel not assigned in inspector!");
+        }
     }
 
     /// <summary>
@@ -96,13 +94,13 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void OnQuit()
     {
-#if UNITY_EDITOR
-        // 에디터에서는 플레이 모드 종료
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        // 실제 빌드에서는 애플리케이션 종료
-        Application.Quit();
-#endif
+        #if UNITY_EDITOR
+            // 에디터에서는 플레이 모드 종료
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            // 실제 빌드에서는 애플리케이션 종료
+            Application.Quit();
+        #endif
     }
 
     /// <summary>
