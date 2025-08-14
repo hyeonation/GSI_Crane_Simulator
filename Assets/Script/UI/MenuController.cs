@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MenuController : MonoBehaviour
 {
-    [Header("UI References (인스펙터에서 드래그 연결)")]
+    [Header("UI References")]
     [SerializeField] private TextMeshProUGUI titleText;   // 상단 타이틀 텍스트
     [SerializeField] private Button btnKeyboard;          // "Keyboard Mode" 버튼
     [SerializeField] private Button btnPLC;               // "PLC Mode" 버튼
@@ -26,7 +26,7 @@ public class MenuController : MonoBehaviour
     [Tooltip("모드 선택 시 즉시 시뮬레이터 씬을 로드할지 여부")]
     [SerializeField] private bool loadSceneOnModeSelect = true;
 
-    private void OnEnable()
+    void Start()
     {
         // 버튼 클릭 이벤트 연결
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
@@ -36,16 +36,7 @@ public class MenuController : MonoBehaviour
         if (btnSetting)  btnSetting.onClick.AddListener(OnSetting);
         if (btnQuit)     btnQuit.onClick.AddListener(OnQuit);
     }
-
-    private void OnDisable()
-    {
-        // 리스너 정리(메모리 누수/중복 호출 방지)
-        if (btnKeyboard) btnKeyboard.onClick.RemoveListener(OnKeyboardMode);
-        if (btnPLC)      btnPLC.onClick.RemoveListener(OnPLCMode);
-        if (btnSetting)  btnSetting.onClick.RemoveListener(OnSetting);
-        if (btnQuit)     btnQuit.onClick.RemoveListener(OnQuit);
-    }
-
+        
     /// <summary>
     /// Keyboard Mode 선택 시 호출
     /// </summary>

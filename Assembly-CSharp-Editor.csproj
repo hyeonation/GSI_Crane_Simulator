@@ -64,6 +64,7 @@
     <Analyzer Include="C:\Program Files\Unity 2022.3.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\RectTransformNaNCleaner.cs" />
     <Compile Include="Assets\FiloCables\Editor\CableShapeEditor.cs" />
     <Compile Include="Assets\FiloCables\Editor\CableEditor.cs" />
     <Compile Include="Assets\FiloCables\Editor\DraggableIcon.cs" />
