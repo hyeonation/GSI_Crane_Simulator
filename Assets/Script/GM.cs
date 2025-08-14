@@ -53,8 +53,6 @@ public class GM : MonoBehaviour
             nameTrucks[i] = truck.transform.GetChild(i).name;
         }
 
-        // ip
-
         // Read DB array
         cmdGantryVelFWD = new float[nameCranes.Length];
         cmdGantryVelBWD = new float[nameCranes.Length];
@@ -69,22 +67,5 @@ public class GM : MonoBehaviour
         cmd45ft = new bool[nameCranes.Length];
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
-
-        // Input_IP = new GameObject[]{
-        //     GameObject.Find("Input_IP"),
-        //     GameObject.Find("Input_Start_DB"),
-        // };
     }
-
-    // void GameStart()
-    // {
-
-    //     GameObject canvas = GameObject.Find("Canvas");
-    //     canvas.SetActive(false);
-
-    //     plc_comm.Connect_PLC();
-    //     run = true;
-
-    // }
-
 }

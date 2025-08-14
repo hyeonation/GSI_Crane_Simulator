@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LiDAR2D : MonoBehaviour
@@ -14,11 +13,10 @@ public class LiDAR2D : MonoBehaviour
     [HideInInspector] public float resolution = 0.1f;  // resolution
     [HideInInspector] public int max_angle = 90;  // maximum angle for LiDAR sweep
     [HideInInspector] public int min_angle = -90;  // minimum angle for LiDAR sweep
-
+    [HideInInspector] public float scanTime = 1f;  // time interval for scanning [sec]
 
     // Width of the laser ray for visualization
     private float laserWidthDrawing = 0.01f;
-
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +32,7 @@ public class LiDAR2D : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(scanTime);
             GetLaserDistance(maxDistance);
         }
     }
@@ -50,7 +48,7 @@ public class LiDAR2D : MonoBehaviour
         
         // determine standard vector
         Vector3 point_src = transform.position;
-        Vector3 dir_std = transform.forward;
+        Vector3 dir_std = transform.right; // Use right vector for horizontal sweep
         Vector3 dir_rotate = transform.up;
 
         for (int count = 0; count < arrDistance.Length; count++)
