@@ -10,7 +10,7 @@ public class OrganizingData : MonoBehaviour
 
     float keyGantrySpeed = 0.5f;
     float keyTrolleySpeed = 0.5f;
-    float keySpreaderSpeed = 0.5f;
+    float keySpreaderSpeed = 0.25f;
     float keyMMSpeed = 0.05f;
 
     bool toggleQ = false;

@@ -36,7 +36,7 @@ public class MenuController : MonoBehaviour
         if (btnSetting)  btnSetting.onClick.AddListener(OnSetting);
         if (btnQuit)     btnQuit.onClick.AddListener(OnQuit);
     }
-        
+
     /// <summary>
     /// Keyboard Mode 선택 시 호출
     /// </summary>
@@ -46,7 +46,10 @@ public class MenuController : MonoBehaviour
         Debug.Log("Mode set to: Keyboard");
 
         // 즉시 시뮬레이터 씬 로드 옵션이 켜져 있으면 이동
-        TryLoadSimulatorScene();
+        // TryLoadSimulatorScene();
+
+        gameObject.SetActive(false); // 현재 메뉴 숨김
+        
     }
 
     /// <summary>
