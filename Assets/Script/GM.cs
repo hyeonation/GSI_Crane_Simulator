@@ -11,6 +11,8 @@ public class GM : MonoBehaviour
     public List<string> listIP;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
+    [HideInInspector] public static bool playSimulation = false; // 시뮬레이션 실행 여부
+
     [Header("Container_Preset")]
     public static short bay = 16;
     public static short row = 5;
@@ -20,12 +22,22 @@ public class GM : MonoBehaviour
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public static short num_containers = 100;
+    public static short num_containers = 0;
 
     // command data
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
     public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
+
+    // settings
+    [HideInInspector] public static float lidarMaxDistance = 10f;
+    [HideInInspector] public static float lidarHorizontalFOV = 90f; // 수평 시야각 Field of View
+    [HideInInspector] public static float lidarVerticalFOV = 20f;   // 수직 시야각
+    [HideInInspector] public static float lidarHorizontalResolution = 1f; // 수평 각도 간격(도)
+    [HideInInspector] public static float lidarVerticalResolution = 1f;   // 수직 각도 간격(도)
+    [HideInInspector] public static float lidarNoiseStdDev = 0.01f; // 노이즈 표준편차 (미터 단위)
+    
+    [HideInInspector] public static float laserMaxDistance = 12.0f;  // maximum distance for laser detection
 
     void Awake()
     {

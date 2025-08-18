@@ -21,14 +21,12 @@ public class Container : MonoBehaviour
     void Start()
     {
 
-        // init values
-        init();
-
         // 랜덤한 위치에서 게임 오브젝트 스폰
         // SpawnContainers();
-        mkContainers();     // 초기 시작 때 컨테이너 뜨는 현상 제거
+        // mkContainers();     // 초기 시작 때 컨테이너 뜨는 현상 제거
         // StartCoroutine(RotationUncheck());
         // StartCoroutine(kinematicCheck());
+        StartCoroutine(startMakeContainers());
     }
 
     void init()
@@ -78,31 +76,25 @@ public class Container : MonoBehaviour
     //     }
     // }
 
-    void SpawnContainers()
+    IEnumerator startMakeContainers()
     {
-        for (int i = 0; i < num_containers; i++)
+        // Simulation이 시작되기 전까지 대기
+        while (GM.playSimulation == false)
         {
-            int randomBay, randomRow, randomTier;
-            Vector3 spawnPosition;
-
-            do
-            {
-                randomBay = Random.Range(0, GM.bay);
-                randomRow = Random.Range(0, GM.row);
-                randomTier = Random.Range(0, GM.tier);
-                spawnPosition = new Vector3((randomRow * x_interval) + start_val, (randomTier + 0.5f) * y_interval, (randomBay * z_interval) + 7.75f);
-            } while (spawnedPositions.Contains(spawnPosition)); //중복 되지 않을때까지
-
-            spawnedPositions.Add(spawnPosition);
-
-            GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
-            GameObject newObject = Instantiate(randomPrefab, spawnPosition, Quaternion.identity);
-
-            newObject.name = $"{name_container}{i}"; //이름 설정
-
-            newObject.transform.SetParent(transform);
-            newObject.transform.Rotate(Vector3.up, 0f);
+            yield return new WaitForSeconds(0.5f);
         }
+
+        Debug.Log($"[Container] 컨테이너 개수: {GM.num_containers}");
+
+        // init values
+        init();
+
+        // 컨테이너 생성
+        mkContainers();
+
+        // 종료
+        yield break;
+        
     }
 
     // Container 만드는 방식 변경

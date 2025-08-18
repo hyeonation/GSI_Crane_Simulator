@@ -133,8 +133,8 @@ public class SafeAreaFitter : MonoBehaviour
 
         rt.anchorMin = min;
         rt.anchorMax = max;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
+        // rt.offsetMin = Vector2.zero;
+        // rt.offsetMax = Vector2.zero;
         
         // 여백 만들기
         float margin = Screen.width / 2.5f; // 여백

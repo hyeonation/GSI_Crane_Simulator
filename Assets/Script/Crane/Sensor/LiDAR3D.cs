@@ -4,17 +4,7 @@ using System.IO;
 
 public class LiDAR3D : MonoBehaviour
 {
-    [Header("LiDAR Settings")]
-    public float maxDistance = 10f;
-    public float horizontalFOV = 90f; // 수평 시야각 Field of View
-    public float verticalFOV = 20f;   // 수직 시야각
-    public float horizontalResolution = 1f; // 수평 각도 간격(도)
-    public float verticalResolution = 1f;   // 수직 각도 간격(도)
-
     public Vector3 scanOffset = Vector3.zero;
-
-    [Header("Noise Settings")]
-    public float noiseStdDev = 0.01f; // 노이즈 표준편차 (미터 단위)
 
     [Header("Save Settings")]
     public bool saveToFile = false;
@@ -38,33 +28,33 @@ public class LiDAR3D : MonoBehaviour
     {
         Vector3 origin = transform.position + scanOffset;
 
-        int hSteps = Mathf.CeilToInt(horizontalFOV / horizontalResolution);
-        int vSteps = Mathf.CeilToInt(verticalFOV / verticalResolution);
+        int hSteps = Mathf.CeilToInt(GM.lidarHorizontalFOV / GM.lidarHorizontalResolution);
+        int vSteps = Mathf.CeilToInt(GM.lidarVerticalFOV / GM.lidarVerticalResolution);
 
-        float hStart = -horizontalFOV / 2f;
-        float vStart = -verticalFOV / 2f;
+        float hStart = -GM.lidarHorizontalFOV / 2f;
+        float vStart = -GM.lidarVerticalFOV / 2f;
 
         for (int v = 0; v < vSteps; v++)
         {
-            float vAngle = vStart + v * verticalResolution;
+            float vAngle = vStart + v * GM.lidarVerticalResolution;
             Quaternion vRot = Quaternion.Euler(0, 0, vAngle);
             Vector3 vDir = vRot * Vector3.right;
 
             for (int h = 0; h < hSteps; h++)
             {
-                float hAngle = hStart + h * horizontalResolution;
+                float hAngle = hStart + h * GM.lidarHorizontalResolution;
                 Quaternion hRot = Quaternion.AngleAxis(hAngle, Vector3.up);
                 Vector3 dir = hRot * vDir;
 
-                if (Physics.Raycast(origin, transform.rotation * dir, out RaycastHit hit, maxDistance))
+                if (Physics.Raycast(origin, transform.rotation * dir, out RaycastHit hit, GM.lidarMaxDistance))
                 {
-                    Vector3 noisyPoint = hit.point + Random.insideUnitSphere * noiseStdDev;
+                    Vector3 noisyPoint = hit.point + Random.insideUnitSphere * GM.lidarNoiseStdDev;
                     pointCloud.Add(noisyPoint);
                     Debug.DrawLine(origin, noisyPoint, Color.green, 0.1f);
                 }
                 else
                 {
-                    Debug.DrawRay(origin, transform.rotation * dir * maxDistance, Color.red, 0.1f);
+                    Debug.DrawRay(origin, transform.rotation * dir * GM.lidarMaxDistance, Color.red, 0.1f);
                 }
             }
         }

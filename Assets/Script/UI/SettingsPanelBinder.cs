@@ -17,8 +17,10 @@ using TMPro;
 /// </summary>
 public class SettingsPanelBinder : MonoBehaviour
 {
+
+    // ----------------- UI 요소들 -----------------
     [Header("PLC Mode")]
-    [SerializeField] private TMP_InputField plcIp;
+    [SerializeField] private TMP_InputField plcIP;
 
     [Header("SPSS LiDAR")]
     [SerializeField] private TMP_InputField lidarMaxDistance_m;
@@ -37,12 +39,13 @@ public class SettingsPanelBinder : MonoBehaviour
     [Header("Controls")]
     [SerializeField] private Button applyButton;
     [SerializeField] private GameObject menuControllerPanel;       // menuControllerPanel 패널 오브젝트
+    [SerializeField] private MonoBehaviour containerPreset; // containerPreset 패널 오브젝트
 
     // ----------------- 설정 데이터 모델 -----------------
     [Serializable]
     public class SimulatorSettings
     {
-        public string plcIp = "192.168.100.101";
+        public string plcIP = "192.168.100.101";
         public float lidarMaxDistance_m = 100f;
         public float lidarFovHorizontal_deg = 90f;
         public float lidarFovVertical_deg = 30f;
@@ -79,11 +82,12 @@ public class SettingsPanelBinder : MonoBehaviour
         if (applyButton) applyButton.onClick.AddListener(ApplyAndSave);
 
         // 저장된 설정 로드 → UI 채우기
-        LoadFromDisk();
+        // LoadFromDisk();
         PopulateUIFromData();
         ClearAllErrorStates();
     }
 
+    // 굳이 필요한가?
     void OnDestroy()
     {
         if (applyButton) applyButton.onClick.RemoveListener(ApplyAndSave);
@@ -105,6 +109,11 @@ public class SettingsPanelBinder : MonoBehaviour
         // 반영
         Current = updated;
 
+        // UI에서 읽은 값을 데이터 모델에 반영
+        PopulateData();
+
+        containerPreset.enabled = true; // 컨테이너 프리셋 활성화
+
         // 저장
         SaveToDisk(Current);
 
@@ -113,7 +122,7 @@ public class SettingsPanelBinder : MonoBehaviour
 
         Debug.Log("[SettingsPanelBinder] 설정 적용/저장 완료: " + FilePath);
 
-        gameObject.SetActive(false); // 현재 메뉴 숨김
+        gameObject.SetActive(false); // 현재 SettingsPanel 숨김
         if (menuControllerPanel)
         {
             menuControllerPanel.SetActive(true); // 메뉴 컨트롤러 패널 활성화
@@ -127,7 +136,7 @@ public class SettingsPanelBinder : MonoBehaviour
     // ----------------- Data -> UI -----------------
     private void PopulateUIFromData()
     {
-        Set(plcIp, Current.plcIp);
+        Set(plcIP, Current.plcIP);
 
         Set(lidarMaxDistance_m, Current.lidarMaxDistance_m);
         Set(lidarFovHorizontal_deg, Current.lidarFovHorizontal_deg);
@@ -140,19 +149,34 @@ public class SettingsPanelBinder : MonoBehaviour
         Set(yardContainerNumberEA, Current.yardContainerNumberEA);
     }
 
+    private static void PopulateData()
+    {
+        // GM.cs에 설정 반영
+        GM.lidarMaxDistance = Current.lidarMaxDistance_m;
+        GM.lidarHorizontalFOV = Current.lidarFovHorizontal_deg;
+        GM.lidarVerticalFOV = Current.lidarFovVertical_deg;
+        GM.lidarHorizontalResolution = Current.lidarResHorizontal_deg;
+        GM.lidarVerticalResolution = Current.lidarResVertical_deg;
+        GM.lidarNoiseStdDev = Current.lidarNoiseStd;
+        GM.laserMaxDistance = Current.laserMaxDistance_m;
+        GM.num_containers = (short)Current.yardContainerNumberEA;
+        Debug.Log("[SettingsPanelBinder] 설정이 GM.cs에 반영되었습니다.");
+    }
+    
+
     // ----------------- UI 읽기 + 검증 -----------------
     private bool TryReadAllFields(out SimulatorSettings s)
     {
         s = new SimulatorSettings();
 
         // PLC IP
-        string ip = GetText(plcIp);
+        string ip = GetText(plcIP);
         if (!IsValidIp(ip))
         {
-            MarkInvalid(plcIp, "Invalid IP");
+            MarkInvalid(plcIP, "Invalid IP");
             return false;
         }
-        s.plcIp = ip;
+        s.plcIP = ip;
 
         // LiDAR
         if (!TryFloat(lidarMaxDistance_m, range_LidarMax_m, out s.lidarMaxDistance_m)) return false;
@@ -230,7 +254,7 @@ public class SettingsPanelBinder : MonoBehaviour
 
     private void ClearAllErrorStates()
     {
-        ResetColor(plcIp);
+        ResetColor(plcIP);
 
         ResetColor(lidarMaxDistance_m);
         ResetColor(lidarFovHorizontal_deg);
@@ -264,8 +288,11 @@ public class SettingsPanelBinder : MonoBehaviour
         }
     }
 
-    private static void LoadFromDisk()
+    public static void LoadFromDisk()
     {
+        // GM.cs에 설정 반영
+        PopulateData();
+
         try
         {
             if (File.Exists(FilePath))

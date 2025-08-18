@@ -28,6 +28,9 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
+        // 설정 패널에서 저장된 설정을 로드
+        SettingsPanelBinder.LoadFromDisk();
+        
         // 버튼 클릭 이벤트 연결
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
         // 오브젝트 활성/비활성 반복 시 중복 Add 방지에 안전합니다.
@@ -49,6 +52,8 @@ public class MenuController : MonoBehaviour
         // TryLoadSimulatorScene();
 
         gameObject.SetActive(false); // 현재 메뉴 숨김
+        GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
+
         
     }
 
@@ -60,6 +65,8 @@ public class MenuController : MonoBehaviour
         GameMode.Set(GameMode.Mode.PLC);         // 전역 모드 저장
         Debug.Log("Mode set to: PLC");
         TryLoadSimulatorScene();
+
+        GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
     }
 
     /// <summary>

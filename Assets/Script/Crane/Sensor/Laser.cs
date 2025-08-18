@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    // parameters
-    [HideInInspector] public float maxDistance = 12.0f;  // maximum distance for laser detection
-
     // outputs
     [HideInInspector] public float distance;
     [HideInInspector] public bool boolHit;
@@ -15,7 +12,7 @@ public class Laser : MonoBehaviour
 
     private void Update()
     {
-        distance = GetLaserDistance(maxDistance);
+        distance = GetLaserDistance(GM.laserMaxDistance);
     }
 
     public float GetLaserDistance(float maxDistance)
