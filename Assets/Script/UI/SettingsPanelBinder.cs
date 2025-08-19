@@ -115,7 +115,7 @@ public class SettingsPanelBinder : MonoBehaviour
         bool ok = TryReadAllFields(out SimulatorSettings updated);
         if (!ok)
         {
-            Debug.LogWarning("[SettingsPanelBinder] 입력값에 오류가 있어 저장하지 않았습니다.");
+            Debug.Log("[SettingsPanelBinder] 입력값에 오류가 있어 저장하지 않았습니다.");
             return;
         }
 
@@ -153,8 +153,8 @@ public class SettingsPanelBinder : MonoBehaviour
         GameObject newIPField = Instantiate(plcIPInputFieldPrefab, plcModePanel.transform);
         newIPField.transform.SetParent(plcModePanel.transform, false); // 부모 설정
 
-        TMP_InputField inputField = newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
-        if (inputField) inputField.text = plcDefaultIP; // 초기값 설정
+        newIPField.transform.Find("SubTitle").GetComponent<TextMeshProUGUI>().text = $" Crane {listIPObject.Count + 1}"; // 서브타이틀 업데이트
+        newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = plcDefaultIP;
 
         listIPObject.Add(newIPField); // 리스트에 추가
 
@@ -217,6 +217,7 @@ public class SettingsPanelBinder : MonoBehaviour
         GM.lidarNoiseStdDev = Current.lidarNoiseStd;
         GM.laserMaxDistance = Current.laserMaxDistance_m;
         GM.num_containers = (short)Current.yardContainerNumberEA;
+
         Debug.Log("[SettingsPanelBinder] 설정이 GM.cs에 반영되었습니다.");
     }
 
@@ -229,12 +230,13 @@ public class SettingsPanelBinder : MonoBehaviour
 
         // PLC IP
         s.listIP = new List<string>();
-        foreach (var ipField in listIPObject)
+        foreach (GameObject ipObject in listIPObject)
         {
-            string textIP = GetText(ipField.GetComponent<TMP_InputField>());
+            TMP_InputField inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+            string textIP = GetText(inputField);
             if (!IsValidIp(textIP))
             {
-                MarkInvalid(ipField.GetComponent<TMP_InputField>(), "Invalid IP");
+                MarkInvalid(inputField, "Invalid IP");
                 return false;
             }
             s.listIP.Add(textIP);
@@ -380,6 +382,7 @@ public class SettingsPanelBinder : MonoBehaviour
             {
                 AddIP();
                 listIPObject[idx].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = ip;    // 초기값 설정
+                idx++;
                 // listIP는 Current 업데이트 하면서 반영
             }
 
