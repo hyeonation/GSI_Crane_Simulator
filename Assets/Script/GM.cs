@@ -7,8 +7,8 @@ public class GM : MonoBehaviour
 {
 
     // command with PLC
-    public bool cmdWithPLC = false;
-    public List<string> listIP;
+    public static bool cmdWithPLC = false;
+    public static List<string> listIP = new List<string>(); // PLC IP list
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
     [HideInInspector] public static bool playSimulation = false; // 시뮬레이션 실행 여부

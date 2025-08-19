@@ -59,13 +59,13 @@ public class CommPLC
     // 추후 WriteBytes로 바꿔보자
     void InitializePLCValues()
     {
-        plc.Write($"DB{info.writeDBNum}.DBX254.4", false);
-        plc.Write($"DB{info.writeDBNum}.DBX254.5", true);
-        plc.Write($"DB{info.writeDBNum}.DBX254.6", false);
-        plc.Write($"DB{info.writeDBNum}.DBX44.0", false);
-        plc.Write($"DB{info.writeDBNum}.DBX44.1", true);
-        // plc.Write($"DB{info.writeDBNum}.DBX268.0", false);
-        // plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
+        // plc.Write($"DB{info.writeDBNum}.DBX254.4", false);
+        // plc.Write($"DB{info.writeDBNum}.DBX254.5", true);
+        // plc.Write($"DB{info.writeDBNum}.DBX254.6", false);
+        // plc.Write($"DB{info.writeDBNum}.DBX44.0", false);
+        // plc.Write($"DB{info.writeDBNum}.DBX44.1", true);
+        // // plc.Write($"DB{info.writeDBNum}.DBX268.0", false);
+        // // plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
     }
 
     public byte[] ReadToPLC()

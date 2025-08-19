@@ -37,9 +37,15 @@ public class SettingsPanelBinder : MonoBehaviour
     [SerializeField] private TMP_InputField yardContainerNumberEA;
 
     [Header("Controls")]
-    [SerializeField] private Button applyButton;
+    [SerializeField] private Button btnApply;
     [SerializeField] private GameObject menuControllerPanel;       // menuControllerPanel 패널 오브젝트
     [SerializeField] private MonoBehaviour containerPreset; // containerPreset 패널 오브젝트
+    [SerializeField] private Button btnAddIP; // IP 추가 버튼
+    [SerializeField] private Button btnRemoveIP; // IP 제거 버튼
+
+
+    // // init plc array
+    // plc = new CommPLC[gm.listIP.Count];
 
     // ----------------- 설정 데이터 모델 -----------------
     [Serializable]
@@ -57,9 +63,6 @@ public class SettingsPanelBinder : MonoBehaviour
     }
 
     public static SimulatorSettings Current { get; private set; } = new SimulatorSettings();
-
-    /// <summary>외부에서 구독: Apply 직후 최신 설정 전달</summary>
-    public static event Action<SimulatorSettings> OnApplied;
 
     // ----------------- 범위(필요시 인스펙터에서 조정) -----------------
     [Header("Validation Ranges")]
@@ -79,7 +82,7 @@ public class SettingsPanelBinder : MonoBehaviour
     void Awake()
     {
         // 버튼 연결
-        if (applyButton) applyButton.onClick.AddListener(ApplyAndSave);
+        if (btnApply) btnApply.onClick.AddListener(ApplyAndSave);
 
         // 저장된 설정 로드 → UI 채우기
         // LoadFromDisk();
@@ -90,7 +93,7 @@ public class SettingsPanelBinder : MonoBehaviour
     // 굳이 필요한가?
     void OnDestroy()
     {
-        if (applyButton) applyButton.onClick.RemoveListener(ApplyAndSave);
+        if (btnApply) btnApply.onClick.RemoveListener(ApplyAndSave);
     }
 
     // ----------------- UI -> Data 적용 & 저장 -----------------
@@ -117,9 +120,6 @@ public class SettingsPanelBinder : MonoBehaviour
         // 저장
         SaveToDisk(Current);
 
-        // 브로드캐스트
-        OnApplied?.Invoke(Current);
-
         Debug.Log("[SettingsPanelBinder] 설정 적용/저장 완료: " + FilePath);
 
         gameObject.SetActive(false); // 현재 SettingsPanel 숨김
@@ -130,6 +130,21 @@ public class SettingsPanelBinder : MonoBehaviour
         else
         {
             Debug.LogWarning("MenuControllerPanel not assigned in inspector!");
+        }
+    }
+
+    // ------------- PLC IP Add/Remove --------------
+    public void AddIP()
+    {
+        string newIP = plcIP.text.Trim();
+        if (!string.IsNullOrEmpty(newIP) && !GM.listIP.Contains(newIP))
+        {
+            GM.listIP.Add(newIP);
+            Debug.Log($"Added IP: {newIP}");
+        }
+        else
+        {
+            Debug.LogWarning("Invalid or duplicate IP.");
         }
     }
 

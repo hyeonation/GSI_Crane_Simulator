@@ -5,7 +5,6 @@ using UnityEngine;
 // Organizing data
 public class OrganizingData : MonoBehaviour
 {
-    GM gm;
     CommPLC[] plc;
 
     float keyGantrySpeed = 0.5f;
@@ -30,22 +29,17 @@ public class OrganizingData : MonoBehaviour
 
     void Start()
     {
-        // init variables
-        gm = GameObject.Find("GameManager").GetComponent<GM>();
-
         // Using PLC data
-        if (gm.cmdWithPLC)
+        if (GM.cmdWithPLC)
         {
             // Check if listIP is not null
-            if (gm.listIP != null)
+            if (GM.listIP != null)
             {
-                // init plc array
-                plc = new CommPLC[gm.listIP.Count];
 
                 // connect
-                for (int i = 0; i < gm.listIP.Count; i++)
+                for (int i = 0; i < GM.listIP.Count; i++)
                 {
-                    plc[i] = new CommPLC(ip: gm.listIP[i]);
+                    plc[i] = new CommPLC(ip: GM.listIP[i]);
                     plc[i].Connect();
                 }
             }
@@ -62,9 +56,9 @@ public class OrganizingData : MonoBehaviour
         // Debug.Log($"loop time = {Time.deltaTime} sec");
 
         // Using PLC data
-        if (gm.cmdWithPLC)
+        if (GM.cmdWithPLC)
         {
-            for (int i = 0; i < gm.listIP.Count; i++)
+            for (int i = 0; i < GM.listIP.Count; i++)
             {
                 // Read PLC DB
                 ReadPLCdata();
