@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// Setting UI(스크린샷 구조)에 맞춘 바인더:
@@ -20,7 +22,11 @@ public class SettingsPanelBinder : MonoBehaviour
 
     // ----------------- UI 요소들 -----------------
     [Header("PLC Mode")]
-    [SerializeField] private TMP_InputField plcIP;
+    [SerializeField] private GameObject plcIPInputFieldPrefab; // IP 입력 필드 프리팹
+    [SerializeField] private GameObject plcModePanel; // IP 입력 필드들을 담을 컨테이너
+    [SerializeField] private RectTransform contentsPanel;  // Contents 패널 RectTransform. 화면 refresh 위함
+    private const string plcDefaultIP = "192.168.100.101"; // 기본 IP 주소
+    [HideInInspector] private List<GameObject> listIPObject; // IP 입력 필드 오브젝트 리스트
 
     [Header("SPSS LiDAR")]
     [SerializeField] private TMP_InputField lidarMaxDistance_m;
@@ -51,7 +57,7 @@ public class SettingsPanelBinder : MonoBehaviour
     [Serializable]
     public class SimulatorSettings
     {
-        public string plcIP = "192.168.100.101";
+        public List<string> listIP = new List<string>() { plcDefaultIP };
         public float lidarMaxDistance_m = 100f;
         public float lidarFovHorizontal_deg = 90f;
         public float lidarFovVertical_deg = 30f;
@@ -83,9 +89,11 @@ public class SettingsPanelBinder : MonoBehaviour
     {
         // 버튼 연결
         if (btnApply) btnApply.onClick.AddListener(ApplyAndSave);
+        if (btnAddIP) btnAddIP.onClick.AddListener(AddIP);
+        if (btnRemoveIP) btnRemoveIP.onClick.AddListener(RemoveIP);
 
         // 저장된 설정 로드 → UI 채우기
-        // LoadFromDisk();
+        LoadFromDisk();
         PopulateUIFromData();
         ClearAllErrorStates();
     }
@@ -94,6 +102,8 @@ public class SettingsPanelBinder : MonoBehaviour
     void OnDestroy()
     {
         if (btnApply) btnApply.onClick.RemoveListener(ApplyAndSave);
+        if (btnAddIP) btnAddIP.onClick.RemoveListener(AddIP);
+        if (btnRemoveIP) btnRemoveIP.onClick.RemoveListener(RemoveIP);
     }
 
     // ----------------- UI -> Data 적용 & 저장 -----------------
@@ -102,7 +112,7 @@ public class SettingsPanelBinder : MonoBehaviour
         ClearAllErrorStates();
 
         // 입력값 읽기 + 검증
-        bool ok = TryReadAllFields(out var updated);
+        bool ok = TryReadAllFields(out SimulatorSettings updated);
         if (!ok)
         {
             Debug.LogWarning("[SettingsPanelBinder] 입력값에 오류가 있어 저장하지 않았습니다.");
@@ -115,7 +125,8 @@ public class SettingsPanelBinder : MonoBehaviour
         // UI에서 읽은 값을 데이터 모델에 반영
         PopulateData();
 
-        containerPreset.enabled = true; // 컨테이너 프리셋 활성화
+        // 컨테이너 프리셋 활성화. 컨테이너 랜덤 생성
+        containerPreset.enabled = true;
 
         // 저장
         SaveToDisk(Current);
@@ -136,22 +147,52 @@ public class SettingsPanelBinder : MonoBehaviour
     // ------------- PLC IP Add/Remove --------------
     public void AddIP()
     {
-        string newIP = plcIP.text.Trim();
-        if (!string.IsNullOrEmpty(newIP) && !GM.listIP.Contains(newIP))
+        // IP 입력 필드 추가
+        if (listIPObject == null) listIPObject = new List<GameObject>();
+
+        GameObject newIPField = Instantiate(plcIPInputFieldPrefab, plcModePanel.transform);
+        newIPField.transform.SetParent(plcModePanel.transform, false); // 부모 설정
+
+        TMP_InputField inputField = newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+        if (inputField) inputField.text = plcDefaultIP; // 초기값 설정
+
+        listIPObject.Add(newIPField); // 리스트에 추가
+
+        // UI 갱신
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentsPanel);
+    }
+
+    public void RemoveIP()
+    {
+        // 마지막 IP 입력 필드 제거
+        // 최소 1개는 남겨두기
+        if (listIPObject.Count > 1)
         {
-            GM.listIP.Add(newIP);
-            Debug.Log($"Added IP: {newIP}");
+            int lastIndex = listIPObject.Count - 1;
+            Destroy(listIPObject[lastIndex]);
+            listIPObject.RemoveAt(lastIndex);
         }
         else
         {
-            Debug.LogWarning("Invalid or duplicate IP.");
+            Debug.LogWarning("No IP fields to remove.");
         }
+
+        // UI 갱신
+        // panel 제거할 때는 추가할 때와 다르게 UI Update가 한 frame 늦게 적용되어
+        // 다음과 같은 조치
+        StartCoroutine(RefreshUI());
+    }
+
+    // 화면 갱신. 변화 후 다음 frame에 적용
+    IEnumerator RefreshUI(){
+        yield return new WaitForEndOfFrame(); // 다음 프레임까지 대기
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentsPanel);
     }
 
     // ----------------- Data -> UI -----------------
     private void PopulateUIFromData()
     {
-        Set(plcIP, Current.plcIP);
+        // Set(plcIP, Current.plcIP);
 
         Set(lidarMaxDistance_m, Current.lidarMaxDistance_m);
         Set(lidarFovHorizontal_deg, Current.lidarFovHorizontal_deg);
@@ -167,6 +208,7 @@ public class SettingsPanelBinder : MonoBehaviour
     private static void PopulateData()
     {
         // GM.cs에 설정 반영
+        GM.listIP = Current.listIP;
         GM.lidarMaxDistance = Current.lidarMaxDistance_m;
         GM.lidarHorizontalFOV = Current.lidarFovHorizontal_deg;
         GM.lidarVerticalFOV = Current.lidarFovVertical_deg;
@@ -177,21 +219,26 @@ public class SettingsPanelBinder : MonoBehaviour
         GM.num_containers = (short)Current.yardContainerNumberEA;
         Debug.Log("[SettingsPanelBinder] 설정이 GM.cs에 반영되었습니다.");
     }
-    
+
 
     // ----------------- UI 읽기 + 검증 -----------------
+    // UI 데이터를 Current에 입력
     private bool TryReadAllFields(out SimulatorSettings s)
     {
         s = new SimulatorSettings();
 
         // PLC IP
-        string ip = GetText(plcIP);
-        if (!IsValidIp(ip))
+        s.listIP = new List<string>();
+        foreach (var ipField in listIPObject)
         {
-            MarkInvalid(plcIP, "Invalid IP");
-            return false;
+            string textIP = GetText(ipField.GetComponent<TMP_InputField>());
+            if (!IsValidIp(textIP))
+            {
+                MarkInvalid(ipField.GetComponent<TMP_InputField>(), "Invalid IP");
+                return false;
+            }
+            s.listIP.Add(textIP);
         }
-        s.plcIP = ip;
 
         // LiDAR
         if (!TryFloat(lidarMaxDistance_m, range_LidarMax_m, out s.lidarMaxDistance_m)) return false;
@@ -214,7 +261,7 @@ public class SettingsPanelBinder : MonoBehaviour
     private static string GetText(TMP_InputField f) => f ? f.text.Trim() : "";
     private static void Set(TMP_InputField f, string v) { if (f) f.SetTextWithoutNotify(v ?? ""); }
     private static void Set(TMP_InputField f, float v) { if (f) f.SetTextWithoutNotify(v.ToString("0.###", CultureInfo.InvariantCulture)); }
-    private static void Set(TMP_InputField f, int v)   { if (f) f.SetTextWithoutNotify(v.ToString(CultureInfo.InvariantCulture)); }
+    private static void Set(TMP_InputField f, int v) { if (f) f.SetTextWithoutNotify(v.ToString(CultureInfo.InvariantCulture)); }
 
     // 숫자 파싱 + 범위 검증(+ 에러 표시)
     private bool TryFloat(TMP_InputField f, Vector2 range, out float value)
@@ -269,7 +316,7 @@ public class SettingsPanelBinder : MonoBehaviour
 
     private void ClearAllErrorStates()
     {
-        ResetColor(plcIP);
+        // ResetColor(plcIP);
 
         ResetColor(lidarMaxDistance_m);
         ResetColor(lidarFovHorizontal_deg);
@@ -303,11 +350,8 @@ public class SettingsPanelBinder : MonoBehaviour
         }
     }
 
-    public static void LoadFromDisk()
+    public void LoadFromDisk()
     {
-        // GM.cs에 설정 반영
-        PopulateData();
-
         try
         {
             if (File.Exists(FilePath))
@@ -321,6 +365,25 @@ public class SettingsPanelBinder : MonoBehaviour
         {
             Debug.LogWarning("[SettingsPanelBinder] 로드 실패(기본값 사용): " + e.Message);
             Current = new SimulatorSettings();
+        }
+        finally
+        {
+            // GM.cs에 설정 반영
+            PopulateData();
+
+            // listIPObject 초기화
+            listIPObject = new List<GameObject>();
+
+            // 현재 설정에 따라 IP 입력 필드 생성
+            int idx = 0;
+            foreach (string ip in Current.listIP)
+            {
+                AddIP();
+                listIPObject[idx].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = ip;    // 초기값 설정
+                // listIP는 Current 업데이트 하면서 반영
+            }
+
+            Debug.Log("[SettingsPanelBinder] 설정 로드 완료: " + FilePath);
         }
     }
 }

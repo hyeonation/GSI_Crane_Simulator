@@ -28,8 +28,6 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        // 설정 패널에서 저장된 설정을 로드
-        SettingsPanelBinder.LoadFromDisk();
         
         // 버튼 클릭 이벤트 연결
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
