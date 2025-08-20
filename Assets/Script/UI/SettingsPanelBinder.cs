@@ -205,18 +205,18 @@ public class SettingsPanelBinder : MonoBehaviour
         }
 
         // LiDAR 플레이스홀더 설정
-        Set(lidarMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarMaxDistance_m);
-        Set(lidarFovHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarFovHorizontal_deg);
-        Set(lidarFovVertical_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarFovVertical_deg);
-        Set(lidarResHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarResHorizontal_deg);
-        Set(lidarResVertical_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarResVertical_deg);
-        Set(lidarNoiseStd.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarNoiseStd);
+        lidarMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_LidarMax_m.x} - {range_LidarMax_m.y}";
+        lidarFovHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_FovH_deg.x} - {range_FovH_deg.y}";
+        lidarFovVertical_deg.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_FovV_deg.x} - {range_FovV_deg.y}";
+        lidarResHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_Res_deg.x} - {range_Res_deg.y}";
+        lidarResVertical_deg.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_Res_deg.x} - {range_Res_deg.y}";
+        lidarNoiseStd.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_Noise.x} - {range_Noise.y}";
 
         // Laser 플레이스홀더 설정
-        Set(laserMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.laserMaxDistance_m);
+        laserMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range:  {range_LaserMax_m.x} - {range_LaserMax_m.y}";
 
         // Yard 플레이스홀더 설정
-        Set(yardContainerNumberEA.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.yardContainerNumberEA);
+        yardContainerNumberEA.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_Containers.x} - {range_Containers.y}";
     }
 
     // ----------------- Data -> UI -----------------
@@ -339,6 +339,7 @@ public class SettingsPanelBinder : MonoBehaviour
     private static string GetText(TMP_InputField f) => f ? f.text.Trim() : "";
     private static void Set(TMP_InputField f, string v) { if (f) f.SetTextWithoutNotify(v ?? ""); }
     private static void Set(TMP_InputField f, float v) { if (f) f.SetTextWithoutNotify(v.ToString("0.###", CultureInfo.InvariantCulture)); }
+    private static void Set(TextMeshProUGUI f, string v) { if (f) f.text = v; }
     private static void Set(TextMeshProUGUI f, float v) { if (f) f.text = v.ToString("0.###", CultureInfo.InvariantCulture); }
 
     private static void Set(TMP_InputField f, int v) { if (f) f.SetTextWithoutNotify(v.ToString(CultureInfo.InvariantCulture)); }
