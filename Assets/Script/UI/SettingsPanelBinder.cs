@@ -45,16 +45,15 @@ public class SettingsPanelBinder : MonoBehaviour
     [Header("Controls")]
     [SerializeField] private Button btnApply;
     [SerializeField] private GameObject menuControllerPanel;       // menuControllerPanel 패널 오브젝트
-    [SerializeField] private MonoBehaviour containerPreset; // containerPreset 패널 오브젝트
+    [SerializeField] private MonoBehaviour containerPreset; // containerPreset 패널 오브젝트. 컨테이너 생성
     [SerializeField] private Button btnAddIP; // IP 추가 버튼
     [SerializeField] private Button btnRemoveIP; // IP 제거 버튼
 
 
-    // // init plc array
-    // plc = new CommPLC[gm.listIP.Count];
-
     // ----------------- 설정 데이터 모델 -----------------
-    [Serializable]
+
+    // SimulatorSettings: 설정 데이터 모델
+    // data load, save 용이하도록 structure로 정의
     public class SimulatorSettings
     {
         public List<string> listIP = new List<string>() { plcDefaultIP };
@@ -68,7 +67,9 @@ public class SettingsPanelBinder : MonoBehaviour
         public int yardContainerNumberEA = 100;
     }
 
-    public static SimulatorSettings Current { get; private set; } = new SimulatorSettings();
+    // get, set 방식이 굳이 필요 없어서 주석 처리
+    // public static SimulatorSettings Current { get; private set; } = new SimulatorSettings();
+    public static SimulatorSettings Current = new();
 
     // ----------------- 범위(필요시 인스펙터에서 조정) -----------------
     [Header("Validation Ranges")]
@@ -81,6 +82,8 @@ public class SettingsPanelBinder : MonoBehaviour
     [SerializeField] private Vector2Int range_Containers = new Vector2Int(0, 1000000);
 
     // ----------------- 파일 저장 경로 -----------------
+    // Application.persistentDataPath/settings.json
+    // Unity의 영속적 데이터 경로를 사용하여 설정 파일을 저장
     private static string FilePath =>
         Path.Combine(Application.persistentDataPath, "settings.json");
 
@@ -94,11 +97,12 @@ public class SettingsPanelBinder : MonoBehaviour
 
         // 저장된 설정 로드 → UI 채우기
         LoadFromDisk();
-        PopulateUIFromData();
+        InitUIFromData();
+        InitPlaceholder(); // 플레이스홀더 설정
         ClearAllErrorStates();
     }
 
-    // 굳이 필요한가?
+    // 게임 오브젝트가 파괴될 때 이벤트 해제
     void OnDestroy()
     {
         if (btnApply) btnApply.onClick.RemoveListener(ApplyAndSave);
@@ -189,10 +193,52 @@ public class SettingsPanelBinder : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentsPanel);
     }
 
-    // ----------------- Data -> UI -----------------
-    private void PopulateUIFromData()
+    private void InitPlaceholder()
     {
-        // Set(plcIP, Current.plcIP);
+        SimulatorSettings defaultSettings = new SimulatorSettings();
+
+        // IP 입력 필드 플레이스홀더 설정
+        foreach (GameObject ipObject in listIPObject)
+        {
+            TMP_InputField inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = plcDefaultIP; // 플레이스홀더 설정
+        }
+
+        // LiDAR 플레이스홀더 설정
+        Set(lidarMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarMaxDistance_m);
+        Set(lidarFovHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarFovHorizontal_deg);
+        Set(lidarFovVertical_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarFovVertical_deg);
+        Set(lidarResHorizontal_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarResHorizontal_deg);
+        Set(lidarResVertical_deg.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarResVertical_deg);
+        Set(lidarNoiseStd.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.lidarNoiseStd);
+
+        // Laser 플레이스홀더 설정
+        Set(laserMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.laserMaxDistance_m);
+
+        // Yard 플레이스홀더 설정
+        Set(yardContainerNumberEA.placeholder.GetComponent<TextMeshProUGUI>(), defaultSettings.yardContainerNumberEA);
+    }
+
+    // ----------------- Data -> UI -----------------
+    // Currnet 설정 데이터를 UI에 반영
+    private void InitUIFromData()
+    {
+        // listIPObject 초기화
+        listIPObject = new List<GameObject>();
+
+        // 현재 설정에 따라 IP 입력 필드 생성
+        int idx = 0;
+        TMP_InputField inputField;
+        foreach (string ip in Current.listIP)
+        {
+            // IP Field 생성
+            AddIP();
+
+            // 저장된 ip를 입력 필드에 설정
+            inputField = listIPObject[idx++].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+            Set(inputField, ip);
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = plcDefaultIP; // 플레이스홀더 설정
+        }
 
         Set(lidarMaxDistance_m, Current.lidarMaxDistance_m);
         Set(lidarFovHorizontal_deg, Current.lidarFovHorizontal_deg);
@@ -226,10 +272,14 @@ public class SettingsPanelBinder : MonoBehaviour
     // UI 데이터를 Current에 입력
     private bool TryReadAllFields(out SimulatorSettings s)
     {
-        s = new SimulatorSettings();
+        // 초기화
+        s = new SimulatorSettings
+        {
+            // PLC IP
+            listIP = new List<string>()
+        };
 
-        // PLC IP
-        s.listIP = new List<string>();
+        // 유효한 IP 형식인지 확인
         foreach (GameObject ipObject in listIPObject)
         {
             TMP_InputField inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
@@ -240,6 +290,32 @@ public class SettingsPanelBinder : MonoBehaviour
                 return false;
             }
             s.listIP.Add(textIP);
+        }
+
+        // 중복 IP 검사
+        int idx = 0;
+        bool hasDuplicate = false;
+        foreach (string ip in s.listIP)
+        {
+            // 중복 검사
+            List<string> listIPcopy = new List<string>(s.listIP);
+            listIPcopy.RemoveAt(idx); // 현재 IP를 제외하고 검사
+
+            // 중복된 IP가 있을 때
+            if (listIPcopy.Contains(ip))
+            {
+                TMP_InputField inputField = listIPObject[idx].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+                MarkInvalid(inputField, "Invalid IP");
+                hasDuplicate = true;
+            }
+
+            // 인덱스 증가
+            idx++;
+        }
+        if (hasDuplicate)
+        {
+            Debug.Log("[SettingsPanelBinder] 중복된 IP가 있습니다.");
+            return false;
         }
 
         // LiDAR
@@ -263,6 +339,8 @@ public class SettingsPanelBinder : MonoBehaviour
     private static string GetText(TMP_InputField f) => f ? f.text.Trim() : "";
     private static void Set(TMP_InputField f, string v) { if (f) f.SetTextWithoutNotify(v ?? ""); }
     private static void Set(TMP_InputField f, float v) { if (f) f.SetTextWithoutNotify(v.ToString("0.###", CultureInfo.InvariantCulture)); }
+    private static void Set(TextMeshProUGUI f, float v) { if (f) f.text = v.ToString("0.###", CultureInfo.InvariantCulture); }
+
     private static void Set(TMP_InputField f, int v) { if (f) f.SetTextWithoutNotify(v.ToString(CultureInfo.InvariantCulture)); }
 
     // 숫자 파싱 + 범위 검증(+ 에러 표시)
@@ -274,9 +352,17 @@ public class SettingsPanelBinder : MonoBehaviour
         if (!float.TryParse(f.text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         { MarkInvalid(f, "Number"); return false; }
 
+        // 범위 검증
+        if (value < range.x || value > range.y)
+        {
+            MarkInvalid(f, $"Range: {range.x} - {range.y}");
+            return false;
+        }
+
+        // 범위 내로 클램프
         value = Mathf.Clamp(value, range.x, range.y);
-        // 다시 표시(클램프 결과를 UI에 반영하고 싶다면 주석 해제)
-        // f.SetTextWithoutNotify(value.ToString("0.###", CultureInfo.InvariantCulture));
+        f.SetTextWithoutNotify(value.ToString("0.###", CultureInfo.InvariantCulture));
+
         return true;
     }
 
@@ -313,12 +399,22 @@ public class SettingsPanelBinder : MonoBehaviour
         if (!f) return;
         var img = f.GetComponent<Image>(); // Input 백그라운드에 Image가 있다고 가정
         if (img) img.color = invalidColor;
+        Debug.Log(_reason);
         // 필요하면 툴팁/라벨 표시 로직 추가 가능
     }
 
+    // ----------------- 에러 상태 초기화 -----------------
+    // 모든 입력 필드의 에러 상태 초기화
+    // (색상 초기화)
     private void ClearAllErrorStates()
     {
-        // ResetColor(plcIP);
+        TMP_InputField inputField;
+        foreach (GameObject ipObject in listIPObject)
+        {
+            // 저장된 ip를 입력 필드에 설정
+            inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+            ResetColor(inputField);
+        }
 
         ResetColor(lidarMaxDistance_m);
         ResetColor(lidarFovHorizontal_deg);
@@ -368,25 +464,6 @@ public class SettingsPanelBinder : MonoBehaviour
             Debug.LogWarning("[SettingsPanelBinder] 로드 실패(기본값 사용): " + e.Message);
             Current = new SimulatorSettings();
         }
-        finally
-        {
-            // GM.cs에 설정 반영
-            PopulateData();
-
-            // listIPObject 초기화
-            listIPObject = new List<GameObject>();
-
-            // 현재 설정에 따라 IP 입력 필드 생성
-            int idx = 0;
-            foreach (string ip in Current.listIP)
-            {
-                AddIP();
-                listIPObject[idx].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = ip;    // 초기값 설정
-                idx++;
-                // listIP는 Current 업데이트 하면서 반영
-            }
-
-            Debug.Log("[SettingsPanelBinder] 설정 로드 완료: " + FilePath);
-        }
+        
     }
 }

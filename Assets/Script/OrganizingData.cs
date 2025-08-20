@@ -58,10 +58,10 @@ public class OrganizingData : MonoBehaviour
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-            for (int i = 0; i < GM.listIP.Count; i++)
+            for (int iCrane = 0; iCrane < GM.listIP.Count; iCrane++)
             {
                 // Read PLC DB
-                ReadPLCdata();
+                ReadPLCdata(iCrane);
 
                 // Write PLC DB
                 // plc[i].WriteToPLC();
@@ -76,7 +76,7 @@ public class OrganizingData : MonoBehaviour
             
     }
 
-    void ReadPLCdata()
+    void ReadPLCdata(int iCrane)
     {
         const int floatStartIdxGantryVelBWD = 0;
         const int floatStartIdxGantryVelFWD = 4;
@@ -91,25 +91,22 @@ public class OrganizingData : MonoBehaviour
         const int boolBitTwlLock = 0;
         const int boolBitTwlUnlock = 1;
 
-        for (int iCrane = 0; iCrane < plc.Length; iCrane++)
-        {
-            // Read raw data from PLC
-            var rawData = plc[iCrane].ReadToPLC();
+        // Read raw data from PLC
+        var rawData = plc[iCrane].ReadToPLC();
 
-            // Read float data
-            GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-            GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-            GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
-            GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
-            GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
-            GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
-            GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
-            GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
-            
-            // Read boolean data
-            GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);
-            GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlUnlock);
-        }
+        // Read float data
+        GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
+        GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
+        
+        // Read boolean data
+        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);
+        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlUnlock);
     }
 
     float ReadFloatData(byte[] rawData, int startIndex) {

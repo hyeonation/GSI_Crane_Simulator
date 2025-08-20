@@ -47,7 +47,7 @@ public class GM : MonoBehaviour
         Application.targetFrameRate = 30;
     }
 
-    void InitVar()
+    static void InitVar()
     {
         // Crane name
         GameObject crane = GameObject.Find("Crane");

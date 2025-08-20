@@ -19,16 +19,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Button btnQuit;              // "Quit" 버튼
     [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
 
-    [Header("Behaviour Config")]
-    [Tooltip("모드 선택 시 로드할 시뮬레이터 씬 이름 (Build Settings에 등록 필요)")]
-    [SerializeField] private string simulatorSceneName = "ARMG";
-
-    [Tooltip("모드 선택 시 즉시 시뮬레이터 씬을 로드할지 여부")]
-    [SerializeField] private bool loadSceneOnModeSelect = true;
 
     void Start()
     {
-        
         // 버튼 클릭 이벤트 연결
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
         // 오브젝트 활성/비활성 반복 시 중복 Add 방지에 안전합니다.
@@ -51,8 +44,6 @@ public class MenuController : MonoBehaviour
 
         gameObject.SetActive(false); // 현재 메뉴 숨김
         GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
-
-        
     }
 
     /// <summary>
@@ -109,10 +100,10 @@ public class MenuController : MonoBehaviour
     /// </summary>
     private void TryLoadSimulatorScene()
     {
-        if (!loadSceneOnModeSelect) return;
-        if (string.IsNullOrEmpty(simulatorSceneName)) return;
+        // if (!loadSceneOnModeSelect) return;
+        // if (string.IsNullOrEmpty(simulatorSceneName)) return;
 
-        // 씬 로드(싱글). 필요 시 Additive로 변경 가능
-        SceneManager.LoadScene(simulatorSceneName);
+        // // 씬 로드(싱글). 필요 시 Additive로 변경 가능
+        // SceneManager.LoadScene(simulatorSceneName);
     }
 }
