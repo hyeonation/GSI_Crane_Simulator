@@ -195,12 +195,11 @@ public class SettingsPanelBinder : MonoBehaviour
 
     private void InitPlaceholder()
     {
-        SimulatorSettings defaultSettings = new SimulatorSettings();
-
         // IP 입력 필드 플레이스홀더 설정
+        TMP_InputField inputField;
         foreach (GameObject ipObject in listIPObject)
         {
-            TMP_InputField inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
+            inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
             inputField.placeholder.GetComponent<TextMeshProUGUI>().text = plcDefaultIP; // 플레이스홀더 설정
         }
 
@@ -312,6 +311,8 @@ public class SettingsPanelBinder : MonoBehaviour
             // 인덱스 증가
             idx++;
         }
+
+        // 중복 IP가 있으면 false 반환
         if (hasDuplicate)
         {
             Debug.Log("[SettingsPanelBinder] 중복된 IP가 있습니다.");
@@ -339,9 +340,6 @@ public class SettingsPanelBinder : MonoBehaviour
     private static string GetText(TMP_InputField f) => f ? f.text.Trim() : "";
     private static void Set(TMP_InputField f, string v) { if (f) f.SetTextWithoutNotify(v ?? ""); }
     private static void Set(TMP_InputField f, float v) { if (f) f.SetTextWithoutNotify(v.ToString("0.###", CultureInfo.InvariantCulture)); }
-    private static void Set(TextMeshProUGUI f, string v) { if (f) f.text = v; }
-    private static void Set(TextMeshProUGUI f, float v) { if (f) f.text = v.ToString("0.###", CultureInfo.InvariantCulture); }
-
     private static void Set(TMP_InputField f, int v) { if (f) f.SetTextWithoutNotify(v.ToString(CultureInfo.InvariantCulture)); }
 
     // 숫자 파싱 + 범위 검증(+ 에러 표시)
