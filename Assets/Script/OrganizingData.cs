@@ -7,8 +7,13 @@ public class OrganizingData : MonoBehaviour
 {
     CommPLC[] plc;
 
-    bool toggleQ, toggleA, toggleW, toggleS, toggleE, toggleD, toggleR = false;
-    bool toggleF, toggleT, toggleG, toggleY, toggleH, toggleU, toggleJ = false;
+    KeyCmd keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
+    KeyCmd keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
+    KeyCmd keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.E, KeyCode.D);
+    KeyCmd keyMM0Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.R, KeyCode.F);
+    KeyCmd keyMM1Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.T, KeyCode.G);
+    KeyCmd keyMM2Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.Y, KeyCode.H);
+    KeyCmd keyMM3Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.U, KeyCode.J);
 
     void Start()
     {
@@ -56,7 +61,7 @@ public class OrganizingData : MonoBehaviour
         {
             CmdKeyboard();
         }
-            
+
     }
 
     void ReadPLCdata(int iCrane)
@@ -86,13 +91,14 @@ public class OrganizingData : MonoBehaviour
         GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
         GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
         GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
-        
+
         // Read boolean data
         GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);
         GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlUnlock);
     }
 
-    float ReadFloatData(byte[] rawData, int startIndex) {
+    float ReadFloatData(byte[] rawData, int startIndex)
+    {
 
         // float 4 bytes
         byte[] bytes = new byte[4];
@@ -122,78 +128,59 @@ public class OrganizingData : MonoBehaviour
         // keyboard input
         if (Input.anyKeyDown)
         {
-            // toggle boolean
-            toggleQ = Input.GetKeyDown(KeyCode.Q) ? !toggleQ : toggleQ;
-            toggleA = Input.GetKeyDown(KeyCode.A) ? !toggleA : toggleA;
-            toggleW = Input.GetKeyDown(KeyCode.W) ? !toggleW : toggleW;
-            toggleS = Input.GetKeyDown(KeyCode.S) ? !toggleS : toggleS;
-            toggleE = Input.GetKeyDown(KeyCode.E) ? !toggleE : toggleE;
-            toggleD = Input.GetKeyDown(KeyCode.D) ? !toggleD : toggleD;
-            toggleR = Input.GetKeyDown(KeyCode.R) ? !toggleR : toggleR;
-            toggleF = Input.GetKeyDown(KeyCode.F) ? !toggleF : toggleF;
-            toggleT = Input.GetKeyDown(KeyCode.T) ? !toggleT : toggleT;
-            toggleG = Input.GetKeyDown(KeyCode.G) ? !toggleG : toggleG;
-            toggleY = Input.GetKeyDown(KeyCode.Y) ? !toggleY : toggleY;
-            toggleH = Input.GetKeyDown(KeyCode.H) ? !toggleH : toggleH;
-            toggleU = Input.GetKeyDown(KeyCode.U) ? !toggleU : toggleU;
-            toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
+            // Gantry
+            GM.cmdGantryVelFWD[iCrane] = keyGantryCmd.GetSpeed();
+            GM.cmdGantryVelBWD[iCrane] = GM.cmdGantryVelFWD[iCrane];
 
-            // toggle boolean with key combinations
-            // 두 버튼 중 하나만 켜지도록
-            toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
-            toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
+            // Trolley
+            GM.cmdTrolleyVel[iCrane] = keyTrolleyCmd.GetSpeed();
+            GM.cmdSpreaderVel[iCrane] = keySpreaderCmd.GetSpeed();
 
-            toggleW = toggleW && toggleS && Input.GetKeyDown(KeyCode.S) ? false : toggleW;
-            toggleS = toggleW && toggleS && Input.GetKeyDown(KeyCode.W) ? false : toggleS;
+            // Micro Motion
+            GM.cmdMM0Vel[iCrane] = keyMM0Cmd.GetSpeed();
+            GM.cmdMM1Vel[iCrane] = keyMM1Cmd.GetSpeed();
+            GM.cmdMM2Vel[iCrane] = keyMM2Cmd.GetSpeed();
+            GM.cmdMM3Vel[iCrane] = keyMM3Cmd.GetSpeed();
 
-            toggleE = toggleE && toggleD && Input.GetKeyDown(KeyCode.D) ? false : toggleE;
-            toggleD = toggleE && toggleD && Input.GetKeyDown(KeyCode.E) ? false : toggleD;
-
-            toggleR = toggleR && toggleF && Input.GetKeyDown(KeyCode.F) ? false : toggleR;
-            toggleF = toggleR && toggleF && Input.GetKeyDown(KeyCode.R) ? false : toggleF;
-
-            toggleT = toggleT && toggleG && Input.GetKeyDown(KeyCode.G) ? false : toggleT;
-            toggleG = toggleT && toggleG && Input.GetKeyDown(KeyCode.T) ? false : toggleG;
-
-            toggleY = toggleY && toggleH && Input.GetKeyDown(KeyCode.H) ? false : toggleY;
-            toggleH = toggleY && toggleH && Input.GetKeyDown(KeyCode.Y) ? false : toggleH;
-
-            toggleU = toggleU && toggleJ && Input.GetKeyDown(KeyCode.J) ? false : toggleU;
-            toggleJ = toggleU && toggleJ && Input.GetKeyDown(KeyCode.U) ? false : toggleJ;
-
-            // input velocity
-            // 이동 중 반대 방향 키를 누르면 반대 방향으로 바로 움직이도록
-            GM.cmdGantryVelFWD[iCrane] = toggleQ ? GM.settingParams.keyGantrySpeed : 0;
-            GM.cmdGantryVelFWD[iCrane] = toggleA ? -GM.settingParams.keyGantrySpeed : GM.cmdGantryVelFWD[iCrane];
-
-            GM.cmdGantryVelBWD[iCrane] = toggleQ ? GM.settingParams.keyGantrySpeed : 0;
-            GM.cmdGantryVelBWD[iCrane] = toggleA ? -GM.settingParams.keyGantrySpeed : GM.cmdGantryVelBWD[iCrane];
-
-            GM.cmdTrolleyVel[iCrane] = toggleW ? GM.settingParams.keyTrolleySpeed : 0;
-            GM.cmdTrolleyVel[iCrane] = toggleS ? -GM.settingParams.keyTrolleySpeed : GM.cmdTrolleyVel[iCrane];
-
-            GM.cmdSpreaderVel[iCrane] = toggleE ? GM.settingParams.keySpreaderSpeed : 0;
-            GM.cmdSpreaderVel[iCrane] = toggleD ? -GM.settingParams.keySpreaderSpeed : GM.cmdSpreaderVel[iCrane];
-
-            GM.cmdMM0Vel[iCrane] = toggleR ? GM.settingParams.keyMMSpeed : 0;
-            GM.cmdMM0Vel[iCrane] = toggleF ? -GM.settingParams.keyMMSpeed : GM.cmdMM0Vel[iCrane];
-            GM.cmdMM1Vel[iCrane] = toggleT ? GM.settingParams.keyMMSpeed : 0;
-            GM.cmdMM1Vel[iCrane] = toggleG ? -GM.settingParams.keyMMSpeed : GM.cmdMM1Vel[iCrane];
-            GM.cmdMM2Vel[iCrane] = toggleY ? GM.settingParams.keyMMSpeed : 0;
-            GM.cmdMM2Vel[iCrane] = toggleH ? -GM.settingParams.keyMMSpeed : GM.cmdMM2Vel[iCrane];
-            GM.cmdMM3Vel[iCrane] = toggleU ? GM.settingParams.keyMMSpeed : 0;
-            GM.cmdMM3Vel[iCrane] = toggleJ ? -GM.settingParams.keyMMSpeed : GM.cmdMM3Vel[iCrane];
-
+            // 20ft, 40ft
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? true : GM.cmd20ft[iCrane];
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd20ft[iCrane];
-
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd40ft[iCrane];
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? true : GM.cmd40ft[iCrane];
 
+            // Twist Lock
             GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmdTwlLock[iCrane];
             GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlLock[iCrane];
             GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmdTwlUnlock[iCrane];
             GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlUnlock[iCrane];
         }
+    }
+}
+
+public class KeyCmd
+{
+    float speedABS = 0f;
+    float[] direction = new float[3] { -1f, 0f, 1f };
+    int directionIdx = 1; // 0: BWD, 1: Stop, 2: FWD
+    
+    KeyCode keyFWD;
+    KeyCode keyBWD;
+
+    public KeyCmd(float speedABS, KeyCode keyFWD, KeyCode keyBWD)
+    {
+        this.speedABS = speedABS;
+        this.keyFWD = keyFWD;
+        this.keyBWD = keyBWD;
+    }
+
+    public float GetSpeed()
+    {
+        if      (Input.GetKeyDown(keyFWD)) directionIdx++;
+        else if (Input.GetKeyDown(keyBWD)) directionIdx--;
+
+        // Ensure directionIdx is within bounds
+        directionIdx = Mathf.Clamp(directionIdx, 0, 2);
+
+        return speedABS * direction[directionIdx];
     }
 }
