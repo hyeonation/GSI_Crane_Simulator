@@ -8,7 +8,6 @@ public class GM : MonoBehaviour
     public static bool cmdWithPLC = false;
     public static List<string> listIP = new(); // PLC IP list
     [HideInInspector] public static string[] nameCranes, nameTrucks;
-
     [HideInInspector] public static bool playSimulation = false; // 시뮬레이션 실행 여부
 
     [Header("Container_Preset")]
@@ -78,6 +77,10 @@ public class GM : MonoBehaviour
 public class SettingParams
 {
     public List<string> listIP = new() { "192.168.100.101" };   // 기본 IP 주소. 최소 1개 이상.
+    public float keyGantrySpeed = 0.5f;
+    public float keyTrolleySpeed = 0.5f;
+    public float keySpreaderSpeed = 0.25f;
+    public float keyMMSpeed = 0.05f;
     public float lidarMaxDistance_m = 100f;
     public float lidarFovHorizontal_deg = 90f;
     public float lidarFovVertical_deg = 30f;

@@ -27,6 +27,12 @@ public class SettingsPanelBinder : MonoBehaviour
     [SerializeField] private RectTransform contentsPanel;  // Contents 패널 RectTransform. 화면 refresh 위함
     [HideInInspector] private List<GameObject> listIPObject; // IP 입력 필드 오브젝트 리스트
 
+    [Header("Keyboard Mode")]
+    [SerializeField] private TMP_InputField keyGantrySpeed;
+    [SerializeField] private TMP_InputField keyTrolleySpeed;
+    [SerializeField] private TMP_InputField keySpreaderSpeed;
+    [SerializeField] private TMP_InputField keyMMSpeed;
+
     [Header("SPSS LiDAR")]
     [SerializeField] private TMP_InputField lidarMaxDistance_m;
     [SerializeField] private TMP_InputField lidarFovHorizontal_deg;
@@ -51,10 +57,14 @@ public class SettingsPanelBinder : MonoBehaviour
     // get, set 방식이 굳이 필요 없어서 주석 처리
     // public static SettingParams Current { get; private set; } = new SimulatorSettings();
     public SettingParams current = new();
-    public SettingParams simulatorSettingsDefault = new();
+    public SettingParams settingDefault = new();
 
     // ----------------- 범위(필요시 인스펙터에서 조정) -----------------
     [Header("Validation Ranges")]
+    [SerializeField] private Vector2 range_keyGantrySpeed = new Vector2(0f, 10f);
+    [SerializeField] private Vector2 range_keyTrolleySpeed = new Vector2(0f, 10f);
+    [SerializeField] private Vector2 range_keySpreaderSpeed = new Vector2(0f, 10f);
+    [SerializeField] private Vector2 range_keyMMSpeed = new Vector2(0f, 10f);
     [SerializeField] private Vector2 range_LidarMax_m = new Vector2(1f, 10000f);
     [SerializeField] private Vector2 range_FovH_deg = new Vector2(1f, 360f);
     [SerializeField] private Vector2 range_FovV_deg = new Vector2(1f, 180f);
@@ -140,7 +150,7 @@ public class SettingsPanelBinder : MonoBehaviour
         newIPField.transform.SetParent(plcModePanel.transform, false); // 부모 설정
 
         newIPField.transform.Find("SubTitle").GetComponent<TextMeshProUGUI>().text = $" Crane {listIPObject.Count + 1}"; // 서브타이틀 업데이트
-        newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = simulatorSettingsDefault.listIP[0];
+        newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = settingDefault.listIP[0];
 
         listIPObject.Add(newIPField); // 리스트에 추가
 
@@ -182,8 +192,14 @@ public class SettingsPanelBinder : MonoBehaviour
         foreach (GameObject ipObject in listIPObject)
         {
             inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = simulatorSettingsDefault.listIP[0]; // 플레이스홀더 설정
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = settingDefault.listIP[0]; // 플레이스홀더 설정
         }
+
+        // 키보드 속도 플레이스홀더 설정
+        keyGantrySpeed.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_keyGantrySpeed.x} - {range_keyGantrySpeed.y}";
+        keyTrolleySpeed.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_keyTrolleySpeed.x} - {range_keyTrolleySpeed.y}";
+        keySpreaderSpeed.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_keySpreaderSpeed.x} - {range_keySpreaderSpeed.y}";
+        keyMMSpeed.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_keyMMSpeed.x} - {range_keyMMSpeed.y}";
 
         // LiDAR 플레이스홀더 설정
         lidarMaxDistance_m.placeholder.GetComponent<TextMeshProUGUI>().text = $"Range: {range_LidarMax_m.x} - {range_LidarMax_m.y}";
@@ -218,8 +234,14 @@ public class SettingsPanelBinder : MonoBehaviour
             // 저장된 ip를 입력 필드에 설정
             inputField = listIPObject[idx++].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
             Set(inputField, ip);
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = simulatorSettingsDefault.listIP[0]; // 플레이스홀더 설정
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = settingDefault.listIP[0]; // 플레이스홀더 설정
         }
+
+        // 키보드 속도 설정
+        Set(keyGantrySpeed, current.keyGantrySpeed);
+        Set(keyTrolleySpeed, current.keyTrolleySpeed);
+        Set(keySpreaderSpeed, current.keySpreaderSpeed);
+        Set(keyMMSpeed, current.keyMMSpeed);
 
         Set(lidarMaxDistance_m, current.lidarMaxDistance_m);
         Set(lidarFovHorizontal_deg, current.lidarFovHorizontal_deg);
@@ -283,6 +305,12 @@ public class SettingsPanelBinder : MonoBehaviour
             Debug.Log("[SettingsPanelBinder] 중복된 IP가 있습니다.");
             return false;
         }
+
+        // 키보드 속도
+        if (!TryFloat(keyGantrySpeed, range_keyGantrySpeed, out s.keyGantrySpeed)) return false;
+        if (!TryFloat(keyTrolleySpeed, range_keyTrolleySpeed, out s.keyTrolleySpeed)) return false;
+        if (!TryFloat(keySpreaderSpeed, range_keySpreaderSpeed, out s.keySpreaderSpeed)) return false;
+        if (!TryFloat(keyMMSpeed, range_keyMMSpeed, out s.keyMMSpeed)) return false;
 
         // LiDAR
         if (!TryFloat(lidarMaxDistance_m, range_LidarMax_m, out s.lidarMaxDistance_m)) return false;

@@ -7,25 +7,8 @@ public class OrganizingData : MonoBehaviour
 {
     CommPLC[] plc;
 
-    float keyGantrySpeed = 0.5f;
-    float keyTrolleySpeed = 0.5f;
-    float keySpreaderSpeed = 0.25f;
-    float keyMMSpeed = 0.05f;
-
-    bool toggleQ = false;
-    bool toggleA = false;
-    bool toggleW = false;
-    bool toggleS = false;
-    bool toggleE = false;
-    bool toggleD = false;
-    bool toggleR = false;
-    bool toggleF = false;
-    bool toggleT = false;
-    bool toggleG = false;
-    bool toggleY = false;
-    bool toggleH = false;
-    bool toggleU = false;
-    bool toggleJ = false;
+    bool toggleQ, toggleA, toggleW, toggleS, toggleE, toggleD, toggleR = false;
+    bool toggleF, toggleT, toggleG, toggleY, toggleH, toggleU, toggleJ = false;
 
     void Start()
     {
@@ -156,6 +139,7 @@ public class OrganizingData : MonoBehaviour
             toggleJ = Input.GetKeyDown(KeyCode.J) ? !toggleJ : toggleJ;
 
             // toggle boolean with key combinations
+            // 두 버튼 중 하나만 켜지도록
             toggleQ = toggleQ && toggleA && Input.GetKeyDown(KeyCode.A) ? false : toggleQ;
             toggleA = toggleQ && toggleA && Input.GetKeyDown(KeyCode.Q) ? false : toggleA;
 
@@ -178,26 +162,27 @@ public class OrganizingData : MonoBehaviour
             toggleJ = toggleU && toggleJ && Input.GetKeyDown(KeyCode.U) ? false : toggleJ;
 
             // input velocity
-            GM.cmdGantryVelFWD[iCrane] = toggleQ ? keyGantrySpeed : 0;
-            GM.cmdGantryVelFWD[iCrane] = toggleA ? -keyGantrySpeed : GM.cmdGantryVelFWD[iCrane];
+            // 이동 중 반대 방향 키를 누르면 반대 방향으로 바로 움직이도록
+            GM.cmdGantryVelFWD[iCrane] = toggleQ ? GM.settingParams.keyGantrySpeed : 0;
+            GM.cmdGantryVelFWD[iCrane] = toggleA ? -GM.settingParams.keyGantrySpeed : GM.cmdGantryVelFWD[iCrane];
 
-            GM.cmdGantryVelBWD[iCrane] = toggleQ ? keyGantrySpeed : 0;
-            GM.cmdGantryVelBWD[iCrane] = toggleA ? -keyGantrySpeed : GM.cmdGantryVelBWD[iCrane];
+            GM.cmdGantryVelBWD[iCrane] = toggleQ ? GM.settingParams.keyGantrySpeed : 0;
+            GM.cmdGantryVelBWD[iCrane] = toggleA ? -GM.settingParams.keyGantrySpeed : GM.cmdGantryVelBWD[iCrane];
 
-            GM.cmdTrolleyVel[iCrane] = toggleW ? keyTrolleySpeed : 0;
-            GM.cmdTrolleyVel[iCrane] = toggleS ? -keyTrolleySpeed : GM.cmdTrolleyVel[iCrane];
+            GM.cmdTrolleyVel[iCrane] = toggleW ? GM.settingParams.keyTrolleySpeed : 0;
+            GM.cmdTrolleyVel[iCrane] = toggleS ? -GM.settingParams.keyTrolleySpeed : GM.cmdTrolleyVel[iCrane];
 
-            GM.cmdSpreaderVel[iCrane] = toggleE ? keySpreaderSpeed : 0;
-            GM.cmdSpreaderVel[iCrane] = toggleD ? -keySpreaderSpeed : GM.cmdSpreaderVel[iCrane];
+            GM.cmdSpreaderVel[iCrane] = toggleE ? GM.settingParams.keySpreaderSpeed : 0;
+            GM.cmdSpreaderVel[iCrane] = toggleD ? -GM.settingParams.keySpreaderSpeed : GM.cmdSpreaderVel[iCrane];
 
-            GM.cmdMM0Vel[iCrane] = toggleR ? keyMMSpeed : 0;
-            GM.cmdMM0Vel[iCrane] = toggleF ? -keyMMSpeed : GM.cmdMM0Vel[iCrane];
-            GM.cmdMM1Vel[iCrane] = toggleT ? keyMMSpeed : 0;
-            GM.cmdMM1Vel[iCrane] = toggleG ? -keyMMSpeed : GM.cmdMM1Vel[iCrane];
-            GM.cmdMM2Vel[iCrane] = toggleY ? keyMMSpeed : 0;
-            GM.cmdMM2Vel[iCrane] = toggleH ? -keyMMSpeed : GM.cmdMM2Vel[iCrane];
-            GM.cmdMM3Vel[iCrane] = toggleU ? keyMMSpeed : 0;
-            GM.cmdMM3Vel[iCrane] = toggleJ ? -keyMMSpeed : GM.cmdMM3Vel[iCrane];
+            GM.cmdMM0Vel[iCrane] = toggleR ? GM.settingParams.keyMMSpeed : 0;
+            GM.cmdMM0Vel[iCrane] = toggleF ? -GM.settingParams.keyMMSpeed : GM.cmdMM0Vel[iCrane];
+            GM.cmdMM1Vel[iCrane] = toggleT ? GM.settingParams.keyMMSpeed : 0;
+            GM.cmdMM1Vel[iCrane] = toggleG ? -GM.settingParams.keyMMSpeed : GM.cmdMM1Vel[iCrane];
+            GM.cmdMM2Vel[iCrane] = toggleY ? GM.settingParams.keyMMSpeed : 0;
+            GM.cmdMM2Vel[iCrane] = toggleH ? -GM.settingParams.keyMMSpeed : GM.cmdMM2Vel[iCrane];
+            GM.cmdMM3Vel[iCrane] = toggleU ? GM.settingParams.keyMMSpeed : 0;
+            GM.cmdMM3Vel[iCrane] = toggleJ ? -GM.settingParams.keyMMSpeed : GM.cmdMM3Vel[iCrane];
 
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? true : GM.cmd20ft[iCrane];
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd20ft[iCrane];
