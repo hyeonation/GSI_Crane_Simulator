@@ -456,5 +456,8 @@ public class SettingsPanelBinder : MonoBehaviour
             Debug.LogWarning("[SettingsPanelBinder] 로드 실패(기본값 사용): " + e.Message);
             current = new SettingParams();
         }
+
+        // 전역 설정에 반영
+        GM.settingParams = current;
     }
 }

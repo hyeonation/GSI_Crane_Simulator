@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 메인 메뉴 UI 컨트롤러.
@@ -44,6 +43,10 @@ public class MenuController : MonoBehaviour
 
         gameObject.SetActive(false); // 현재 메뉴 숨김
         GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
+
+        // OrganizingData 껐다가 다시 켜기
+        // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
+        GameObject.Find("GameManager").GetComponent<OrganizingData>().enabled = true;
     }
 
     /// <summary>

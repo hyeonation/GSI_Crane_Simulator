@@ -26,7 +26,7 @@ public class GM : MonoBehaviour
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
     // settings
-    public static SettingParams settingParams = new();
+    public static SettingParams settingParams;
 
     void Awake()
     {
