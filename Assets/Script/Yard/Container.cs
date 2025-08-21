@@ -7,10 +7,9 @@ public class Container : MonoBehaviour
 
     //containers
     public GameObject[] prefabs;
-    List<Vector3> spawnedPositions = new List<Vector3>();
 
     float start_val, x_interval, y_interval, z_interval;
-    short num_containers;
+    int num_containers;
     string name_container = "Container";
 
     int row_max, bay_max, tier_max;
@@ -36,7 +35,7 @@ public class Container : MonoBehaviour
         x_interval = GM.yard_x_interval;
         y_interval = GM.yard_y_interval;
         z_interval = GM.yard_z_interval;
-        num_containers = GM.num_containers;
+        num_containers = GM.settingParams.yardContainerNumberEA;
 
         // load data
         row_max = GM.row;
@@ -84,7 +83,7 @@ public class Container : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        Debug.Log($"[Container] 컨테이너 개수: {GM.num_containers}");
+        Debug.Log($"[Container] 컨테이너 개수: {GM.settingParams.yardContainerNumberEA}");
 
         // init values
         init();

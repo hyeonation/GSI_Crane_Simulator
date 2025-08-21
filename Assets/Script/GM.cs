@@ -1,14 +1,12 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 // GameManager, GameMaster
 public class GM : MonoBehaviour
 {
-
     // command with PLC
     public static bool cmdWithPLC = false;
-    public static List<string> listIP = new List<string>(); // PLC IP list
+    public static List<string> listIP = new(); // PLC IP list
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
     [HideInInspector] public static bool playSimulation = false; // 시뮬레이션 실행 여부
@@ -22,7 +20,6 @@ public class GM : MonoBehaviour
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public static short num_containers = 0;
 
     // command data
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
@@ -30,14 +27,7 @@ public class GM : MonoBehaviour
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
     // settings
-    [HideInInspector] public static float lidarMaxDistance = 10f;
-    [HideInInspector] public static float lidarHorizontalFOV = 90f; // 수평 시야각 Field of View
-    [HideInInspector] public static float lidarVerticalFOV = 20f;   // 수직 시야각
-    [HideInInspector] public static float lidarHorizontalResolution = 1f; // 수평 각도 간격(도)
-    [HideInInspector] public static float lidarVerticalResolution = 1f;   // 수직 각도 간격(도)
-    [HideInInspector] public static float lidarNoiseStdDev = 0.01f; // 노이즈 표준편차 (미터 단위)
-    
-    [HideInInspector] public static float laserMaxDistance = 12.0f;  // maximum distance for laser detection
+    public static SettingParams settingParams = new();
 
     void Awake()
     {
@@ -80,4 +70,20 @@ public class GM : MonoBehaviour
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
     }
+}
+
+// ----------------- 설정 데이터 모델 -----------------
+// SimulatorSettings: 설정 데이터 모델
+// data load, save 용이하도록 structure로 정의
+public class SettingParams
+{
+    public List<string> listIP = new() { "192.168.100.101" };   // 기본 IP 주소. 최소 1개 이상.
+    public float lidarMaxDistance_m = 100f;
+    public float lidarFovHorizontal_deg = 90f;
+    public float lidarFovVertical_deg = 30f;
+    public float lidarResHorizontal_deg = 0.2f;
+    public float lidarResVertical_deg = 0.2f;
+    public float lidarNoiseStd = 0.01f;
+    public float laserMaxDistance_m = 50f;
+    public int yardContainerNumberEA = 100;
 }

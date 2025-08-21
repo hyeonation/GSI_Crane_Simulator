@@ -12,7 +12,7 @@ public class Laser : MonoBehaviour
 
     private void Update()
     {
-        distance = GetLaserDistance(GM.laserMaxDistance);
+        distance = GetLaserDistance(GM.settingParams.laserMaxDistance_m);
     }
 
     public float GetLaserDistance(float maxDistance)

@@ -25,7 +25,6 @@ public class SettingsPanelBinder : MonoBehaviour
     [SerializeField] private GameObject plcIPInputFieldPrefab; // IP 입력 필드 프리팹
     [SerializeField] private GameObject plcModePanel; // IP 입력 필드들을 담을 컨테이너
     [SerializeField] private RectTransform contentsPanel;  // Contents 패널 RectTransform. 화면 refresh 위함
-    private const string plcDefaultIP = "192.168.100.101"; // 기본 IP 주소
     [HideInInspector] private List<GameObject> listIPObject; // IP 입력 필드 오브젝트 리스트
 
     [Header("SPSS LiDAR")]
@@ -49,27 +48,10 @@ public class SettingsPanelBinder : MonoBehaviour
     [SerializeField] private Button btnAddIP; // IP 추가 버튼
     [SerializeField] private Button btnRemoveIP; // IP 제거 버튼
 
-
-    // ----------------- 설정 데이터 모델 -----------------
-
-    // SimulatorSettings: 설정 데이터 모델
-    // data load, save 용이하도록 structure로 정의
-    public class SimulatorSettings
-    {
-        public List<string> listIP = new List<string>() { plcDefaultIP };
-        public float lidarMaxDistance_m = 100f;
-        public float lidarFovHorizontal_deg = 90f;
-        public float lidarFovVertical_deg = 30f;
-        public float lidarResHorizontal_deg = 0.2f;
-        public float lidarResVertical_deg = 0.2f;
-        public float lidarNoiseStd = 0.01f;
-        public float laserMaxDistance_m = 50f;
-        public int yardContainerNumberEA = 100;
-    }
-
     // get, set 방식이 굳이 필요 없어서 주석 처리
-    // public static SimulatorSettings Current { get; private set; } = new SimulatorSettings();
-    public static SimulatorSettings Current = new();
+    // public static SettingParams Current { get; private set; } = new SimulatorSettings();
+    public SettingParams current = new();
+    public SettingParams simulatorSettingsDefault = new();
 
     // ----------------- 범위(필요시 인스펙터에서 조정) -----------------
     [Header("Validation Ranges")]
@@ -116,7 +98,7 @@ public class SettingsPanelBinder : MonoBehaviour
         ClearAllErrorStates();
 
         // 입력값 읽기 + 검증
-        bool ok = TryReadAllFields(out SimulatorSettings updated);
+        bool ok = TryReadAllFields(out SettingParams updated);
         if (!ok)
         {
             Debug.Log("[SettingsPanelBinder] 입력값에 오류가 있어 저장하지 않았습니다.");
@@ -124,16 +106,16 @@ public class SettingsPanelBinder : MonoBehaviour
         }
 
         // 반영
-        Current = updated;
+        current = updated;
 
         // UI에서 읽은 값을 데이터 모델에 반영
-        PopulateData();
+        GM.settingParams = current;
 
         // 컨테이너 프리셋 활성화. 컨테이너 랜덤 생성
         containerPreset.enabled = true;
 
         // 저장
-        SaveToDisk(Current);
+        SaveToDisk(current);
 
         Debug.Log("[SettingsPanelBinder] 설정 적용/저장 완료: " + FilePath);
 
@@ -158,7 +140,7 @@ public class SettingsPanelBinder : MonoBehaviour
         newIPField.transform.SetParent(plcModePanel.transform, false); // 부모 설정
 
         newIPField.transform.Find("SubTitle").GetComponent<TextMeshProUGUI>().text = $" Crane {listIPObject.Count + 1}"; // 서브타이틀 업데이트
-        newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = plcDefaultIP;
+        newIPField.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>().text = simulatorSettingsDefault.listIP[0];
 
         listIPObject.Add(newIPField); // 리스트에 추가
 
@@ -200,7 +182,7 @@ public class SettingsPanelBinder : MonoBehaviour
         foreach (GameObject ipObject in listIPObject)
         {
             inputField = ipObject.transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = plcDefaultIP; // 플레이스홀더 설정
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = simulatorSettingsDefault.listIP[0]; // 플레이스홀더 설정
         }
 
         // LiDAR 플레이스홀더 설정
@@ -228,7 +210,7 @@ public class SettingsPanelBinder : MonoBehaviour
         // 현재 설정에 따라 IP 입력 필드 생성
         int idx = 0;
         TMP_InputField inputField;
-        foreach (string ip in Current.listIP)
+        foreach (string ip in current.listIP)
         {
             // IP Field 생성
             AddIP();
@@ -236,43 +218,26 @@ public class SettingsPanelBinder : MonoBehaviour
             // 저장된 ip를 입력 필드에 설정
             inputField = listIPObject[idx++].transform.Find("InputField(TMP)").GetComponent<TMP_InputField>();
             Set(inputField, ip);
-            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = plcDefaultIP; // 플레이스홀더 설정
+            inputField.placeholder.GetComponent<TextMeshProUGUI>().text = simulatorSettingsDefault.listIP[0]; // 플레이스홀더 설정
         }
 
-        Set(lidarMaxDistance_m, Current.lidarMaxDistance_m);
-        Set(lidarFovHorizontal_deg, Current.lidarFovHorizontal_deg);
-        Set(lidarFovVertical_deg, Current.lidarFovVertical_deg);
-        Set(lidarResHorizontal_deg, Current.lidarResHorizontal_deg);
-        Set(lidarResVertical_deg, Current.lidarResVertical_deg);
-        Set(lidarNoiseStd, Current.lidarNoiseStd);
+        Set(lidarMaxDistance_m, current.lidarMaxDistance_m);
+        Set(lidarFovHorizontal_deg, current.lidarFovHorizontal_deg);
+        Set(lidarFovVertical_deg, current.lidarFovVertical_deg);
+        Set(lidarResHorizontal_deg, current.lidarResHorizontal_deg);
+        Set(lidarResVertical_deg, current.lidarResVertical_deg);
+        Set(lidarNoiseStd, current.lidarNoiseStd);
 
-        Set(laserMaxDistance_m, Current.laserMaxDistance_m);
-        Set(yardContainerNumberEA, Current.yardContainerNumberEA);
+        Set(laserMaxDistance_m, current.laserMaxDistance_m);
+        Set(yardContainerNumberEA, current.yardContainerNumberEA);
     }
-
-    private static void PopulateData()
-    {
-        // GM.cs에 설정 반영
-        GM.listIP = Current.listIP;
-        GM.lidarMaxDistance = Current.lidarMaxDistance_m;
-        GM.lidarHorizontalFOV = Current.lidarFovHorizontal_deg;
-        GM.lidarVerticalFOV = Current.lidarFovVertical_deg;
-        GM.lidarHorizontalResolution = Current.lidarResHorizontal_deg;
-        GM.lidarVerticalResolution = Current.lidarResVertical_deg;
-        GM.lidarNoiseStdDev = Current.lidarNoiseStd;
-        GM.laserMaxDistance = Current.laserMaxDistance_m;
-        GM.num_containers = (short)Current.yardContainerNumberEA;
-
-        Debug.Log("[SettingsPanelBinder] 설정이 GM.cs에 반영되었습니다.");
-    }
-
 
     // ----------------- UI 읽기 + 검증 -----------------
     // UI 데이터를 Current에 입력
-    private bool TryReadAllFields(out SimulatorSettings s)
+    private bool TryReadAllFields(out SettingParams s)
     {
         // 초기화
-        s = new SimulatorSettings
+        s = new SettingParams
         {
             // PLC IP
             listIP = new List<string>()
@@ -434,7 +399,7 @@ public class SettingsPanelBinder : MonoBehaviour
     }
 
     // ----------------- 저장/로드 -----------------
-    private static void SaveToDisk(SimulatorSettings s)
+    private static void SaveToDisk(SettingParams s)
     {
         try
         {
@@ -454,15 +419,14 @@ public class SettingsPanelBinder : MonoBehaviour
             if (File.Exists(FilePath))
             {
                 var json = File.ReadAllText(FilePath, Encoding.UTF8);
-                var loaded = JsonUtility.FromJson<SimulatorSettings>(json);
-                if (loaded != null) Current = loaded;
+                var loaded = JsonUtility.FromJson<SettingParams>(json);
+                if (loaded != null) current = loaded;
             }
         }
         catch (Exception e)
         {
             Debug.LogWarning("[SettingsPanelBinder] 로드 실패(기본값 사용): " + e.Message);
-            Current = new SimulatorSettings();
+            current = new SettingParams();
         }
-        
     }
 }
