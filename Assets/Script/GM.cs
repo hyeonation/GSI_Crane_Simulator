@@ -8,7 +8,6 @@ public class GM : MonoBehaviour
     public static bool cmdWithPLC = false;
     public static List<string> listIP = new(); // PLC IP list
     [HideInInspector] public static string[] nameCranes, nameTrucks;
-    [HideInInspector] public static bool playSimulation = false; // 시뮬레이션 실행 여부
 
     [Header("Container_Preset")]
     public static short bay = 16;

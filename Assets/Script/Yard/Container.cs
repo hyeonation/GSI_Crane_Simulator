@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Container : MonoBehaviour
 {
-
     //containers
     public GameObject[] prefabs;
 
@@ -20,17 +19,15 @@ public class Container : MonoBehaviour
     void Start()
     {
 
-        // 랜덤한 위치에서 게임 오브젝트 스폰
-        // SpawnContainers();
-        // mkContainers();     // 초기 시작 때 컨테이너 뜨는 현상 제거
-        // StartCoroutine(RotationUncheck());
-        // StartCoroutine(kinematicCheck());
-        StartCoroutine(startMakeContainers());
+        // init values
+        init();
+
+        // 컨테이너 생성
+        mkContainers();
     }
 
     void init()
     {
-        
         start_val = GM.yard_start_val;
         x_interval = GM.yard_x_interval;
         y_interval = GM.yard_y_interval;
@@ -75,32 +72,10 @@ public class Container : MonoBehaviour
     //     }
     // }
 
-    IEnumerator startMakeContainers()
-    {
-        // Simulation이 시작되기 전까지 대기
-        while (GM.playSimulation == false)
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        Debug.Log($"[Container] 컨테이너 개수: {GM.settingParams.yardContainerNumberEA}");
-
-        // init values
-        init();
-
-        // 컨테이너 생성
-        mkContainers();
-
-        // 종료
-        yield break;
-        
-    }
-
     // Container 만드는 방식 변경
     // 초기 시작에서 Container 공중에 뜨는 현상 없애기 위함
     void mkContainers()
     {
-
         //// 컨테이너 입력 개수가 Yard 최대 개수 초과했는지 구분
 
         // container 개수 범위 안일 때

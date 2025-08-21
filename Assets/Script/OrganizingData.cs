@@ -12,7 +12,7 @@ public class OrganizingData : MonoBehaviour
 
     void Start()
     {
-        // Initialize variables
+        // Initialize key commands with settings from GM
         keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
         keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
         keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.E, KeyCode.D);

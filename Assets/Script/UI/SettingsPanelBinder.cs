@@ -50,7 +50,6 @@ public class SettingsPanelBinder : MonoBehaviour
     [Header("Controls")]
     [SerializeField] private Button btnApply;
     [SerializeField] private GameObject menuControllerPanel;       // menuControllerPanel 패널 오브젝트
-    [SerializeField] private MonoBehaviour containerPreset; // containerPreset 패널 오브젝트. 컨테이너 생성
     [SerializeField] private Button btnAddIP; // IP 추가 버튼
     [SerializeField] private Button btnRemoveIP; // IP 제거 버튼
 
@@ -120,9 +119,6 @@ public class SettingsPanelBinder : MonoBehaviour
 
         // UI에서 읽은 값을 데이터 모델에 반영
         GM.settingParams = current;
-
-        // 컨테이너 프리셋 활성화. 컨테이너 랜덤 생성
-        containerPreset.enabled = true;
 
         // 저장
         SaveToDisk(current);

@@ -38,15 +38,10 @@ public class MenuController : MonoBehaviour
         GameMode.Set(GameMode.Mode.Keyboard);    // 전역 모드 저장
         Debug.Log("Mode set to: Keyboard");
 
-        // 즉시 시뮬레이터 씬 로드 옵션이 켜져 있으면 이동
-        // TryLoadSimulatorScene();
+        GM.cmdWithPLC = false; // PLC 모드 비활성화
+        Debug.Log("PLC mode disabled");
 
-        gameObject.SetActive(false); // 현재 메뉴 숨김
-        GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
-
-        // OrganizingData 껐다가 다시 켜기
-        // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        GameObject.Find("GameManager").GetComponent<OrganizingData>().enabled = true;
+        StartSimulation(); // 시뮬레이션 시작
     }
 
     /// <summary>
@@ -56,9 +51,23 @@ public class MenuController : MonoBehaviour
     {
         GameMode.Set(GameMode.Mode.PLC);         // 전역 모드 저장
         Debug.Log("Mode set to: PLC");
-        TryLoadSimulatorScene();
 
-        GM.playSimulation = true; // 시뮬레이션 시작 플래그 설정
+        GM.cmdWithPLC = true; // PLC 모드 활성화
+        Debug.Log("PLC mode enabled");
+
+        StartSimulation(); // 시뮬레이션 시작
+    }
+
+    public void StartSimulation()
+    {
+        gameObject.SetActive(false); // 현재 메뉴 숨김
+
+        // container 생성
+        GameObject.Find("Containers").GetComponent<Container>().enabled = true;
+
+        // OrganizingData 켜기
+        // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
+        GameObject.Find("GameManager").GetComponent<OrganizingData>().enabled = true;
     }
 
     /// <summary>
@@ -94,19 +103,5 @@ public class MenuController : MonoBehaviour
             // 실제 빌드에서는 애플리케이션 종료
             Application.Quit();
         #endif
-    }
-
-    /// <summary>
-    /// 옵션에 따라 시뮬레이터 씬을 로드.
-    /// - 씬 이름이 비어있지 않아야 하며
-    /// - Build Settings에 해당 씬이 등록되어 있어야 합니다.
-    /// </summary>
-    private void TryLoadSimulatorScene()
-    {
-        // if (!loadSceneOnModeSelect) return;
-        // if (string.IsNullOrEmpty(simulatorSceneName)) return;
-
-        // // 씬 로드(싱글). 필요 시 Additive로 변경 가능
-        // SceneManager.LoadScene(simulatorSceneName);
     }
 }
