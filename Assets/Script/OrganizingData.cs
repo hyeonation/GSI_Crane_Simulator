@@ -45,8 +45,6 @@ public class OrganizingData : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log($"loop time = {Time.deltaTime} sec");
-
         // Using PLC data
         if (GM.cmdWithPLC)
         {
@@ -65,6 +63,9 @@ public class OrganizingData : MonoBehaviour
         {
             CmdKeyboard();
         }
+        // 시간 측정
+        // Time.deltaTime: 프레임 간 시간 간격
+        Debug.Log($"loop time = {Time.deltaTime} sec");
 
     }
 

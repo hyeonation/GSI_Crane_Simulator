@@ -75,6 +75,7 @@
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR2D.cs" />
     <Compile Include="Assets\conten.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableJoint.cs" />
+    <Compile Include="Assets\Script\Crane\Sensor\LiDAR3DIJobParallelForMain.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR3D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\PlatformController.cs" />
     <Compile Include="Assets\Script\GM.cs" />

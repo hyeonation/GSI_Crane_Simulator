@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 // GameManager, GameMaster
 public class GM : MonoBehaviour
@@ -32,7 +33,7 @@ public class GM : MonoBehaviour
         // init variables
         InitVar();
 
-        Application.targetFrameRate = 30;
+        // Application.targetFrameRate = 30;
     }
 
     static void InitVar()

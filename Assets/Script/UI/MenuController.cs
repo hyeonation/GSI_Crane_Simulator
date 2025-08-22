@@ -17,6 +17,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Button btnSetting;           // "Setting" 버튼
     [SerializeField] private Button btnQuit;              // "Quit" 버튼
     [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
+    [SerializeField] private GameObject gameManager;        // GameManager 오브젝트
+    [SerializeField] private GameObject containerPreset;    // 컨테이너 프리셋 오브젝트. 컨테이너 생성
 
 
     void Start()
@@ -63,11 +65,11 @@ public class MenuController : MonoBehaviour
         gameObject.SetActive(false); // 현재 메뉴 숨김
 
         // container 생성
-        GameObject.Find("Containers").GetComponent<Container>().enabled = true;
+        containerPreset.GetComponent<Container>().enabled = true;
 
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        GameObject.Find("GameManager").GetComponent<OrganizingData>().enabled = true;
+        gameManager.GetComponent<OrganizingData>().enabled = true;
     }
 
     /// <summary>
