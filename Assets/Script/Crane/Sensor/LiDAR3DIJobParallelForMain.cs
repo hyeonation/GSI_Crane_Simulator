@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using UnityEngine.Jobs;
 using Unity.Collections;
+using Unity.Burst;
 
 
 public class LiDAR3DIJobParallelForMain : MonoBehaviour {
@@ -22,12 +23,14 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour {
     int hSteps, vSteps, totalSteps;
     float hStart, vStart;
 
+    [BurstCompile(CompileSynchronously = true)]
     public struct SetRaycastJob : IJobParallelFor
     {
         // constants
         public Vector3 origin;
         public Quaternion rotation;
         public float maxDistance;
+        public float resVertical_deg, resHorizontal_deg;
         public int hSteps;
         public float hStart, vStart;
         public NativeArray<RaycastCommand> RaycastCommands;
@@ -39,14 +42,14 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour {
             int v = index / hSteps;
             int h = index % hSteps;
 
-            float vAngle = vStart + v * GM.settingParams.lidarResVertical_deg;
+            float vAngle = vStart + v * resVertical_deg;
             Quaternion vRot = Quaternion.Euler(0, 0, vAngle);
             Vector3 vDir = vRot * Vector3.right;
 
-            float hAngle = hStart + h * GM.settingParams.lidarResHorizontal_deg;
+            float hAngle = hStart + h * resHorizontal_deg;
             Quaternion hRot = Quaternion.AngleAxis(hAngle, Vector3.up);
             Vector3 dir = hRot * vDir;
-            
+
             RaycastCommands[index] = new RaycastCommand(origin, rotation * dir, maxDistance, LayerMask);
         }
     }
@@ -118,6 +121,8 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour {
             origin = transform.position + scanOffset,
             rotation = transform.rotation,
             maxDistance = GM.settingParams.lidarMaxDistance_m,
+            resVertical_deg = GM.settingParams.lidarResVertical_deg,
+            resHorizontal_deg = GM.settingParams.lidarResHorizontal_deg,
             hSteps = hSteps,
             hStart = hStart,
             vStart = vStart,
@@ -128,19 +133,21 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour {
         var setHandle = setRaycastJob.Schedule(totalSteps, 1);
         var rayHandle = RaycastCommand.ScheduleBatch(_commands, _hits, totalSteps, setHandle);
         rayHandle.Complete();
-        // for (int i = 0; i < totalSteps; ++i)
-        // {
-        //     if (_hits[i].collider != null)
-        //     {
-        //         pointCloud.Add(_hits[i].point);
-        //         // UnityEngine.Debug.DrawLine(transform.position, _hits[i].point, Color.blue, 0.1f);
-        //     }
-        //     else
-        //     {
-        //         pointCloud.Add(transform.position + (_commands[i].direction * GM.settingParams.lidarMaxDistance_m));
-        //         // UnityEngine.Debug.DrawLine(transform.position, transform.position + (_commands[i].direction * GM.settingParams.lidarMaxDistance_m), Color.red, 0.1f);
-        //     }
-        // }
+
+        // Drawing and storing results
+        for (int i = 0; i < totalSteps; ++i)
+        {
+            if (_hits[i].collider != null)
+            {
+                pointCloud.Add(_hits[i].point);
+                UnityEngine.Debug.DrawLine(transform.position, _hits[i].point, Color.blue, 0.1f);
+            }
+            else
+            {
+                pointCloud.Add(transform.position + (_commands[i].direction * GM.settingParams.lidarMaxDistance_m));
+                UnityEngine.Debug.DrawLine(transform.position, transform.position + (_commands[i].direction * GM.settingParams.lidarMaxDistance_m), Color.red, 0.1f);
+            }
+        }
     }
 }
 
