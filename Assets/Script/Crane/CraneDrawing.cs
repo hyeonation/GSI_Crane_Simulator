@@ -244,7 +244,7 @@ public class CraneDrawing : MonoBehaviour
 
         if (speed < 0)
         {
-            // spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
+            spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
             spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
@@ -254,7 +254,7 @@ public class CraneDrawing : MonoBehaviour
         }
         else
         {
-            // spreader.Translate(Vector3.up * Time.deltaTime * 0);
+            spreader.Translate(Vector3.up * Time.deltaTime * 0);
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
             if (!landedContainer)

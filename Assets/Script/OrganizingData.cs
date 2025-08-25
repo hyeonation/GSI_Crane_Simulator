@@ -25,13 +25,13 @@ public class OrganizingData : MonoBehaviour
         if (GM.cmdWithPLC)
         {
             // Check if listIP is not null
-            if (GM.listIP != null)
+            if (GM.settingParams.listIP != null)
             {
-
                 // connect
-                for (int i = 0; i < GM.listIP.Count; i++)
+                plc = new CommPLC[GM.settingParams.listIP.Count];
+                for (int i = 0; i < GM.settingParams.listIP.Count; i++)
                 {
-                    plc[i] = new CommPLC(ip: GM.listIP[i]);
+                    plc[i] = new CommPLC(ip: GM.settingParams.listIP[i]);
                     plc[i].Connect();
                 }
             }
@@ -48,7 +48,7 @@ public class OrganizingData : MonoBehaviour
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-            for (int iCrane = 0; iCrane < GM.listIP.Count; iCrane++)
+            for (int iCrane = 0; iCrane < GM.settingParams.listIP.Count; iCrane++)
             {
                 // Read PLC DB
                 ReadPLCdata(iCrane);
@@ -137,7 +137,7 @@ public class OrganizingData : MonoBehaviour
             GM.cmdGantryVelFWD[iCrane] = keyGantryCmd.GetSpeed();
             GM.cmdGantryVelBWD[iCrane] = GM.cmdGantryVelFWD[iCrane];
 
-            // Trolley
+            // Trolley, spreader
             GM.cmdTrolleyVel[iCrane] = keyTrolleyCmd.GetSpeed();
             GM.cmdSpreaderVel[iCrane] = keySpreaderCmd.GetSpeed();
 

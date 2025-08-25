@@ -85,7 +85,7 @@
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
-    <Compile Include="Assets\Script\Crane\CommPLC.cs" />
+    <Compile Include="Assets\Script\CommPLC.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\SpoolController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\RuntimeCableGenerator.cs" />
@@ -1137,8 +1137,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model">
-      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Burst">
@@ -1149,8 +1149,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Burst.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model">
+      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
