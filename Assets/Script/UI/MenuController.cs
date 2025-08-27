@@ -27,9 +27,12 @@ public class MenuController : MonoBehaviour
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
         // 오브젝트 활성/비활성 반복 시 중복 Add 방지에 안전합니다.
         if (btnKeyboard) btnKeyboard.onClick.AddListener(OnKeyboardMode);
-        if (btnPLC)      btnPLC.onClick.AddListener(OnPLCMode);
-        if (btnSetting)  btnSetting.onClick.AddListener(OnSetting);
-        if (btnQuit)     btnQuit.onClick.AddListener(OnQuit);
+        if (btnPLC) btnPLC.onClick.AddListener(OnPLCMode);
+        if (btnSetting) btnSetting.onClick.AddListener(OnSetting);
+        if (btnQuit) btnQuit.onClick.AddListener(OnQuit);
+
+        // load setting data
+        settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
     }
 
     /// <summary>
@@ -98,12 +101,12 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void OnQuit()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             // 에디터에서는 플레이 모드 종료
             UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            // 실제 빌드에서는 애플리케이션 종료
-            Application.Quit();
-        #endif
+#else
+        // 실제 빌드에서는 애플리케이션 종료
+        Application.Quit();
+#endif
     }
 }

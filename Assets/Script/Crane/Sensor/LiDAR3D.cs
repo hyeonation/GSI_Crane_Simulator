@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
-using System.Threading;
 
 public class LiDAR3D : MonoBehaviour
 {
@@ -33,10 +32,6 @@ public class LiDAR3D : MonoBehaviour
 
         // hstart와 vStart 값 확인
         UnityEngine.Debug.Log($"Horizontal Start: {hStart}, Vertical Start: {vStart}");
-
-        // Thread thread = new Thread(Run);
-        // thread.IsBackground = true; // 백그라운드 스레드로 설정
-        // thread.Start();
     }
 
 

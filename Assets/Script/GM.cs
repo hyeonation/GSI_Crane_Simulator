@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 // GameManager, GameMaster
 public class GM : MonoBehaviour
@@ -25,7 +24,13 @@ public class GM : MonoBehaviour
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
     // settings
-    public static SettingParams settingParams;
+    public static SettingParams settingParams = new();
+
+    // crane position
+    public static Vector3[] cranePOS = {
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 100),
+    };
 
     void Awake()
     {
@@ -35,7 +40,7 @@ public class GM : MonoBehaviour
         // Application.targetFrameRate = 30;
     }
 
-    static void InitVar()
+    public static void InitVar()
     {
         // Crane name
         GameObject crane = GameObject.Find("Crane");
@@ -67,6 +72,23 @@ public class GM : MonoBehaviour
         cmd45ft = new bool[nameCranes.Length];
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
+    }
+
+    public static void DestroyVar()
+    {
+        // Crane
+        GameObject crane = GameObject.Find("Crane");
+        for (int i = 0; i < crane.transform.childCount; i++)
+        {
+            Destroy(crane.transform.GetChild(i));
+        }
+
+        // // Truck
+        // GameObject truck = GameObject.Find("Truck");
+        // for (int i = 0; i < truck.transform.childCount; i++)
+        // {
+        //     Destroy(truck.transform.GetChild(i));
+        // }
     }
 }
 

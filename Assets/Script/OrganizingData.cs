@@ -10,8 +10,13 @@ public class OrganizingData : MonoBehaviour
     KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
 
+    [SerializeField] private GameObject cranePrefab;
+
     void Start()
     {
+
+        // Debug.Log($"crane pos : {GameObject.Find("ARTG1").transform.position}");
+
         // Initialize key commands with settings from GM
         keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
         keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
@@ -24,6 +29,22 @@ public class OrganizingData : MonoBehaviour
         // Using PLC data
         if (GM.cmdWithPLC)
         {
+            // // reset
+            // GM.DestroyVar();
+
+            // making crane
+            // i = 1부터 시작. 기존 크레인은 유지.
+            GameObject crane = GameObject.Find("Crane");
+            for (int i = 1; i < GM.settingParams.listIP.Count; i++)
+            {
+                GameObject craneObject = Instantiate(cranePrefab, GM.cranePOS[i], Quaternion.identity);
+                craneObject.name = $"ARTG{i + 1}";
+                craneObject.transform.SetParent(crane.transform);
+            }
+
+            // init var
+            GM.InitVar();
+
             // Check if listIP is not null
             if (GM.settingParams.listIP != null)
             {

@@ -26,11 +26,10 @@ public class CraneDrawing : MonoBehaviour
     string nameSelf;
     int iSelf;
     Transform rtg, trolley, spreader, rtg_B, rtg_F, spreaderCam;
-    
+
     Transform[] disc, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     GameObject[] cables;
     GameObject container;
-    Rigidbody containerRigidbody;
 
     bool Feet20_ack, Feet40_ack, fifthup, fifthdown, landedContainer, landedFloor, locked, unlocked;
     float hoistPos, gantryLength;
@@ -123,13 +122,13 @@ public class CraneDrawing : MonoBehaviour
 
         feet[0] = spreader.transform.Find("Spreader_0");
         var twistlock_0 = feet[0].transform.Find("TwistLock");
-        
+
         twlLand[0] = twistlock_0.transform.Find("Land_0");
         twlLand[1] = twistlock_0.transform.Find("Land_1");
 
         twlLock[0] = twistlock_0.transform.Find("Lock_0");
         twlLock[1] = twistlock_0.transform.Find("Lock_1");
-        
+
         var laser_0 = feet[0].transform.Find("laser");
 
         laser[0] = laser_0.transform.Find("Laser0");
@@ -146,7 +145,7 @@ public class CraneDrawing : MonoBehaviour
 
         twlLand[2] = twistlock_1.transform.Find("Land_2");
         twlLand[3] = twistlock_1.transform.Find("Land_3");
-        
+
         twlLock[2] = twistlock_1.transform.Find("Lock_2");
         twlLock[3] = twistlock_1.transform.Find("Lock_3");
 
@@ -203,9 +202,10 @@ public class CraneDrawing : MonoBehaviour
     {
         trolley.Translate(Vector3.right * Time.deltaTime * GM.cmdTrolleyVel[iSelf]);
     }
-    
+
     void Hoist_OP()
     {
+        // var force = 0.0065f;
         var force = 0.0065f;
         var speed = GM.cmdSpreaderVel[iSelf] * 138f;
 
@@ -249,13 +249,13 @@ public class CraneDrawing : MonoBehaviour
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
             {
-                // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * speed * force);
+                container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
             }
         }
         else
         {
-            spreader.Translate(Vector3.up * Time.deltaTime * 0);
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
+            spreader.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
             if (!landedContainer)
             {
@@ -284,7 +284,7 @@ public class CraneDrawing : MonoBehaviour
             microMotion[3].Translate(Vector3.back * Time.deltaTime * GM.cmdMM3Vel[iSelf]);
         }
     }
-    
+
     void Feet_OP()
     {
         // spreader feet dx
@@ -320,7 +320,7 @@ public class CraneDrawing : MonoBehaviour
             }
         }
     }
-    
+
     void TwistLock_OP()
     {
         // Lock. 반복실행 방지 코드 추가.
@@ -403,7 +403,7 @@ public class CraneDrawing : MonoBehaviour
                     cables[j].GetComponent<Cable>().loosenessScale = 0;
                 }
             }
-        }        
+        }
     }
 
     void InitLaserPos(float gqp, float ygap)

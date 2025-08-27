@@ -87,10 +87,14 @@ public class SettingsPanelBinder : MonoBehaviour
         if (btnRemoveIP) btnRemoveIP.onClick.AddListener(RemoveIP);
 
         // 저장된 설정 로드 → UI 채우기
-        LoadFromDisk();
         InitUIFromData();
         InitPlaceholder(); // 플레이스홀더 설정
         ClearAllErrorStates();
+
+        // UI 갱신
+        // panel 제거할 때는 추가할 때와 다르게 UI Update가 한 frame 늦게 적용되어
+        // 다음과 같은 조치
+        StartCoroutine(RefreshUI());
     }
 
     // 게임 오브젝트가 파괴될 때 이벤트 해제
@@ -176,7 +180,8 @@ public class SettingsPanelBinder : MonoBehaviour
     }
 
     // 화면 갱신. 변화 후 다음 frame에 적용
-    IEnumerator RefreshUI(){
+    IEnumerator RefreshUI()
+    {
         yield return new WaitForEndOfFrame(); // 다음 프레임까지 대기
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentsPanel);
     }
