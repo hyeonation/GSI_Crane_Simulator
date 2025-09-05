@@ -8,7 +8,7 @@ public class CraneDrawing : MonoBehaviour
 
     [Header("Laser Preset")]
     [Tooltip("Laser Preset")]
-    public float laser_gap = 40f;
+    public float laser_x_gap = 40f;
     public float laser_y_gap = 640f;
 
     [Header("Camera Preset")]
@@ -60,7 +60,7 @@ public class CraneDrawing : MonoBehaviour
 
         FindObject();
 
-        InitLaserPos(laser_gap, laser_y_gap);
+        InitLaserPos(laser_x_gap, laser_y_gap);
         InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
         // InitSPSSPos(SPSS_x_gap, SPSS_y_gap, SPSS_z_gap);
 
@@ -205,13 +205,12 @@ public class CraneDrawing : MonoBehaviour
 
     void Hoist_OP()
     {
-        // var force = 0.0065f;
         var force = 0.0065f;
         var speed = GM.cmdSpreaderVel[iSelf] * 138f;
 
         //var con_force = 0.0065f;
 
-        force = landedContainer ? 0 : force;
+        force = (landedContainer && !GM.cmdTwlLock[iSelf]) ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
         for (short j = 0; j < disc.Length; j++)
@@ -249,13 +248,13 @@ public class CraneDrawing : MonoBehaviour
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
             {
-                container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
+                // container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
             }
         }
         else
         {
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
-            spreader.Translate(Vector3.up * Time.deltaTime * 0);
+            // spreader.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
             if (!landedContainer)
             {
@@ -338,6 +337,8 @@ public class CraneDrawing : MonoBehaviour
             {
                 container = twlLand[0].GetComponent<Landed>().container;   // 컨테이너 정보 가져오기
                 Debug.Log($"Container: {container.name}");
+
+                container.transform.SetParent(spreader.transform);
                 container.AddComponent<FixedJoint>(); // FixedJoint 추가
                 containerFixedJoint = container.GetComponent<FixedJoint>(); // FixedJoint 변수에 저장
                 containerFixedJoint.connectedBody = spreader.GetComponent<Rigidbody>(); // spreader와 연결
@@ -356,6 +357,10 @@ public class CraneDrawing : MonoBehaviour
 
             // 컨테이너와 spreader 연결 해제
             Destroy(containerFixedJoint);
+
+            GameObject containers = GameObject.Find("Containers");
+            container.transform.SetParent(containers.transform);
+
         }
     }
 

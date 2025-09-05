@@ -12,6 +12,8 @@ public class GM : MonoBehaviour
     public static short bay = 16;
     public static short row = 5;
     public static short tier = 5;
+    public static int[,] stack_profile;
+
 
     public const float yard_start_val = 8.32f;
     public const float yard_x_interval = 2.840f;
@@ -30,6 +32,8 @@ public class GM : MonoBehaviour
     public static Vector3[] cranePOS = {
         new Vector3(0, 0, 0),
         new Vector3(0, 0, 100),
+        new Vector3(0, 0, 200),
+        new Vector3(0, 0, 300),
     };
 
     void Awake()
@@ -72,6 +76,10 @@ public class GM : MonoBehaviour
         cmd45ft = new bool[nameCranes.Length];
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
+
+        // stack profile
+        stack_profile = new int[row, bay];
+
     }
 
     public static void DestroyVar()

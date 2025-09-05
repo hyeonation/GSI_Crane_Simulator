@@ -86,7 +86,7 @@ public class SettingsPanelBinder : MonoBehaviour
         if (btnAddIP) btnAddIP.onClick.AddListener(AddIP);
         if (btnRemoveIP) btnRemoveIP.onClick.AddListener(RemoveIP);
 
-        // 저장된 설정 로드 → UI 채우기
+        // UI 채우기
         InitUIFromData();
         InitPlaceholder(); // 플레이스홀더 설정
         ClearAllErrorStates();

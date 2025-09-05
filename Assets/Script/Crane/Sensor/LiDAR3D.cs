@@ -11,7 +11,7 @@ public class LiDAR3D : MonoBehaviour
     [Header("Save Settings")]
     public bool saveToFile = false;
     public string fileName = "LiDAR_PointCloud.txt";
-    public float scanDelay = 5f; // 스캔 간격
+    public float scanDelay = 0.001f; // 스캔 간격[sec]
     public bool run = true; // 스캔 실행 여부
 
     private List<Vector3> pointCloud = new List<Vector3>();
@@ -41,8 +41,8 @@ public class LiDAR3D : MonoBehaviour
         {
             yield return new WaitForSeconds(scanDelay); // 초기화 대기
 
-            // Stopwatch stopwatch = new Stopwatch();
-            // stopwatch.Start();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             pointCloud.Clear();
             Scan();
@@ -53,8 +53,8 @@ public class LiDAR3D : MonoBehaviour
                 saveToFile = false; // 한 번만 저장
             }
 
-            // stopwatch.Stop();
-            // UnityEngine.Debug.Log("코드 실행 시간: " + stopwatch.ElapsedMilliseconds + "ms");
+            stopwatch.Stop();
+            UnityEngine.Debug.Log($"{gameObject.name} 코드 실행 시간: " + stopwatch.ElapsedMilliseconds + "ms");
         }
     }
 
@@ -102,8 +102,8 @@ public class LiDAR3D : MonoBehaviour
 
                 if (Physics.Raycast(origin, transform.rotation * dir, out RaycastHit hit, GM.settingParams.lidarMaxDistance_m))
                 {
-                    // Vector3 noisyPoint = hit.point + Random.insideUnitSphere * GM.settingParams.lidarNoiseStd;
-                    // pointCloud.Add(noisyPoint);
+                    Vector3 noisyPoint = hit.point + Random.insideUnitSphere * GM.settingParams.lidarNoiseStd;
+                    pointCloud.Add(noisyPoint);
                     // UnityEngine.Debug.DrawLine(origin, noisyPoint, Color.green, 0.1f);
                 }
                 else

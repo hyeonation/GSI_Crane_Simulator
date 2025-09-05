@@ -7511,6 +7511,7 @@ GameObject:
   - component: {fileID: 8377739084421640488}
   - component: {fileID: 6430257402914545483}
   - component: {fileID: 1336483494139827488}
+  - component: {fileID: 1047886036777307462}
   m_Layer: 0
   m_Name: Lidar3
   m_TagString: Untagged
@@ -7590,7 +7591,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4049425158973478250}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8076531d3f4f6341bf73ad92f208d3d, type: 3}
   m_Name: 
@@ -7598,6 +7599,24 @@ MonoBehaviour:
   scanOffset: {x: 0, y: 0, z: 0}
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  scanDelay: 5
+  run: 1
+--- !u!114 &1047886036777307462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4049425158973478250}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad82046ae56ebb342b5534ebf4685d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanOffset: {x: 0, y: 0, z: 0}
+  saveToFile: 0
+  fileName: LiDAR_PointCloud.txt
+  pointCloud: []
 --- !u!1 &4093558642262571285
 GameObject:
   m_ObjectHideFlags: 0
@@ -8100,6 +8119,7 @@ GameObject:
   - component: {fileID: 1055201085861866269}
   - component: {fileID: 3574323098005212868}
   - component: {fileID: 2378347664669834855}
+  - component: {fileID: 5971340082648568154}
   m_Layer: 0
   m_Name: Lidar1
   m_TagString: Untagged
@@ -8179,7 +8199,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4433145894957069616}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8076531d3f4f6341bf73ad92f208d3d, type: 3}
   m_Name: 
@@ -8187,6 +8207,24 @@ MonoBehaviour:
   scanOffset: {x: 0, y: 0, z: 0}
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  scanDelay: 5
+  run: 1
+--- !u!114 &5971340082648568154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4433145894957069616}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad82046ae56ebb342b5534ebf4685d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanOffset: {x: 0, y: 0, z: 0}
+  saveToFile: 0
+  fileName: LiDAR_PointCloud.txt
+  pointCloud: []
 --- !u!1 &4460091864460520420
 GameObject:
   m_ObjectHideFlags: 0
@@ -11521,6 +11559,7 @@ GameObject:
   - component: {fileID: 6251716611768300283}
   - component: {fileID: 1964835644136339291}
   - component: {fileID: 8087486084172594472}
+  - component: {fileID: 5536821981890824989}
   m_Layer: 0
   m_Name: Lidar0
   m_TagString: Untagged
@@ -11600,7 +11639,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6815803994051533009}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8076531d3f4f6341bf73ad92f208d3d, type: 3}
   m_Name: 
@@ -11608,6 +11647,24 @@ MonoBehaviour:
   scanOffset: {x: 0, y: 0, z: 0}
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  scanDelay: 5
+  run: 1
+--- !u!114 &5536821981890824989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815803994051533009}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad82046ae56ebb342b5534ebf4685d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanOffset: {x: 0, y: 0, z: 0}
+  saveToFile: 0
+  fileName: LiDAR_PointCloud.txt
+  pointCloud: []
 --- !u!1 &6825398536186037152
 GameObject:
   m_ObjectHideFlags: 0
@@ -14841,6 +14898,7 @@ GameObject:
   - component: {fileID: 2713139408704444664}
   - component: {fileID: 5757495347347777529}
   - component: {fileID: 1375022401413379028}
+  - component: {fileID: 1336547401154202152}
   m_Layer: 0
   m_Name: Lidar2
   m_TagString: Untagged
@@ -14920,7 +14978,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8945973497043238673}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8076531d3f4f6341bf73ad92f208d3d, type: 3}
   m_Name: 
@@ -14928,6 +14986,24 @@ MonoBehaviour:
   scanOffset: {x: 0, y: 0, z: 0}
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  scanDelay: 5
+  run: 1
+--- !u!114 &1336547401154202152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945973497043238673}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad82046ae56ebb342b5534ebf4685d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanOffset: {x: 0, y: 0, z: 0}
+  saveToFile: 0
+  fileName: LiDAR_PointCloud.txt
+  pointCloud: []
 --- !u!1 &9070216349169020303
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,6 @@ public class Container : MonoBehaviour
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
-    public static int[,] stack_profile;
     public static List<List<int>> list_stack_profile;
 
     void Start()
@@ -44,7 +43,6 @@ public class Container : MonoBehaviour
 
         // stack profile 생성
         stack_profile_idx_max = row_max * bay_max;
-        stack_profile = new int[row_max, bay_max];
         list_stack_profile = new List<List<int>>();
     }
 
@@ -104,7 +102,7 @@ public class Container : MonoBehaviour
                 // random row, bay 추출
                 i_row = idx % row_max;
                 i_bay = idx / row_max;
-                tier = stack_profile[i_row, i_bay];
+                tier = GM.stack_profile[i_row, i_bay];
 
                 // tier 최대 아니면 추가
                 if (tier < tier_max)
@@ -115,7 +113,7 @@ public class Container : MonoBehaviour
                     list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
-                    stack_profile[i_row, i_bay] = tier;
+                    GM.stack_profile[i_row, i_bay] = tier;
                     num_containers_tmp++;
                 }
 
@@ -132,13 +130,13 @@ public class Container : MonoBehaviour
         {
             // 최대 개수로 초기화
             num_containers = (short)num_containers_max;
-            
+
             // stack_profile, list_stack_profile
             for (int i_row = 0; i_row < row_max; i_row++)
             {
                 for (int i_bay = 0; i_bay < bay_max; i_bay++)
                 {
-                    stack_profile[i_row, i_bay] = tier_max;
+                    GM.stack_profile[i_row, i_bay] = tier_max;
 
                     for (int i_tier = 1; i_tier <= tier_max; i_tier++)
                     {
