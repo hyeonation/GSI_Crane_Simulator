@@ -6,7 +6,7 @@ public struct InfoPLC
     public string ip;
     public short rack, slot;
     public short readDBNum, readStartIdx, readLength;
-    public short writeDBNum, writeStartIdx;
+    public short writeDBNum, writeStartIdx, writeLength;
 }
 
 public class CommPLC
@@ -23,8 +23,9 @@ public class CommPLC
         info.readDBNum = 1000;
         info.readStartIdx = 0;
         info.readLength = 36;
-        info.writeDBNum = 1000;
+        info.writeDBNum = 1001;
         info.writeStartIdx = 0;
+        info.writeLength = 218;
     }
 
     public void Connect()

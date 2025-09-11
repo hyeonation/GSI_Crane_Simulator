@@ -6,6 +6,8 @@ using UnityEngine;
 public class OrganizingData : MonoBehaviour
 {
     CommPLC[] plc;
+    byte[] writeDB;
+
 
     GameObject[] cranes;
     KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
@@ -79,7 +81,7 @@ public class OrganizingData : MonoBehaviour
                 ReadPLCdata(iCrane);
 
                 // Write PLC DB
-                // plc[i].WriteToPLC();
+                WriteUnitydataToPLC(iCrane);
             }
         }
 
@@ -96,17 +98,22 @@ public class OrganizingData : MonoBehaviour
 
     void WriteUnitydataToPLC(int iCrane)
     {
-        // const int floatStartIdxGantryPos = 46;
-        const int floatStartIdxGantryPos = 234;
-
-        byte[] bytes = new byte[252 - 234];
 
         float testFloat = 123.0f;
+        Array.Copy(FloatToByteArr(testFloat), 0, writeDB, 0, 4);
 
-        Array.Copy(FloatToByteArr(testFloat), 0, bytes, 0, 4);
+        byte boolByte = 0;
+        boolByte |= 1 << 0;
+        boolByte |= 1 << 3;
+        boolByte |= 1 << 4;
 
+        // if (valve) boolByte |= 1 << 0; // DBX8.0
+        // if (pump)  boolByte |= 1 << 1; // DBX8.1
+        // if (alarm) boolByte |= 1 << 2; // DBX8.2
 
+        writeDB[204] = boolByte;
 
+        plc[iCrane].WriteToPLC(writeDB);
     }
 
     byte[] FloatToByteArr(float floatData)
@@ -117,7 +124,6 @@ public class OrganizingData : MonoBehaviour
         // sync
         return reverseByteArr(bytes);
     }
-
 
 
     void ReadPLCdata(int iCrane)
