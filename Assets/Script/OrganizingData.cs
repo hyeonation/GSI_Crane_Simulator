@@ -7,7 +7,7 @@ public class OrganizingData : MonoBehaviour
 {
     CommPLC[] plc;
     byte[] writeDB;
-
+    byte boolByte;
 
     GameObject[] cranes;
     KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
@@ -100,21 +100,33 @@ public class OrganizingData : MonoBehaviour
     {
 
         float testFloat = 123.0f;
-        Array.Copy(FloatToByteArr(testFloat), 0, writeDB, 0, 4);
+        int startIdx = 0;
+        WriteFloat(testFloat, startIdx);
 
-        byte boolByte = 0;
-        boolByte |= 1 << 0;
-        boolByte |= 1 << 3;
-        boolByte |= 1 << 4;
-
-        // if (valve) boolByte |= 1 << 0; // DBX8.0
-        // if (pump)  boolByte |= 1 << 1; // DBX8.1
-        // if (alarm) boolByte |= 1 << 2; // DBX8.2
+        byte boolByte = 0;  // init
+        WriteBool(true, 0);
+        WriteBool(false, 1);
+        WriteBool(true, 2);
+        WriteBool(false, 3);
+        WriteBool(true, 4);
 
         writeDB[204] = boolByte;
 
         plc[iCrane].WriteToPLC(writeDB);
     }
+
+    void WriteFloat(float floatData, int startIdx)
+    {
+        const int lengthFloat = 4;
+        Array.Copy(FloatToByteArr(floatData), 0, writeDB, startIdx, lengthFloat);
+    }
+
+    byte WriteBool(bool boolData, int startPoint)
+    {
+        if (boolData) boolByte |= (byte)(1 << startPoint);
+        return boolByte;
+    }
+
 
     byte[] FloatToByteArr(float floatData)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 [DefaultExecutionOrder(1000)] // CanvasScaler 이후 실행
 public class SafeAreaFitter : MonoBehaviour
 {
-    public enum WidthMode { Ratio, FixedPixels }            // 비율로 맞출지, 고정 픽셀로 맞출지
+    public enum WidthMode { Ratio, FixedPixels, FullScreen }            // 비율로 맞출지, 고정 픽셀로 맞출지
     public enum Basis { ScreenWidth, SafeAreaWidth }    // 비율 기준: 전체 화면 or 세이프에어리어
 
     [Header("Width Setting")]

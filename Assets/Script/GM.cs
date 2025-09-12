@@ -11,7 +11,7 @@ public class GM : MonoBehaviour
     [Header("Container_Preset")]
     public static short bay = 16;
     public static short row = 5;
-    public static short tier = 5;
+    public static short tier = 6;
     public static int[,] stack_profile;
 
 
