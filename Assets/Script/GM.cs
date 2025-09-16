@@ -8,14 +8,19 @@ public class GM : MonoBehaviour
     public static bool cmdWithPLC = false;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
+    public short rowMax = 5;
+    public short bayMax = 16;
+    public short tierMax = 6;
+    public float startVal = 8.32f;
+
     [Header("Container_Preset")]
-    public static short bay = 16;
     public static short row = 5;
+    public static short bay = 16;
     public static short tier = 6;
     public static int[,] stack_profile;
 
 
-    public const float yard_start_val = 8.32f;
+    public static float yard_start_val = 8.32f;
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
@@ -38,6 +43,13 @@ public class GM : MonoBehaviour
 
     void Awake()
     {
+
+        // init
+        row = rowMax;
+        bay = bayMax;
+        tier = tierMax;
+        yard_start_val = startVal;
+
         // init variables
         InitVar();
 

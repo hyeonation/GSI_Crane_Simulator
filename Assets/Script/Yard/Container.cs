@@ -171,16 +171,20 @@ public class Container : MonoBehaviour
         int i_bay = idx_pos[1];
         int i_tier = idx_pos[2];
 
+        GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
+        GameObject newObject = Instantiate(randomPrefab, Vector3.zero, Quaternion.identity);
+
+        newObject.name = $"{name_container}{num}"; //이름 설정
+        newObject.transform.SetParent(transform);
+
+        // 위치 배치
         Vector3 spawnPosition = new Vector3((i_row * x_interval) + start_val,
                                             (i_tier * y_interval) - y_interval / 2 + 0.1f,
                                             (i_bay * z_interval) + 7.75f);
 
-        GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
-        GameObject newObject = Instantiate(randomPrefab, spawnPosition, Quaternion.identity);
-
-        newObject.name = $"{name_container}{num}"; //이름 설정
-
-        newObject.transform.SetParent(transform);
-        newObject.transform.Rotate(Vector3.up, 0f);
+        // 부모인 Containers에 맞춤
+        newObject.transform.position = transform.position;
+        newObject.transform.localPosition = spawnPosition;
+        newObject.transform.rotation = transform.rotation;
     }
 }
