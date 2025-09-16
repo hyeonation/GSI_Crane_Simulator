@@ -6022,7 +6022,7 @@ GameObject:
   - component: {fileID: 5410034613152256458}
   - component: {fileID: 8509690599020881189}
   m_Layer: 0
-  m_Name: BODY
+  m_Name: Spreader Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12014,7 +12014,7 @@ GameObject:
   - component: {fileID: 5921181526567926351}
   - component: {fileID: 8737121649610053639}
   m_Layer: 0
-  m_Name: RTG
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

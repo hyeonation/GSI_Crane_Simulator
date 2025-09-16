@@ -50,7 +50,7 @@ public class GM : MonoBehaviour
         GameObject crane;
         string craneType;
 
-        // Crane name
+        // ARTG
         craneType = "ARTG";
         crane = GameObject.Find(craneType);
         nameRTGCs = new string[crane.transform.childCount];
@@ -59,7 +59,7 @@ public class GM : MonoBehaviour
             nameRTGCs[i] = crane.transform.GetChild(i).name;
         }
 
-        // Crane name
+        // QC
         crane = GameObject.Find("QC");
         nameQCs = new string[crane.transform.childCount];
         for (int i = 0; i < crane.transform.childCount; i++)
@@ -67,7 +67,7 @@ public class GM : MonoBehaviour
             nameQCs[i] = crane.transform.GetChild(i).name;
         }
 
-        // Truck name
+        // Truck
         GameObject truck = GameObject.Find("Truck");
         nameTrucks = new string[truck.transform.childCount];
         for (int i = 0; i < truck.transform.childCount; i++)

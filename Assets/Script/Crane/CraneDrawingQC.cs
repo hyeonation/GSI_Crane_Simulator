@@ -24,11 +24,12 @@ public class CraneDrawingQC : MonoBehaviour
 
     string nameSelf;
     int iSelf;
-    Transform dtqc, upperTrolley, spreader, rtg_B, rtg_F, spreaderCam;
+    Transform craneBody, upperTrolley, spreader, rtg_B, rtg_F, spreaderCam;
 
+    GameObject container;
     Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     GameObject[] cables;
-    GameObject container;
+    float convHoistVel;
 
     bool landedContainer, landedFloor, locked;
     float hoistPos, gantryLength;
@@ -57,8 +58,8 @@ public class CraneDrawingQC : MonoBehaviour
 
         FindObject();
 
-        InitLaserPos(laser_x_gap, laser_y_gap);
-        InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
+        // InitLaserPos(laser_x_gap, laser_y_gap);
+        // InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
         // InitSPSSPos(SPSS_x_gap, SPSS_y_gap, SPSS_z_gap);
 
         // 변수 계산
@@ -71,7 +72,7 @@ public class CraneDrawingQC : MonoBehaviour
 
     void Update()
     {
-        // Gantry_OP();
+        Gantry_OP();
         Trolley_OP();
         Hoist_OP();
         MicroMotion_OP();
@@ -87,12 +88,9 @@ public class CraneDrawingQC : MonoBehaviour
         nameSelf = gameObject.name;
         iSelf = Array.IndexOf(GM.nameQCs, nameSelf);
 
-        dtqc = gameObject.transform.Find("DTQC");
-        // var gantry = rtg.transform.Find("Gantry");
-        // rtg_B = gantry.transform.Find("B_Position");
-        // rtg_F = gantry.transform.Find("F_Position");
+        craneBody = gameObject.transform.Find("Body");
 
-        var cable = dtqc.transform.Find($"Cable");
+        var cable = craneBody.transform.Find($"Cable");
         cables = new GameObject[cable.transform.childCount - 1];
         for (short j = 0; j < cables.Length; j++)
         {
@@ -101,13 +99,17 @@ public class CraneDrawingQC : MonoBehaviour
         }
 
         // Get Objects From Trolley
-        upperTrolley = dtqc.transform.Find("Upper Trolley");
+        upperTrolley = craneBody.transform.Find("Upper Trolley");
         var disc = upperTrolley.transform.Find("Disc");
-        discs = new Transform[disc.transform.childCount - 1];
+        discs = new Transform[disc.transform.childCount];
         for (short j = 0; j < discs.Length; j++)
         {
             discs[j] = disc.transform.Find($"Disc{j}");
         }
+
+        // convHoistVel
+        float upperHoistDiameter = disc.GetChild(0).GetComponent<CableDisc>().radius;
+        convHoistVel = 360 / (upperHoistDiameter * Mathf.PI);
 
         spreaderCam = upperTrolley.transform.Find("Get_View_Camera");
 
@@ -160,48 +162,33 @@ public class CraneDrawingQC : MonoBehaviour
         cam[2] = cam_1.transform.Find("Camera3");
     }
 
+    void Gantry_OP()
+    {
+
+        float vecDx = GM.cmdGantryVelFWD[iSelf] * Time.deltaTime;
+        craneBody.position += new Vector3(vecDx, 0, 0);
+    }
+
     void Trolley_OP()
     {
-        upperTrolley.Translate(Vector3.right * Time.deltaTime * GM.cmdTrolleyVel[iSelf]);
+        upperTrolley.Translate(Vector3.back * Time.deltaTime * GM.cmdTrolleyVel[iSelf]);
     }
 
     void Hoist_OP()
     {
         var force = 0.0065f;
-        var speed = GM.cmdSpreaderVel[iSelf] * 138f;
+        var speed = GM.cmdSpreaderVel[iSelf] * convHoistVel;
 
         //var con_force = 0.0065f;
 
         force = (landedContainer && !GM.cmdTwlLock[iSelf]) ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
-        for (short j = 0; j < discs.Length; j++)
-        {
-            if (j == 5 || j == 11)
-            {
-                discs[j].Rotate(Vector3.forward * speed * Time.deltaTime, Space.World);
-            }
-            else if (j == 0 || j == 6)
-            {
-                discs[j].Rotate(Vector3.back * speed * Time.deltaTime, Space.World);
-            }
-            else if (j == 7 || j == 9 || j == 12)
-            {
-                discs[j].Rotate(Vector3.right * speed * Time.deltaTime, Space.World);
-            }
-            else if (j == 2 || j == 4)
-            {
-                discs[j].Rotate(Vector3.left * speed * Time.deltaTime, Space.World);
-            }
-            else if (j == 3 || j == 10)
-            {
-                discs[j].Rotate(Vector3.up * speed * Time.deltaTime, Space.Self);
-            }
-            else if (j == 1 || j == 8)
-            {
-                discs[j].Rotate(Vector3.down * speed * Time.deltaTime, Space.Self);
-            }
-        }
+        // disc rotation
+        discs[0].Rotate(Vector3.back * speed * Time.deltaTime, Space.World);
+        discs[1].Rotate(Vector3.back * speed * Time.deltaTime, Space.World);
+        discs[2].Rotate(Vector3.forward * speed * Time.deltaTime, Space.World);
+        discs[3].Rotate(Vector3.forward * speed * Time.deltaTime, Space.World);
 
         if (speed < 0)
         {
@@ -441,7 +428,7 @@ public class CraneDrawingQC : MonoBehaviour
     void InitSPSSPos(float xgap, float ygap, float zgap)
     {
         // Object position
-        Vector3 gantry_pos = dtqc.position;
+        Vector3 gantry_pos = craneBody.position;
         Vector3 trolley_pos = upperTrolley.position;
 
         //multiplier

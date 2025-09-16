@@ -18,8 +18,6 @@ public class OrganizingData : MonoBehaviour
     void Start()
     {
 
-        // Debug.Log($"crane pos : {GameObject.Find("ARTG1").transform.position}");
-
         // Initialize key commands with settings from GM
         keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
         keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);

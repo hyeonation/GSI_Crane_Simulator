@@ -25,7 +25,7 @@ public class CraneDrawingRTGC : MonoBehaviour
 
     string nameSelf;
     int iSelf;
-    Transform rtg, trolley, spreader, rtg_B, rtg_F, spreaderCam;
+    Transform craneBody, trolley, spreader, rtg_B, rtg_F, spreaderCam;
 
     Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     GameObject[] cables;
@@ -88,12 +88,12 @@ public class CraneDrawingRTGC : MonoBehaviour
         nameSelf = gameObject.name;
         iSelf = Array.IndexOf(GM.nameRTGCs, nameSelf);
 
-        rtg = gameObject.transform.Find("RTG");
-        var gantry = rtg.transform.Find("Gantry");
+        craneBody = gameObject.transform.Find("Body");
+        var gantry = craneBody.transform.Find("Gantry");
         rtg_B = gantry.transform.Find("B_Position");
         rtg_F = gantry.transform.Find("F_Position");
 
-        var cable = rtg.transform.Find($"Cable");
+        var cable = craneBody.transform.Find($"Cable");
         cables = new GameObject[cable.transform.childCount - 1];
         for (short j = 0; j < cables.Length; j++)
         {
@@ -102,9 +102,9 @@ public class CraneDrawingRTGC : MonoBehaviour
         }
 
         // Get Objects From Trolley
-        trolley = rtg.transform.Find("Trolley");
+        trolley = craneBody.transform.Find("Trolley");
         var disc = trolley.transform.Find("Disc");
-        discs = new Transform[disc.transform.childCount - 1];
+        discs = new Transform[disc.transform.childCount];
 
         for (short j = 0; j < discs.Length; j++)
         {
@@ -172,7 +172,7 @@ public class CraneDrawingRTGC : MonoBehaviour
 
         float dPhi, vecDx, vecDz, theta, vecdLength, dirVecd;
 
-        theta = (-rtg.eulerAngles[1] + 90) * Mathf.Deg2Rad;  // 회전 방향 반대여서 부호 음수 처리
+        theta = (-craneBody.eulerAngles[1] + 90) * Mathf.Deg2Rad;  // 회전 방향 반대여서 부호 음수 처리
 
         // 두 속도 같을 때
         if (GM.cmdGantryVelBWD[iSelf] == GM.cmdGantryVelFWD[iSelf])
@@ -195,8 +195,8 @@ public class CraneDrawingRTGC : MonoBehaviour
             vecDz *= dirVecd;
         }
 
-        rtg.position += new Vector3(vecDx, 0, vecDz);
-        rtg.Rotate(Vector3.up * (-dPhi) * Mathf.Rad2Deg);  // 회전 방향 반대여서 부호 음수 처리
+        craneBody.position += new Vector3(vecDx, 0, vecDz);
+        craneBody.Rotate(Vector3.up * (-dPhi) * Mathf.Rad2Deg);  // 회전 방향 반대여서 부호 음수 처리
     }
 
     void Trolley_OP()
@@ -480,7 +480,7 @@ public class CraneDrawingRTGC : MonoBehaviour
     void InitSPSSPos(float xgap, float ygap, float zgap)
     {
         // Object position
-        Vector3 gantry_pos = rtg.position;
+        Vector3 gantry_pos = craneBody.position;
         Vector3 trolley_pos = trolley.position;
 
         //multiplier
