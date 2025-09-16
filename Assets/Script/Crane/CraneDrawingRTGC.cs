@@ -86,7 +86,7 @@ public class CraneDrawingRTGC : MonoBehaviour
 
         // self crane info
         nameSelf = gameObject.name;
-        iSelf = Array.IndexOf(GM.nameRTGCs, nameSelf);
+        iSelf = Array.IndexOf(GM.nameCranes, nameSelf);
 
         craneBody = gameObject.transform.Find("Body");
         var gantry = craneBody.transform.Find("Gantry");

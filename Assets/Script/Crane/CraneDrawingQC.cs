@@ -86,7 +86,7 @@ public class CraneDrawingQC : MonoBehaviour
 
         // self crane info
         nameSelf = gameObject.name;
-        iSelf = Array.IndexOf(GM.nameQCs, nameSelf);
+        iSelf = Array.IndexOf(GM.nameCranes, nameSelf);
 
         craneBody = gameObject.transform.Find("Body");
 
