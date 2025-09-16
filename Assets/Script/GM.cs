@@ -6,7 +6,7 @@ public class GM : MonoBehaviour
 {
     // command with PLC
     public static bool cmdWithPLC = false;
-    [HideInInspector] public static string[] nameCranes, nameTrucks;
+    [HideInInspector] public static string[] nameRTGCs, nameQCs, nameTrucks;
 
     [Header("Container_Preset")]
     public static short bay = 16;
@@ -46,12 +46,25 @@ public class GM : MonoBehaviour
 
     public static void InitVar()
     {
+        // temp
+        GameObject crane;
+        string craneType;
+
         // Crane name
-        GameObject crane = GameObject.Find("Crane");
-        nameCranes = new string[crane.transform.childCount];
+        craneType = "ARTG";
+        crane = GameObject.Find(craneType);
+        nameRTGCs = new string[crane.transform.childCount];
         for (int i = 0; i < crane.transform.childCount; i++)
         {
-            nameCranes[i] = crane.transform.GetChild(i).name;
+            nameRTGCs[i] = crane.transform.GetChild(i).name;
+        }
+
+        // Crane name
+        crane = GameObject.Find("QC");
+        nameQCs = new string[crane.transform.childCount];
+        for (int i = 0; i < crane.transform.childCount; i++)
+        {
+            nameQCs[i] = crane.transform.GetChild(i).name;
         }
 
         // Truck name
@@ -63,19 +76,19 @@ public class GM : MonoBehaviour
         }
 
         // Read DB array
-        cmdGantryVelFWD = new float[nameCranes.Length];
-        cmdGantryVelBWD = new float[nameCranes.Length];
-        cmdTrolleyVel = new float[nameCranes.Length];
-        cmdSpreaderVel = new float[nameCranes.Length];
-        cmdMM0Vel = new float[nameCranes.Length];
-        cmdMM1Vel = new float[nameCranes.Length];
-        cmdMM2Vel = new float[nameCranes.Length];
-        cmdMM3Vel = new float[nameCranes.Length];
-        cmd20ft = new bool[nameCranes.Length];
-        cmd40ft = new bool[nameCranes.Length];
-        cmd45ft = new bool[nameCranes.Length];
-        cmdTwlLock = new bool[nameCranes.Length];
-        cmdTwlUnlock = new bool[nameCranes.Length];
+        cmdGantryVelFWD = new float[nameRTGCs.Length];
+        cmdGantryVelBWD = new float[nameRTGCs.Length];
+        cmdTrolleyVel = new float[nameRTGCs.Length];
+        cmdSpreaderVel = new float[nameRTGCs.Length];
+        cmdMM0Vel = new float[nameRTGCs.Length];
+        cmdMM1Vel = new float[nameRTGCs.Length];
+        cmdMM2Vel = new float[nameRTGCs.Length];
+        cmdMM3Vel = new float[nameRTGCs.Length];
+        cmd20ft = new bool[nameRTGCs.Length];
+        cmd40ft = new bool[nameRTGCs.Length];
+        cmd45ft = new bool[nameRTGCs.Length];
+        cmdTwlLock = new bool[nameRTGCs.Length];
+        cmdTwlUnlock = new bool[nameRTGCs.Length];
 
         // stack profile
         stack_profile = new int[row, bay];

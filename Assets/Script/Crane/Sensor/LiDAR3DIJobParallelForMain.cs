@@ -124,6 +124,7 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour
         [WriteOnly] public NativeArray<RaycastCommand> commands;
         public int layerMask;
 
+        [System.Obsolete]
         public void Execute(int index)
         {
             int v = index / hSteps;

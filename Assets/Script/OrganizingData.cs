@@ -39,12 +39,15 @@ public class OrganizingData : MonoBehaviour
             // cranes = new GameObject[GM.settingParams.listIP.Count];
 
             // i = 1부터 시작. 기존 크레인은 유지.
-            GameObject crane = GameObject.Find("Crane");
-            // cranes[0] = 
+            GameObject crane;
+            string craneType;
+
+            craneType = "ARTG";
+            crane = GameObject.Find(craneType);
             for (int i = 1; i < GM.settingParams.listIP.Count; i++)
             {
                 GameObject craneObject = Instantiate(cranePrefab, GM.cranePOS[i], Quaternion.identity);
-                craneObject.name = $"ARTG{i + 1}";
+                craneObject.name = $"{craneType}{i + 1}";
                 craneObject.transform.SetParent(crane.transform);
             }
 
