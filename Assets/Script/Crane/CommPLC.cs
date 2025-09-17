@@ -42,37 +42,10 @@ public class CommPLC
         plc.Open();
 
         // success or failure
-        string plcState;
-
-        // success
-        if (plc.IsConnected)
-        {
-            plcState = "success";
-
-            // init values
-            InitializePLCValues();
-        }
-
-        // failure
-        else
-        {
-            plcState = "failure";
-        }
+        string plcState = plc.IsConnected ? "success" : "failure";
 
         // output log
         Debug.Log($"{info.ip} Connected {plcState}");
-    }
-
-    // 추후 WriteBytes로 바꿔보자
-    void InitializePLCValues()
-    {
-        // plc.Write($"DB{info.writeDBNum}.DBX254.4", false);
-        // plc.Write($"DB{info.writeDBNum}.DBX254.5", true);
-        // plc.Write($"DB{info.writeDBNum}.DBX254.6", false);
-        // plc.Write($"DB{info.writeDBNum}.DBX44.0", false);
-        // plc.Write($"DB{info.writeDBNum}.DBX44.1", true);
-        // // plc.Write($"DB{info.writeDBNum}.DBX268.0", false);
-        // // plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
     }
 
     public byte[] ReadFromPLC()
@@ -102,6 +75,7 @@ public class CommPLC
 
         // writeDB[204] = boolByte;
 
+        // write to PLC
         WriteToPLC(writeDB);
     }
 
@@ -111,10 +85,9 @@ public class CommPLC
         Array.Copy(FloatToByteArr(floatData), 0, writeDB, startIdx, lengthFloat);
     }
 
-    byte WriteBool(bool boolData, int startPoint)
+    void WriteBool(bool boolData, int startPoint)
     {
         if (boolData) boolByte |= (byte)(1 << startPoint);
-        return boolByte;
     }
 
     byte[] FloatToByteArr(float floatData)
@@ -139,8 +112,8 @@ public class CommPLC
         const int floatStartIdxMM3Vel = 28;
 
         const int boolStartIdxTwistLock = 34;
-        const int boolBitTwlLock = 0;
-        const int boolBitTwlUnlock = 1;
+        const int boolStartPointTwlLock = 0;
+        const int boolStartPointTwlUnlock = 1;
 
         // Read raw data from PLC
         var rawData = ReadFromPLC();
@@ -156,8 +129,8 @@ public class CommPLC
         GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
 
         // Read boolean data
-        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlLock);
-        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolBitTwlUnlock);
+        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
     }
 
     float ReadFloatData(byte[] rawData, int startIndex)

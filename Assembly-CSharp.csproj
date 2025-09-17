@@ -74,7 +74,6 @@
     <Compile Include="Assets\Script\Yard\Yard_Infra.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR2D.cs" />
     <Compile Include="Assets\conten.cs" />
-    <Compile Include="Assets\Script\Crane\CraneDrawingQC.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableJoint.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR3DIJobParallelForMain.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR3D.cs" />
@@ -83,9 +82,9 @@
     <Compile Include="Assets\Script\UI\GameMode.cs" />
     <Compile Include="Assets\Script\Yard\Container.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
+    <Compile Include="Assets\Script\Crane\DrawingQC.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
-    <Compile Include="Assets\Script\Crane\CraneDrawingARTG.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\SpoolController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
@@ -97,6 +96,7 @@
     <Compile Include="Assets\Script\UI\MenuController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableShape.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableSolver.cs" />
+    <Compile Include="Assets\Script\Crane\DrawingARTG.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\TensionProbe.cs" />
   </ItemGroup>
   <ItemGroup>
