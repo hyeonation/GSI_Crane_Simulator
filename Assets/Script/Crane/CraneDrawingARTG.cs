@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using Filo;
 
-public class CraneDrawingRTGC : MonoBehaviour
+public class CraneDrawingARTG : MonoBehaviour
 {
 
     [Header("Laser Preset")]

@@ -179,6 +179,7 @@ public class CommPLC
         return (rawData[startIndex] & (1 << bitIndex)) != 0;
     }
 
+    // for little-endian to big-endian conversion
     byte[] reverseByteArr(byte[] byteArr)
     {
 
