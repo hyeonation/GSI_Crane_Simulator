@@ -75,7 +75,7 @@ public class CommPLC
         // // plc.Write($"DB{info.writeDBNum}.DBX268.1", true);
     }
 
-    public byte[] ReadToPLC()
+    public byte[] ReadFromPLC()
     {
         byte[] data = plc.ReadBytes(DataType.DataBlock, info.readDBNum, info.readStartIdx, info.readLength);
         return data;
@@ -143,7 +143,7 @@ public class CommPLC
         const int boolBitTwlUnlock = 1;
 
         // Read raw data from PLC
-        var rawData = ReadToPLC();
+        var rawData = ReadFromPLC();
 
         // Read float data
         GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);

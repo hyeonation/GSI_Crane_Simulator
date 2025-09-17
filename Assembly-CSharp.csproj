@@ -64,9 +64,9 @@
     <Analyzer Include="C:\Program Files\Unity 2022.3.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\OrganizingData.cs" />
     <Compile Include="Assets\Script\Truck\TruckDrawing.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Landed.cs" />
+    <Compile Include="Assets\Script\MainLoop.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableRenderer.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CablePoint.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Utils.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
     <Compile Include="Assets\Script\Crane\CraneDrawingARTG.cs" />
-    <Compile Include="Assets\Script\CommPLC.cs" />
+    <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\SpoolController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\RuntimeCableGenerator.cs" />

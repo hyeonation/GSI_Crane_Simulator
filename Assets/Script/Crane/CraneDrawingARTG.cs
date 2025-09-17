@@ -58,8 +58,8 @@ public class CraneDrawingARTG : MonoBehaviour
 
         FindObject();
 
-        InitLaserPos(laser_x_gap, laser_y_gap);
-        InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
+        // InitLaserPos(laser_x_gap, laser_y_gap);
+        // InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
         // InitSPSSPos(SPSS_x_gap, SPSS_y_gap, SPSS_z_gap);
 
         // 변수 계산

@@ -72,7 +72,7 @@ public class MenuController : MonoBehaviour
 
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        gameManager.GetComponent<OrganizingData>().enabled = true;
+        gameManager.GetComponent<MainLoop>().enabled = true;
     }
 
     /// <summary>
@@ -102,8 +102,8 @@ public class MenuController : MonoBehaviour
     public void OnQuit()
     {
 #if UNITY_EDITOR
-            // 에디터에서는 플레이 모드 종료
-            UnityEditor.EditorApplication.isPlaying = false;
+        // 에디터에서는 플레이 모드 종료
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
         // 실제 빌드에서는 애플리케이션 종료
         Application.Quit();

@@ -3,11 +3,10 @@ using UnityEngine;
 
 
 // Organizing data
-public class OrganizingData : MonoBehaviour
+public class MainLoop : MonoBehaviour
 {
     CommPLC[] plc;
 
-    GameObject[] cranes;
     KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
 
@@ -28,12 +27,8 @@ public class OrganizingData : MonoBehaviour
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-            // // reset
-            // GM.DestroyVar();
 
-            // making crane
-            // cranes = new GameObject[GM.settingParams.listIP.Count];
-
+            //// IP 개수만큼 크레인 생성
             // i = 1부터 시작. 기존 크레인은 유지.
             GameObject crane;
             string craneType;
@@ -50,6 +45,7 @@ public class OrganizingData : MonoBehaviour
             // init var
             GM.InitVar();
 
+            //// PLC Connect
             // Check if listIP is not null
             if (GM.settingParams.listIP != null)
             {
