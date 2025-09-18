@@ -9,7 +9,7 @@ public class Container : MonoBehaviour
 
     float start_val, x_interval, y_interval, z_interval;
     int num_containers;
-    string name_container = "Container";
+    string containerID = "Container";
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
@@ -174,7 +174,11 @@ public class Container : MonoBehaviour
         GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
         GameObject newObject = Instantiate(randomPrefab, Vector3.zero, Quaternion.identity);
 
-        newObject.name = $"{name_container}{num}"; //이름 설정
+        byte[] containerIDByteArr = mkContainerID();            // 랜덤 ID 생성
+        GM.listContainerID.Add(containerIDByteArr);             // ID 저장
+        containerID = ByteArrayToString(containerIDByteArr);    // String 변환
+        newObject.name = containerID;                           // 이름 설정
+
         newObject.transform.SetParent(transform);
 
         // 위치 배치
@@ -186,5 +190,37 @@ public class Container : MonoBehaviour
         newObject.transform.position = transform.position;
         newObject.transform.localPosition = spawnPosition;
         newObject.transform.rotation = transform.rotation;
+    }
+
+    // make container name
+    byte[] mkContainerID()
+    {
+        byte[] result = new byte[11];
+
+        // 앞 4자리: 대문자 알파벳 (A=65 ~ Z=90)
+        for (int i = 0; i < 4; i++)
+        {
+            result[i] = (byte)Random.Range(65, 91);
+        }
+
+        // 뒤 7자리: 숫자 (0=48 ~ 9=57)
+        for (int i = 4; i < 11; i++)
+        {
+            result[i] = (byte)Random.Range(48, 58);
+        }
+
+        return result;
+    }
+
+
+    // 디버깅용: byte[] → string 변환
+    string ByteArrayToString(byte[] arr)
+    {
+        char[] chars = new char[arr.Length];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            chars[i] = (char)arr[i];
+        }
+        return new string(chars);
     }
 }

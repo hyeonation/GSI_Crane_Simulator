@@ -37,6 +37,9 @@ public class GM : MonoBehaviour
     // dateTime
     public static DateTime dateTimeNow;
 
+    // container name
+    public static List<byte[]> listContainerID = new();
+
 
     // crane position
     public static Vector3[] cranePOS = {
