@@ -18,7 +18,8 @@ public class GM : MonoBehaviour
     public static short row = 5;
     public static short bay = 16;
     public static short tier = 6;
-    public static int[,] stack_profile;
+    public static int[,] stack_profile;     // SPSS 역할
+    public static List<byte[]> listContainerID = new();
 
 
     public static float yard_start_val = 8.32f;
@@ -38,7 +39,6 @@ public class GM : MonoBehaviour
     public static DateTime dateTimeNow;
 
     // container name
-    public static List<byte[]> listContainerID = new();
 
 
     // crane position
@@ -122,6 +122,19 @@ public class GM : MonoBehaviour
         // {
         //     Destroy(truck.transform.GetChild(i));
         // }
+    }
+
+
+
+    // 디버깅용: byte[] → string 변환
+    public static string ByteArrayToString(byte[] arr)
+    {
+        char[] chars = new char[arr.Length];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            chars[i] = (char)arr[i];
+        }
+        return new string(chars);
     }
 }
 

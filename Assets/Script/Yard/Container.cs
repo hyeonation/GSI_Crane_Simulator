@@ -176,7 +176,7 @@ public class Container : MonoBehaviour
 
         byte[] containerIDByteArr = mkContainerID();            // 랜덤 ID 생성
         GM.listContainerID.Add(containerIDByteArr);             // ID 저장
-        containerID = ByteArrayToString(containerIDByteArr);    // String 변환
+        containerID = GM.ByteArrayToString(containerIDByteArr);    // String 변환
         newObject.name = containerID;                           // 이름 설정
 
         newObject.transform.SetParent(transform);
@@ -212,15 +212,4 @@ public class Container : MonoBehaviour
         return result;
     }
 
-
-    // 디버깅용: byte[] → string 변환
-    string ByteArrayToString(byte[] arr)
-    {
-        char[] chars = new char[arr.Length];
-        for (int i = 0; i < arr.Length; i++)
-        {
-            chars[i] = (char)arr[i];
-        }
-        return new string(chars);
-    }
 }
