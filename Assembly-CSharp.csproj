@@ -85,6 +85,7 @@
     <Compile Include="Assets\Script\Crane\DrawingQC.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
+    <Compile Include="Assets\Script\UI\TimeDisplay.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\SpoolController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />

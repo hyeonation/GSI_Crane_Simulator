@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 // GameManager, GameMaster
 public class GM : MonoBehaviour
@@ -32,6 +33,10 @@ public class GM : MonoBehaviour
 
     // settings
     public static SettingParams settingParams = new();
+
+    // dateTime
+    public static DateTime dateTimeNow;
+
 
     // crane position
     public static Vector3[] cranePOS = {
