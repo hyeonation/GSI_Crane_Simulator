@@ -17,21 +17,28 @@ public class CommPLC
     byte[] writeDB;
     byte boolByte;
 
-    public CommPLC(string ip)
+    public CommPLC(
+        string ip,
+        short rack = 0,
+        short slot = 1,
+        short readDBNum = 1000,
+        short readStartIdx = 0,
+        short readLength = 36,
+        short writeDBNum = 1001,
+        short writeStartIdx = 0,
+        short writeLength = 218
+        )
     {
-        // 나중에 일반화할 때는 생성자 parameter에 InfoPLC를 추가하면 될 것
-        info.ip = ip;
-        info.rack = 0;
-        info.slot = 1;
-        info.readDBNum = 1000;
-        info.readStartIdx = 0;
-        info.readLength = 36;
-        info.writeDBNum = 1001;
-        info.writeStartIdx = 0;
-        info.writeLength = 218;
+        info.rack = rack;
+        info.slot = slot;
+        info.readDBNum = readDBNum;
+        info.readStartIdx = readStartIdx;
+        info.readLength = readLength;
+        info.writeDBNum = writeDBNum;
+        info.writeStartIdx = writeStartIdx;
+        info.writeLength = writeLength;
 
         writeDB = new byte[info.writeLength];
-
     }
 
     public void Connect()

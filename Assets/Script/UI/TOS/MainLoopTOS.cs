@@ -22,6 +22,8 @@ public class MainLoopTOS : MonoBehaviour
     //public TextMeshPro textApply;
     public TMP_Text textApply;
 
+    public GameObject containerBlock;
+
     string strCrane, strContainerID, strSource, strDestination;
     const string defaultStrContainerID = "??";
     const string defaultStrSource = "??";
@@ -35,6 +37,14 @@ public class MainLoopTOS : MonoBehaviour
 
         // Init TOS
         InitTOS();
+
+        Transform aa = containerBlock.transform.Find("A");
+
+        for (int i = 0; i < aa.childCount; i++)
+        {
+            Debug.Log(aa.GetChild(i).name);
+        }
+        // aa.GetComponent<Button>().transition.
 
     }
 
@@ -163,5 +173,15 @@ public class MainLoopTOS : MonoBehaviour
         dropdown.value = Math.Clamp(nextIdx, 0, dropdown.options.Count);
     }
 
+
+    // update current stack profile UI
+    void UpdateStackProfileUI()
+    {
+        int bay = DropdownInputBay.value;
+
+        // 해당 bay 컨테이너 활성화
+
+
+    }
 
 }

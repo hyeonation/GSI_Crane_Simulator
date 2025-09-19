@@ -20,6 +20,8 @@ public class GM : MonoBehaviour
     public static short tier = 6;
     public static int[,] stack_profile;     // SPSS 역할
     public static List<byte[]> listContainerID = new();
+    public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
+
 
 
     public static float yard_start_val = 8.32f;
@@ -156,4 +158,32 @@ public class SettingParams
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
     public int yardContainerNumberEA = 100;
+}
+
+public class KeyCmd
+{
+    float speedABS = 0f;
+    float[] direction = new float[3] { -1f, 0f, 1f };
+    int directionIdx = 1; // 0: BWD, 1: Stop, 2: FWD
+
+    KeyCode keyFWD;
+    KeyCode keyBWD;
+
+    public KeyCmd(float speedABS, KeyCode keyFWD, KeyCode keyBWD)
+    {
+        this.speedABS = speedABS;
+        this.keyFWD = keyFWD;
+        this.keyBWD = keyBWD;
+    }
+
+    public float GetSpeed()
+    {
+        if (Input.GetKeyDown(keyFWD)) directionIdx++;
+        else if (Input.GetKeyDown(keyBWD)) directionIdx--;
+
+        // Ensure directionIdx is within bounds
+        directionIdx = Mathf.Clamp(directionIdx, 0, 2);
+
+        return speedABS * direction[directionIdx];
+    }
 }

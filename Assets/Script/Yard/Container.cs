@@ -13,7 +13,6 @@ public class Container : MonoBehaviour
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
-    public static List<int[]> list_stack_profile;
 
     void Start()
     {
@@ -43,32 +42,8 @@ public class Container : MonoBehaviour
 
         // stack profile 생성
         stack_profile_idx_max = row_max * bay_max;
-        list_stack_profile = new List<int[]>();
+        GM.list_stack_profile = new List<int[]>();
     }
-
-    // IEnumerator RotationUncheck()
-    // {
-
-    //     yield return new WaitForSeconds(20f);
-    //     for (int i = 0; i < num_containers; i++)
-    //     {
-    //         GameObject Containers = GameObject.Find($"{name_container}{i}");
-    //         Rigidbody rb = Containers.GetComponent<Rigidbody>();
-    //         rb.constraints = RigidbodyConstraints.FreezeAll;
-    //     }
-    // }
-
-    // IEnumerator kinematicCheck()
-    // {
-
-    //     yield return new WaitForSeconds(11f);
-    //     for (int i = 0; i < num_containers; i++)
-    //     {
-    //         GameObject Containers = GameObject.Find($"{name_container}{i}");
-    //         Rigidbody rb = Containers.GetComponent<Rigidbody>();
-    //         rb.drag = 0.4f;
-    //     }
-    // }
 
     // Container 만드는 방식 변경
     // 초기 시작에서 Container 공중에 뜨는 현상 없애기 위함
@@ -110,7 +85,7 @@ public class Container : MonoBehaviour
                     // list_stack_profile
                     i_tier = ++tier;
                     int[] sp = { i_row, i_bay, i_tier, 0 };     // 마지막 0은 container state. None 의미.
-                    list_stack_profile.Add(sp);
+                    GM.list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
                     GM.stack_profile[i_row, i_bay] = tier;
@@ -141,7 +116,7 @@ public class Container : MonoBehaviour
                     for (int i_tier = 1; i_tier <= tier_max; i_tier++)
                     {
                         int[] sp = { i_row, i_bay, i_tier, 0 };
-                        list_stack_profile.Add(sp);
+                        GM.list_stack_profile.Add(sp);
                     }
                 }
             }
@@ -152,16 +127,16 @@ public class Container : MonoBehaviour
         int random_val;
         for (int i = 0; i < num_containers; i++)
         {
-            tmp = list_stack_profile[i];
+            tmp = GM.list_stack_profile[i];
             random_val = Random.Range(0, num_containers);
-            list_stack_profile[i] = list_stack_profile[random_val];
-            list_stack_profile[random_val] = tmp;
+            GM.list_stack_profile[i] = GM.list_stack_profile[random_val];
+            GM.list_stack_profile[random_val] = tmp;
         }
 
         // make containers
         for (int i = 0; i < num_containers; i++)
         {
-            mkContainer(i, list_stack_profile[i]);
+            mkContainer(i, GM.list_stack_profile[i]);
         }
     }
 
