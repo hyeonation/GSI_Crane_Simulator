@@ -13,7 +13,7 @@ public class Container : MonoBehaviour
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
-    public static List<List<int>> list_stack_profile;
+    public static List<int[]> list_stack_profile;
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class Container : MonoBehaviour
 
         // stack profile 생성
         stack_profile_idx_max = row_max * bay_max;
-        list_stack_profile = new List<List<int>>();
+        list_stack_profile = new List<int[]>();
     }
 
     // IEnumerator RotationUncheck()
@@ -109,7 +109,7 @@ public class Container : MonoBehaviour
                 {
                     // list_stack_profile
                     i_tier = ++tier;
-                    List<int> sp = new List<int> { i_row, i_bay, i_tier };
+                    int[] sp = { i_row, i_bay, i_tier, 0 };     // 마지막 0은 container state. None 의미.
                     list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
@@ -140,7 +140,7 @@ public class Container : MonoBehaviour
 
                     for (int i_tier = 1; i_tier <= tier_max; i_tier++)
                     {
-                        List<int> sp = new List<int> { i_row, i_bay, i_tier };
+                        int[] sp = { i_row, i_bay, i_tier, 0 };
                         list_stack_profile.Add(sp);
                     }
                 }
@@ -148,7 +148,7 @@ public class Container : MonoBehaviour
         }
 
         // shuffle containers
-        List<int> tmp;
+        int[] tmp;
         int random_val;
         for (int i = 0; i < num_containers; i++)
         {
@@ -165,7 +165,7 @@ public class Container : MonoBehaviour
         }
     }
 
-    void mkContainer(int num, List<int> idx_pos)
+    void mkContainer(int num, int[] idx_pos)
     {
         int i_row = idx_pos[0];
         int i_bay = idx_pos[1];

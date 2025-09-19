@@ -29,22 +29,24 @@ public class MainLoopTOS : MonoBehaviour
 
     void Start()
     {
-        // init
-        Initialization();
+        //// UI setting
+        // Add Listeners
+        AddListeners();
 
-        btnApply.interactable = false;
+        // Init TOS
+        InitTOS();
 
     }
 
-    void Initialization()
+    // TOS Task 명령 작업이 끝나면 초기화하는 함수
+    void InitTOS()
     {
         // init values
         InitDropdownData();
         InitTextData();
 
-
-        // Add Listeners
-        AddListeners();
+        // disabled btnApply
+        btnApply.interactable = false;
     }
 
     void InitTextData()
@@ -123,40 +125,24 @@ public class MainLoopTOS : MonoBehaviour
         // Debug.Log("선택된 인덱스: " + index);
         // Debug.Log("선택된 텍스트: " + DropdownInputCrane.options[index].text);
 
-        // 인덱스 값에 따라 다른 동작을 수행합니다
-        switch (index)
-        {
-            case 0:
-                Debug.Log("옵션 1이 선택되었습니다.");
-                break;
-            case 1:
-                Debug.Log("옵션 2가 선택되었습니다.");
-                break;
-            case 2:
-                Debug.Log("옵션 3이 선택되었습니다.");
-                break;
-        }
+        // // 인덱스 값에 따라 다른 동작을 수행합니다
+        // switch (index)
+        // {
+        //     case 0:
+        //         Debug.Log("옵션 1이 선택되었습니다.");
+        //         break;
+        //     case 1:
+        //         Debug.Log("옵션 2가 선택되었습니다.");
+        //         break;
+        //     case 2:
+        //         Debug.Log("옵션 3이 선택되었습니다.");
+        //         break;
+        // }
     }
 
     void OnDdInputBayValueChanged(int index)
     {
-        // index는 선택된 옵션의 순서(0부터 시작)입니다
-        Debug.Log("선택된 인덱스: " + index);
-        Debug.Log("선택된 텍스트: " + DropdownInputBay.options[index].text);
 
-        // 인덱스 값에 따라 다른 동작을 수행합니다
-        switch (index)
-        {
-            case 0:
-                Debug.Log("옵션 1이 선택되었습니다.");
-                break;
-            case 1:
-                Debug.Log("옵션 2가 선택되었습니다.");
-                break;
-            case 2:
-                Debug.Log("옵션 3이 선택되었습니다.");
-                break;
-        }
     }
 
     void OnBtnSelectCraneUp() => OnBtnUpDownEvent(DropdownInputCrane, '-');
