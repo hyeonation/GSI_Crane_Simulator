@@ -393,13 +393,14 @@ public class MainLoopTOS : MonoBehaviour
                     // source와 destination이 다를 때만
                     if ((iRowSource != iRow) || (iBaySource != iBay))
                     {
+                        // deactive prev button
+                        // 같은 bay일 때만
+                        if (iBayDestination == iBay) btnDestination.GetComponent<Image>().color = colorNull;
+
                         // update data
                         iRowDestination = iRow;
                         iBayDestination = iBay;
                         strDestination = strContainerLoc;
-
-                        // deactive prev button
-                        btnDestination.GetComponent<Image>().color = colorNull;
 
                         // update btnDestination
                         btnDestination = containerTr[iRow, iTier];
