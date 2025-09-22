@@ -80,10 +80,10 @@ public class MainLoopQC : MonoBehaviour
             for (int iCrane = 0; iCrane < GM.settingParams.listIP.Count; iCrane++)
             {
                 // Read PLC DB
-                plc[iCrane].ReadPLCdata(iCrane);
+                plc[iCrane].ReadPLCdataQC(iCrane);
 
                 // Write PLC DB
-                plc[iCrane].WriteUnitydataToPLC();
+                plc[iCrane].WriteUnitydataToPLCQC();
             }
         }
 

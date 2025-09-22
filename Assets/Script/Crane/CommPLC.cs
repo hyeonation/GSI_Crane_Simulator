@@ -86,6 +86,26 @@ public class CommPLC
         WriteToPLC(writeDB);
     }
 
+    public void WriteUnitydataToPLCQC()
+    {
+
+        float testFloat = 123.0f;
+        int startIdx = 0;
+        WriteFloat(testFloat, startIdx);
+
+        // byte boolByte = 0;  // init
+        // WriteBool(true, 0);
+        // WriteBool(false, 1);
+        // WriteBool(true, 2);
+        // WriteBool(false, 3);
+        // WriteBool(true, 4);
+
+        // writeDB[204] = boolByte;
+
+        // write to PLC
+        WriteToPLC(writeDB);
+    }
+
     void WriteFloat(float floatData, int startIdx)
     {
         const int lengthFloat = 4;
@@ -107,6 +127,40 @@ public class CommPLC
     }
 
     public void ReadPLCdata(int iCrane)
+    {
+        // DB start index
+        const int floatStartIdxGantryVelBWD = 0;
+        const int floatStartIdxGantryVelFWD = 4;
+        const int floatStartIdxTrolleyVel = 8;
+        const int floatStartIdxSpreaderVel = 12;
+        const int floatStartIdxMM0Vel = 16;
+        const int floatStartIdxMM1Vel = 20;
+        const int floatStartIdxMM2Vel = 24;
+        const int floatStartIdxMM3Vel = 28;
+
+        const int boolStartIdxTwistLock = 34;
+        const int boolStartPointTwlLock = 0;
+        const int boolStartPointTwlUnlock = 1;
+
+        // Read raw data from PLC
+        var rawData = ReadFromPLC();
+
+        // Read float data
+        GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
+        GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
+
+        // Read boolean data
+        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+    }
+
+    public void ReadPLCdataQC(int iCrane)
     {
         // DB start index
         const int floatStartIdxGantryVelBWD = 0;

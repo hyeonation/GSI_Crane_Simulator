@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,10 +23,38 @@ public class MainLoopTOS : MonoBehaviour
 
     public GameObject containerBlock;
 
+
+
     string strCrane, strContainerID, strSource, strDestination;
     const string defaultStrContainerID = "??";
     const string defaultStrSource = "??";
     const string defaultStrDestination = "??";
+
+    public enum StateUI { None, SelectSrc, Ready }
+    public static StateUI stateUI { get; private set; } = StateUI.None;
+
+
+    enum StateContainerBlock { Active, Deactive, Null }
+    Color colorActive = new Color(255f, 255f, 0f, 0f);
+    Color colorDeactive = new Color(220f, 220f, 220f, 0f);
+    Color colorNull = new Color(0f, 0f, 0f, 0f);
+
+    Transform[,] containerTr;
+
+    readonly Dictionary<string, int> dictRow = new()
+    {
+        {"A", 0},
+        {"B", 1},
+        {"C", 2},
+        {"D", 3},
+        {"E", 4},
+        {"F", 5},
+        {"G", 6},
+        {"H", 7},
+        {"J", 8},
+        {"WS", 9},
+        {"LS", 10},
+    };
 
     void Start()
     {
@@ -38,13 +65,41 @@ public class MainLoopTOS : MonoBehaviour
         // Init TOS
         InitTOS();
 
-        Transform aa = containerBlock.transform.Find("A");
 
-        for (int i = 0; i < aa.childCount; i++)
-        {
-            Debug.Log(aa.GetChild(i).name);
-        }
+
+
+
+        // Transform rowA = containerBlock.transform.Find("Border Line");
+
+        // try
+        // {
+        //     Debug.Log(rowA.GetChild(0).name);
+        // }
+        // catch
+        // {
+        //     Debug.Log("not error");
+        // }
+
+
+
+        // for (int i = 0; i < rowA.childCount; i++)
+        // {
+        //     Debug.Log(rowA.GetChild(i).name);
+        // }
+
+        // Transform bb = rowA.transform.Find("Tier");
+        // Debug.Log(bb == null);
+        // Image cc = bb.GetComponent<Image>();
+        // cc.color = Color.red;
+
+        // Button aaa = rowA.transform.Find("Tier 1").GetComponent<Button>();
+        // aaa.onClick.AddListener(() => OnBtnRow(bb));
+
         // aa.GetComponent<Button>().transition.
+
+        // disabled btnApply
+        btnApply.interactable = false;
+
 
     }
 
@@ -55,8 +110,7 @@ public class MainLoopTOS : MonoBehaviour
         InitDropdownData();
         InitTextData();
 
-        // disabled btnApply
-        btnApply.interactable = false;
+
     }
 
     void InitTextData()
@@ -68,13 +122,13 @@ public class MainLoopTOS : MonoBehaviour
         strDestination = defaultStrDestination;
 
         // apply
-        SetTextApply();
+        SetApplyText();
     }
 
-    void SetTextApply()
+    void SetApplyText()
     {
         // make text structure
-        textApply.text = $" {strCrane}\n {strContainerID}\n";
+        textApply.text = $" {strCrane}\n #{strContainerID}\n";
         textApply.text += $" {strSource} -> {strDestination}";
     }
 
@@ -121,6 +175,33 @@ public class MainLoopTOS : MonoBehaviour
         if (btnSelectCraneDown) btnSelectCraneDown.onClick.AddListener(OnBtnSelectCraneDown);
         if (btnSelectBayUp) btnSelectBayUp.onClick.AddListener(OnBtnSelectBayUp);
         if (btnSelectBayDown) btnSelectBayDown.onClick.AddListener(OnBtnSelectBayDown);
+
+        // containerBlock setting
+        containerTr = new Transform[GM.row + 2, GM.tier];   // row : += WS, LS 2개 추가
+        Transform row;
+        for (int i = 0; i < containerBlock.transform.childCount; i++)
+        {
+            // get row
+            row = containerBlock.transform.GetChild(i);
+
+            // get container block unit
+            // child가 없는 Border Line GameObject는 loop 돌지 않음.
+            for (int j = 0; j < row.childCount; j++)
+            {
+                // get container block unit
+                Transform containerBlockUnit = row.GetChild(j);
+
+                // Only Tier
+                if (containerBlockUnit.name.Contains("Tier"))
+                {
+                    // 버튼마다 기능 부여
+                    containerBlockUnit.GetComponent<Button>().onClick.AddListener(() => OnBtnRow(containerBlockUnit));
+
+                    // set containerTr
+                    containerTr[i, j] = containerBlockUnit;
+                }
+            }
+        }
     }
 
     // 드롭다운 값이 변경될 때 호출되는 함수
@@ -129,7 +210,7 @@ public class MainLoopTOS : MonoBehaviour
 
         // select crane
         strCrane = DropdownInputCrane.options[index].text;
-        SetTextApply();
+        SetApplyText();
 
         // // index는 선택된 옵션의 순서(0부터 시작)입니다
         // Debug.Log("선택된 인덱스: " + index);
@@ -152,6 +233,7 @@ public class MainLoopTOS : MonoBehaviour
 
     void OnDdInputBayValueChanged(int index)
     {
+        // stack profile update
 
     }
 
@@ -173,13 +255,127 @@ public class MainLoopTOS : MonoBehaviour
         dropdown.value = Math.Clamp(nextIdx, 0, dropdown.options.Count);
     }
 
+    string mkStrContainerLoc(Transform btn)
+    {
+        // output
+        string output;
+
+        string strRow = btn.transform.parent.name;  // 부모 이름 접근. Row
+        int row = dictRow[strRow];
+        int bay = DropdownInputBay.value;
+
+        // Normal
+        if (row < GM.row)
+        {
+            int tier = GM.stack_profile[row, bay];
+            output = $"{strRow}{bay}-{tier}";
+        }
+
+        // WS or LS
+        else
+        {
+            output = $"{strRow}{bay}";
+        }
+
+        return output;
+    }
+
+    void OnBtnRow(Transform btn)
+    {
+
+        // Image cc = btn.GetComponent<Image>();
+        // cc.color = Color.yellow;
+
+        // input
+        string strContainerLoc = mkStrContainerLoc(btn);
+
+        // Source 선택
+        if (stateUI == StateUI.None)
+        {
+            // make data
+            // strContainerID = 
+            strSource = strContainerLoc;
+
+            // update stateUI
+            stateUI = StateUI.SelectSrc;
+        }
+
+        else if (stateUI == StateUI.SelectSrc)
+        {
+            // 같은 row, bay 눌렀으면 취소
+            if (strContainerLoc == strSource)
+            {
+                strSource = defaultStrSource;
+                stateUI = StateUI.None;
+            }
+
+            // 다른 row, bay 눌렀으면 준비 완료
+            else
+            {
+                strDestination = strContainerLoc;
+                stateUI = StateUI.Ready;
+
+                // Enable btnApply
+                btnApply.interactable = true;
+            }
+        }
+
+        else if (stateUI == StateUI.Ready)
+        {
+            // 같은 row, bay 눌렀으면 취소
+            // rollback
+            if (strContainerLoc == strDestination)
+            {
+                // disable btnApply
+                btnApply.interactable = false;
+
+                strDestination = defaultStrDestination;
+                stateUI = StateUI.SelectSrc;
+            }
+
+            // 다른 row, bay 눌렀으면 Destination 변경
+            // StateUI 는 변화 없음
+            else
+            {
+                strDestination = strContainerLoc;
+            }
+        }
+    }
+
+    void OnBtnApply()
+    {
+        // load data
+
+        // update stack profile data
+
+        // initialization
+        btnApply.interactable = false;
+        strSource = defaultStrSource;
+        strDestination = defaultStrDestination;
+        stateUI = StateUI.None;
+
+    }
 
     // update current stack profile UI
     void UpdateStackProfileUI()
     {
         int bay = DropdownInputBay.value;
 
-        // 해당 bay 컨테이너 활성화
+        // 해당 bay로 containerID 배치 및 활성화
+        for (int i = 0; i < GM.list_stack_profile.Count; i++)
+        {
+            // data
+            int[] containerData = GM.list_stack_profile[i];
+
+            // bay 같을 때
+            if (bay == containerData[1])
+            {
+                // gameObject 추출
+                // containerID 배치
+                // 색 변경
+            }
+        }
+
 
 
     }
