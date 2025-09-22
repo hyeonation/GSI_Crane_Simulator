@@ -15,9 +15,9 @@ public class GM : MonoBehaviour
     public float startVal = 8.32f;
 
     [Header("Container_Preset")]
-    public static short row = 5;
-    public static short bay = 16;
-    public static short tier = 6;
+    public static short lengthRow = 5;
+    public static short lengthBay = 16;
+    public static short lengthTier = 6;
     public static int[,] stack_profile;     // SPSS 역할
     public static List<byte[]> listContainerID = new();
     public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
@@ -55,9 +55,9 @@ public class GM : MonoBehaviour
     {
 
         // init
-        row = rowMax;
-        bay = bayMax;
-        tier = tierMax;
+        lengthRow = rowMax;
+        lengthBay = bayMax;
+        lengthTier = tierMax;
         yard_start_val = startVal;
 
         // init variables
@@ -105,7 +105,7 @@ public class GM : MonoBehaviour
         cmdTwlUnlock = new bool[nameCranes.Length];
 
         // stack profile
-        stack_profile = new int[row, bay];
+        stack_profile = new int[lengthRow, lengthBay];
 
     }
 
@@ -157,7 +157,7 @@ public class SettingParams
     public float lidarResVertical_deg = 0.2f;
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
-    public int yardContainerNumberEA = 100;
+    public int yardContainerNumberEA = 300;
 }
 
 public class KeyCmd

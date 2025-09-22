@@ -33,9 +33,9 @@ public class Container : MonoBehaviour
         num_containers = GM.settingParams.yardContainerNumberEA;
 
         // load data
-        row_max = GM.row;
-        bay_max = GM.bay;
-        tier_max = GM.tier;
+        row_max = GM.lengthRow;
+        bay_max = GM.lengthBay;
+        tier_max = GM.lengthTier;
 
         // 컨테이너 최대 개수 계산
         num_containers_max = row_max * bay_max * tier_max;
@@ -158,7 +158,7 @@ public class Container : MonoBehaviour
 
         // 위치 배치
         Vector3 spawnPosition = new Vector3((i_row * x_interval) + start_val,
-                                            (i_tier * y_interval) - y_interval / 2 + 0.1f,
+                                            (i_tier * y_interval) + y_interval / 2 + 0.1f,
                                             (i_bay * z_interval) + 7.75f);
 
         // 부모인 Containers에 맞춤

@@ -35,11 +35,15 @@ public class MainLoopTOS : MonoBehaviour
 
 
     enum StateContainerBlock { Active, Deactive, Null }
-    Color colorActive = new Color(255f, 255f, 0f, 0f);
+    Color colorActive = new Color(255f, 255f, 0f, 255f);
     Color colorDeactive = new Color(210f, 210f, 210f, 255f);
     Color colorNull = new Color(0f, 0f, 0f, 255f);
 
     Transform[,] containerTr;
+
+    Transform btnSource, btnDestination;
+    int iRowSource = -1, iRowDestination = -1;
+    int iBaySource = -1, iBayDestination = -1;
 
     readonly Dictionary<string, int> dictRow = new()
     {
@@ -122,10 +126,10 @@ public class MainLoopTOS : MonoBehaviour
         strDestination = defaultStrDestination;
 
         // apply
-        SetApplyText();
+        UpdateApplyText();
     }
 
-    void SetApplyText()
+    void UpdateApplyText()
     {
         // make text structure
         textApply.text = $" {strCrane}\n #{strContainerID}\n";
@@ -154,7 +158,7 @@ public class MainLoopTOS : MonoBehaviour
         /// Bay
         // 드롭다운 옵션 목록을 생성합니다
         options = new List<Dropdown.OptionData>();
-        for (int i = 0; i < GM.bay; i++)
+        for (int i = 0; i < GM.lengthBay; i++)
         {
             options.Add(new Dropdown.OptionData($"#{i}"));
         }
@@ -178,9 +182,9 @@ public class MainLoopTOS : MonoBehaviour
 
         // containerBlock setting
         // 버튼마다 기능 부여
-        containerTr = new Transform[GM.row + 2, GM.tier];   // row : += WS, LS 2개 추가
+        containerTr = new Transform[GM.lengthRow + 2, GM.lengthTier];   // row : += WS, LS 2개 추가
         Transform row;
-        int idxRow = 0;     // init
+        int iRow = 0;     // init
         for (int i = 0; i < containerBlock.transform.childCount; i++)
         {
             // get row
@@ -188,7 +192,7 @@ public class MainLoopTOS : MonoBehaviour
 
             // get container block unit
             // child가 없는 Border Line GameObject는 loop 돌지 않음.
-            int idxTier = 0;    // init
+            int iTier = 0;    // init
             for (int j = 0; j < row.childCount; j++)
             {
                 // get container block unit
@@ -201,13 +205,13 @@ public class MainLoopTOS : MonoBehaviour
                     containerBlockUnit.GetComponent<Button>().onClick.AddListener(() => OnBtnRow(containerBlockUnit));
 
                     // set containerTr
-                    containerTr[idxRow, idxTier++] = containerBlockUnit;
+                    containerTr[iRow, iTier++] = containerBlockUnit;
                 }
             }
 
             // update
             // only idxTier != 0
-            idxRow = (idxTier != 0) ? (idxRow + 1) : idxRow;
+            iRow = (iTier != 0) ? (iRow + 1) : iRow;
         }
     }
 
@@ -217,7 +221,7 @@ public class MainLoopTOS : MonoBehaviour
 
         // select crane
         strCrane = DropdownInputCrane.options[index].text;
-        SetApplyText();
+        UpdateApplyText();
 
         // // index는 선택된 옵션의 순서(0부터 시작)입니다
         // Debug.Log("선택된 인덱스: " + index);
@@ -262,27 +266,13 @@ public class MainLoopTOS : MonoBehaviour
         dropdown.value = Math.Clamp(nextIdx, 0, dropdown.options.Count);
     }
 
-    string mkStrContainerLoc(Transform btn)
+    string mkStrContainerLoc(string strIRow, int iBay, int iTier)
     {
-        // output
-        string output;
+        // convert row
+        int iRow = dictRow[strIRow];
 
-        string strRow = btn.transform.parent.name;  // 부모 이름 접근. Row
-        int row = dictRow[strRow];
-        int bay = DropdownInputBay.value;
-
-        // Normal
-        if (row < GM.row)
-        {
-            int tier = GM.stack_profile[row, bay];
-            output = $"{strRow}{bay}-{tier}";
-        }
-
-        // WS or LS
-        else
-        {
-            output = $"{strRow}{bay}";
-        }
+        // WS, LS 구분
+        string output = (iRow < GM.lengthRow) ? $"{strIRow}{iBay}-{iTier + 1}" : $"{strIRow}{iBay}";
 
         return output;
     }
@@ -293,18 +283,31 @@ public class MainLoopTOS : MonoBehaviour
         // Image cc = btn.GetComponent<Image>();
         // cc.color = Color.yellow;
 
-        // input
-        string strContainerLoc = mkStrContainerLoc(btn);
+        // 해당 row의 최상단 Container 선택
+        string strIRow = btn.transform.parent.name;  // 부모 이름 접근. Row
+        int iRow = dictRow[strIRow];
+        int iBay = DropdownInputBay.value;
+        int iTier = GM.stack_profile[iRow, iBay] - 1;   // iTier = Tier - 1
+        string strContainerLoc = mkStrContainerLoc(strIRow, iBay, iTier);
+
+        // top button
+        Transform btnTop = containerTr[iRow, iTier];
 
         // Source 선택
         if (stateUI == StateUI.None)
         {
-            // make data
-            // strContainerID = 
+            // update data
+            strContainerID = btnTop.name;
             strSource = strContainerLoc;
-
-            // update stateUI
+            iRowSource = iRow;
+            iBaySource = iBay;
             stateUI = StateUI.SelectSrc;
+
+            // update button
+            btnSource = btnTop;
+
+            // active
+            btnTop.GetComponent<Image>().color = colorActive;
         }
 
         else if (stateUI == StateUI.SelectSrc)
@@ -312,15 +315,37 @@ public class MainLoopTOS : MonoBehaviour
             // 같은 row, bay 눌렀으면 취소
             if (strContainerLoc == strSource)
             {
+                // update data
+                strContainerID = defaultStrContainerID;
                 strSource = defaultStrSource;
+                iRowSource = -1;
+                iBaySource = -1;
                 stateUI = StateUI.None;
+
+                // update button
+                btnSource = null;
+
+                // deactive
+                btnTop.GetComponent<Image>().color = colorDeactive;
             }
 
-            // 다른 row, bay 눌렀으면 준비 완료
+            // 다른 row, bay 눌렀으면 Destination 결정
+            // 준비 완료
             else
             {
-                strDestination = strContainerLoc;
+                // update data
+                iRowDestination = iRow;
+                iBayDestination = iBay;
                 stateUI = StateUI.Ready;
+
+                // iTier = iTier + 1
+                strDestination = mkStrContainerLoc(strIRow, iBay, ++iTier);
+
+                // update button
+                btnDestination = containerTr[iRow, iTier];
+
+                // active
+                btnDestination.GetComponent<Image>().color = colorActive;
 
                 // Enable btnApply
                 btnApply.interactable = true;
@@ -329,24 +354,57 @@ public class MainLoopTOS : MonoBehaviour
 
         else if (stateUI == StateUI.Ready)
         {
+            // iTier = iTier + 1
+            strContainerLoc = mkStrContainerLoc(strIRow, iBay, ++iTier);
+
             // 같은 row, bay 눌렀으면 취소
             // rollback
             if (strContainerLoc == strDestination)
             {
-                // disable btnApply
-                btnApply.interactable = false;
-
+                // update data
                 strDestination = defaultStrDestination;
                 stateUI = StateUI.SelectSrc;
+                iRowDestination = -1;
+                iBayDestination = -1;
+
+                // deactive
+                btnDestination.GetComponent<Image>().color = colorNull;
+
+                // update button
+                btnDestination = null;
+
+                // disable btnApply
+                btnApply.interactable = false;
             }
 
             // 다른 row, bay 눌렀으면 Destination 변경
             // StateUI 는 변화 없음
             else
             {
-                strDestination = strContainerLoc;
+                // destination 변경
+                // source와 destination이 다를 때만
+                if ((iRowSource != iRow) || (iBaySource != iBay))
+                {
+                    // update data
+                    iRowDestination = iRow;
+                    iBayDestination = iBay;
+                    strDestination = strContainerLoc;
+
+                    // deactive prev button
+                    btnDestination.GetComponent<Image>().color = colorNull;
+
+                    // update btnDestination
+                    btnDestination = containerTr[iRow, iTier];
+
+                    // active
+                    btnDestination.GetComponent<Image>().color = colorActive;
+
+                }
             }
         }
+
+        // update ApplyText
+        UpdateApplyText();
     }
 
     void OnBtnApply()
@@ -359,6 +417,8 @@ public class MainLoopTOS : MonoBehaviour
         btnApply.interactable = false;
         strSource = defaultStrSource;
         strDestination = defaultStrDestination;
+        btnSource = null;
+        btnDestination = null;
         stateUI = StateUI.None;
 
     }
@@ -366,15 +426,20 @@ public class MainLoopTOS : MonoBehaviour
     // update current stack profile UI
     void UpdateStackProfileUI()
     {
-
         // init data
+        Transform cntr;
         for (int i = 0; i < containerTr.GetLength(0); i++)
         {
             for (int j = 0; j < containerTr.GetLength(1); j++)
             {
                 try
                 {
-                    containerTr[i, j].GetComponent<Image>().color = colorNull;
+                    // init data
+                    cntr = containerTr[i, j];
+                    cntr.GetComponent<Image>().color = colorNull;
+                    cntr.name = "";
+                    cntr.GetChild(0).GetComponent<TMP_Text>().text = "";
+                    cntr.GetComponent<Button>().interactable = true;
                 }
                 catch
                 {
@@ -389,7 +454,6 @@ public class MainLoopTOS : MonoBehaviour
 
         // 해당 bay로 containerID 배치 및 활성화
         int iRow, iBay, iTier;
-        Transform cntr;
         for (int i = 0; i < GM.list_stack_profile.Count; i++)
         {
             // [i_row, i_bay, i_tier, containerStatus]
@@ -405,15 +469,38 @@ public class MainLoopTOS : MonoBehaviour
                 cntr = containerTr[iRow, iTier];
 
                 // containerID 배치
-                cntr.name = GM.ByteArrayToString(GM.listContainerID[i]);
+                string ctID = GM.ByteArrayToString(GM.listContainerID[i]);
+                cntr.name = ctID;
+                string containerIDFormat = $"{ctID.Substring(0, 4)}\n{ctID.Substring(4, 4)}\n{ctID.Substring(8, 3)}";
+                cntr.GetChild(0).GetComponent<TMP_Text>().text = containerIDFormat;
 
                 // 색 변경
                 cntr.GetComponent<Image>().color = colorDeactive;
             }
         }
 
+        // active source, destination button
+        if (btnSource && (iBaySource == iBayNow)) btnSource.GetComponent<Image>().color = colorActive;
+        if (btnDestination && (iBayDestination == iBayNow)) btnDestination.GetComponent<Image>().color = colorActive;
 
-
+        // container 없는 row의 버튼은 비활성화
+        // WS, LS는 비활성화하지 않음
+        for (int i = 0; i < GM.lengthRow; i++)
+        {
+            // empty row
+            if (GM.stack_profile[i, iBayNow] == 0)
+            {
+                for (int j = 0; j < containerTr.GetLength(1); j++)
+                {
+                    cntr = containerTr[i, j];
+                    cntr.GetComponent<Button>().interactable = false;
+                }
+            }
+        }
     }
-
 }
+
+// public class TaskUnit
+// {
+//     string strCrane;
+// }
