@@ -14,7 +14,7 @@ public class Container : MonoBehaviour
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
 
-    void Start()
+    void Awake()
     {
 
         // init values
@@ -83,12 +83,12 @@ public class Container : MonoBehaviour
                 if (tier < tier_max)
                 {
                     // list_stack_profile
-                    i_tier = ++tier;
+                    i_tier = tier;
                     int[] sp = { i_row, i_bay, i_tier, 0 };     // 마지막 0은 container state. None 의미.
                     GM.list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
-                    GM.stack_profile[i_row, i_bay] = tier;
+                    GM.stack_profile[i_row, i_bay] = ++tier;
                     num_containers_tmp++;
                 }
 

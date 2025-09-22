@@ -36,8 +36,8 @@ public class MainLoopTOS : MonoBehaviour
 
     enum StateContainerBlock { Active, Deactive, Null }
     Color colorActive = new Color(255f, 255f, 0f, 0f);
-    Color colorDeactive = new Color(220f, 220f, 220f, 0f);
-    Color colorNull = new Color(0f, 0f, 0f, 0f);
+    Color colorDeactive = new Color(210f, 210f, 210f, 255f);
+    Color colorNull = new Color(0f, 0f, 0f, 255f);
 
     Transform[,] containerTr;
 
@@ -65,7 +65,7 @@ public class MainLoopTOS : MonoBehaviour
         // Init TOS
         InitTOS();
 
-
+        UpdateStackProfileUI();
 
 
 
@@ -177,8 +177,10 @@ public class MainLoopTOS : MonoBehaviour
         if (btnSelectBayDown) btnSelectBayDown.onClick.AddListener(OnBtnSelectBayDown);
 
         // containerBlock setting
+        // 버튼마다 기능 부여
         containerTr = new Transform[GM.row + 2, GM.tier];   // row : += WS, LS 2개 추가
         Transform row;
+        int idxRow = 0;     // init
         for (int i = 0; i < containerBlock.transform.childCount; i++)
         {
             // get row
@@ -186,6 +188,7 @@ public class MainLoopTOS : MonoBehaviour
 
             // get container block unit
             // child가 없는 Border Line GameObject는 loop 돌지 않음.
+            int idxTier = 0;    // init
             for (int j = 0; j < row.childCount; j++)
             {
                 // get container block unit
@@ -198,9 +201,13 @@ public class MainLoopTOS : MonoBehaviour
                     containerBlockUnit.GetComponent<Button>().onClick.AddListener(() => OnBtnRow(containerBlockUnit));
 
                     // set containerTr
-                    containerTr[i, j] = containerBlockUnit;
+                    containerTr[idxRow, idxTier++] = containerBlockUnit;
                 }
             }
+
+            // update
+            // only idxTier != 0
+            idxRow = (idxTier != 0) ? (idxRow + 1) : idxRow;
         }
     }
 
@@ -234,7 +241,7 @@ public class MainLoopTOS : MonoBehaviour
     void OnDdInputBayValueChanged(int index)
     {
         // stack profile update
-
+        UpdateStackProfileUI();
     }
 
     void OnBtnSelectCraneUp() => OnBtnUpDownEvent(DropdownInputCrane, '-');
@@ -359,20 +366,49 @@ public class MainLoopTOS : MonoBehaviour
     // update current stack profile UI
     void UpdateStackProfileUI()
     {
-        int bay = DropdownInputBay.value;
+
+        // init data
+        for (int i = 0; i < containerTr.GetLength(0); i++)
+        {
+            for (int j = 0; j < containerTr.GetLength(1); j++)
+            {
+                try
+                {
+                    containerTr[i, j].GetComponent<Image>().color = colorNull;
+                }
+                catch
+                {
+                    // WS, LS 초과하는 인덱스 처리
+                    break;
+                }
+            }
+        }
+
+        // 현재 bay
+        int iBayNow = DropdownInputBay.value;
 
         // 해당 bay로 containerID 배치 및 활성화
+        int iRow, iBay, iTier;
+        Transform cntr;
         for (int i = 0; i < GM.list_stack_profile.Count; i++)
         {
-            // data
+            // [i_row, i_bay, i_tier, containerStatus]
             int[] containerData = GM.list_stack_profile[i];
+            iRow = containerData[0];
+            iBay = containerData[1];
+            iTier = containerData[2];
 
             // bay 같을 때
-            if (bay == containerData[1])
+            if (iBayNow == iBay)
             {
-                // gameObject 추출
+                // transform 추출
+                cntr = containerTr[iRow, iTier];
+
                 // containerID 배치
+                cntr.name = GM.ByteArrayToString(GM.listContainerID[i]);
+
                 // 색 변경
+                cntr.GetComponent<Image>().color = colorDeactive;
             }
         }
 
