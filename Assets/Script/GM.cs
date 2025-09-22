@@ -157,7 +157,7 @@ public class SettingParams
     public float lidarResVertical_deg = 0.2f;
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
-    public int yardContainerNumberEA = 300;
+    public int yardContainerNumberEA = 400;
 }
 
 public class KeyCmd

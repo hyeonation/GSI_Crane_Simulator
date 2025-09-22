@@ -333,72 +333,81 @@ public class MainLoopTOS : MonoBehaviour
             // 준비 완료
             else
             {
-                // update data
-                iRowDestination = iRow;
-                iBayDestination = iBay;
-                stateUI = StateUI.Ready;
-
-                // iTier = iTier + 1
-                strDestination = mkStrContainerLoc(strIRow, iBay, ++iTier);
-
-                // update button
-                btnDestination = containerTr[iRow, iTier];
-
-                // active
-                btnDestination.GetComponent<Image>().color = colorActive;
-
-                // Enable btnApply
-                btnApply.interactable = true;
-            }
-        }
-
-        else if (stateUI == StateUI.Ready)
-        {
-            // iTier = iTier + 1
-            strContainerLoc = mkStrContainerLoc(strIRow, iBay, ++iTier);
-
-            // 같은 row, bay 눌렀으면 취소
-            // rollback
-            if (strContainerLoc == strDestination)
-            {
-                // update data
-                strDestination = defaultStrDestination;
-                stateUI = StateUI.SelectSrc;
-                iRowDestination = -1;
-                iBayDestination = -1;
-
-                // deactive
-                btnDestination.GetComponent<Image>().color = colorNull;
-
-                // update button
-                btnDestination = null;
-
-                // disable btnApply
-                btnApply.interactable = false;
-            }
-
-            // 다른 row, bay 눌렀으면 Destination 변경
-            // StateUI 는 변화 없음
-            else
-            {
-                // destination 변경
-                // source와 destination이 다를 때만
-                if ((iRowSource != iRow) || (iBaySource != iBay))
+                // tier 초과하지 않았을 때만
+                if (iTier < GM.lengthTier - 1)
                 {
                     // update data
                     iRowDestination = iRow;
                     iBayDestination = iBay;
-                    strDestination = strContainerLoc;
+                    stateUI = StateUI.Ready;
 
-                    // deactive prev button
-                    btnDestination.GetComponent<Image>().color = colorNull;
+                    // iTier = iTier + 1
+                    strDestination = mkStrContainerLoc(strIRow, iBay, ++iTier);
 
-                    // update btnDestination
+                    // update button
                     btnDestination = containerTr[iRow, iTier];
 
                     // active
                     btnDestination.GetComponent<Image>().color = colorActive;
 
+                    // Enable btnApply
+                    btnApply.interactable = true;
+                }
+            }
+        }
+
+        else if (stateUI == StateUI.Ready)
+        {
+
+            // tier 초과하지 않았을 때만
+            if (iTier < GM.lengthTier - 1)
+            {
+                // iTier = iTier + 1
+                strContainerLoc = mkStrContainerLoc(strIRow, iBay, ++iTier);
+
+                // 같은 row, bay 눌렀으면 취소
+                // rollback
+                if (strContainerLoc == strDestination)
+                {
+                    // update data
+                    strDestination = defaultStrDestination;
+                    stateUI = StateUI.SelectSrc;
+                    iRowDestination = -1;
+                    iBayDestination = -1;
+
+                    // deactive
+                    btnDestination.GetComponent<Image>().color = colorNull;
+
+                    // update button
+                    btnDestination = null;
+
+                    // disable btnApply
+                    btnApply.interactable = false;
+                }
+
+                // 다른 row, bay 눌렀으면 Destination 변경
+                // StateUI 는 변화 없음
+                else
+                {
+                    // destination 변경
+                    // source와 destination이 다를 때만
+                    if ((iRowSource != iRow) || (iBaySource != iBay))
+                    {
+                        // update data
+                        iRowDestination = iRow;
+                        iBayDestination = iBay;
+                        strDestination = strContainerLoc;
+
+                        // deactive prev button
+                        btnDestination.GetComponent<Image>().color = colorNull;
+
+                        // update btnDestination
+                        btnDestination = containerTr[iRow, iTier];
+
+                        // active
+                        btnDestination.GetComponent<Image>().color = colorActive;
+
+                    }
                 }
             }
         }
