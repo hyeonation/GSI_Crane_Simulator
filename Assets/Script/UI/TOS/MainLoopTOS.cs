@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI; // Dropdown을 사용하기 위한 네임스페이스
 
@@ -22,7 +24,7 @@ public class MainLoopTOS : MonoBehaviour
     public TMP_Text textApply;
 
     public GameObject containerBlock;
-    public GameObject[] listTask;
+    public GameObject[] listTaskObj;
 
 
     string strCrane, strContainerID, strSource, strDestination;
@@ -38,15 +40,16 @@ public class MainLoopTOS : MonoBehaviour
     Color colorActive = new(255f, 255f, 0f, 255f);
     Color colorDeactive = new(210f, 210f, 210f, 255f);
     Color colorNull = new(0f, 0f, 0f, 255f);
-    Color colorApplyActive = Color.green;
-    Color colorApplyDeactive = new(33f, 37f, 42f, 255f);
-
     Transform[,] containerTr;
 
     Transform btnSource, btnDestination;
     const int defaultIdx = -1;
     int iRowSource = defaultIdx, iRowDestination = defaultIdx;
     int iBaySource = defaultIdx, iBayDestination = defaultIdx;
+
+    // task
+    List<TaskInfo> listTaskInfo = new();
+
 
     readonly Dictionary<string, int> dictRow = new()
     {
@@ -80,11 +83,14 @@ public class MainLoopTOS : MonoBehaviour
         DropdownInputCrane.onValueChanged.AddListener(OnDdInputCraneValueChanged);
         DropdownInputBay.onValueChanged.AddListener(OnDdInputBayValueChanged);
 
-        // Button Listener
+        // arrow Button Listener
         if (btnSelectCraneUp) btnSelectCraneUp.onClick.AddListener(OnBtnSelectCraneUp);
         if (btnSelectCraneDown) btnSelectCraneDown.onClick.AddListener(OnBtnSelectCraneDown);
         if (btnSelectBayUp) btnSelectBayUp.onClick.AddListener(OnBtnSelectBayUp);
         if (btnSelectBayDown) btnSelectBayDown.onClick.AddListener(OnBtnSelectBayDown);
+
+        // Apply button
+        if (btnApply) btnApply.onClick.AddListener(OnBtnApply);
 
         // containerBlock setting
         // 버튼마다 기능 부여
@@ -174,11 +180,18 @@ public class MainLoopTOS : MonoBehaviour
         UpdateApplyText();
 
         // init task text
-        for (int i = 0; i < listTask.Length; i++)
-        {
-            listTask[i].GetComponent<TMP_Text>().text = "";
-        }
+        for (int i = 0; i < listTaskObj.Length; i++)
+            GetTaskContent(i).text = "";
+
+        // add task data
+        // loop count가 taskObject 개수 초과하지 않는 선에서
+        int loopCount = Math.Clamp(listTaskInfo.Count, 0, listTaskObj.Length);
+        for (int i = 0; i < loopCount; i++)
+            GetTaskContent(i).text = listTaskInfo[i].getContent();
     }
+
+    TMP_Text GetTaskContent(int i)
+        => listTaskObj[i].transform.Find("Text (TMP)").GetComponent<TMP_Text>();
 
     void InitUIpropData()
     {
@@ -416,18 +429,23 @@ public class MainLoopTOS : MonoBehaviour
 
     void OnBtnApply()
     {
-        // load data
+        // generate Task
+        TaskInfo taskInfo = new();
 
-        // update stack profile data
+        // set task data
+        taskInfo.strCrane = strCrane;
+        taskInfo.strContainerID = strContainerID;
+        taskInfo.strSource = strSource;
+        taskInfo.strDestination = strDestination;
+        taskInfo.registerTime = DateTime.Now;
+
+        // adding task
+        listTaskInfo = listTaskInfo.Prepend(taskInfo).ToList();
 
         // initialization
-        btnApply.interactable = false;
-        strSource = defaultStrSource;
-        strDestination = defaultStrDestination;
-        btnSource = null;
-        btnDestination = null;
-        stateUI = StateUI.Normal;
-
+        RollbackDestination();
+        RollbackSource();
+        InitTextData();
     }
 
     // update current stack profile UI
@@ -517,11 +535,29 @@ public class MainLoopTOS : MonoBehaviour
 
         return output;
     }
-
-
 }
 
-// public class TaskUnit
-// {
-//     string strCrane;
-// }
+public enum StateTask { Done, Working, Standby }
+public class TaskInfo
+{
+    public string strCrane;
+    public string strContainerID;
+    public string strSource;
+    public string strDestination;
+
+    public StateTask stateTask = StateTask.Standby;
+    public DateTime registerTime;
+    public DateTime startTime;
+    public DateTime endTime;
+    public TimeSpan duration;
+
+    public string getContent()
+    {
+        // make text structure
+        string content = $" {GM.TimeToString(registerTime)}\n";
+        content += $" {strCrane}\n #{strContainerID}\n";
+        content += $" {strSource} -> {strDestination}";
+
+        return content;
+    }
+}

@@ -39,6 +39,9 @@ public class GM : MonoBehaviour
 
     // dateTime
     public static DateTime dateTimeNow;
+    public static string TimeToString(DateTime datetime)
+        => datetime.ToString("yy'/'MM'/'dd HH:mm:ss");
+
 
     // container name
 

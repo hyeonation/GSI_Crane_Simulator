@@ -7,6 +7,10 @@ public class TimeDisplay : MonoBehaviour
     TextMeshProUGUI timeText; // TMP UI에 연결할 변수
     private bool showColon = true;
 
+    const string formatColon = "yy'/'MM'/'dd HH:mm";
+    const string formatNoColon = "yy'/'MM'/'dd HH mm";
+    const string formatStd = "yy'/'MM'/'dd HH:mm:ss";
+
     void Start()
     {
         timeText = gameObject.GetComponent<TextMeshProUGUI>();
@@ -16,8 +20,13 @@ public class TimeDisplay : MonoBehaviour
     void Update()
     {
         GM.dateTimeNow = DateTime.Now;
-        string format = showColon ? "yy'/'MM'/'dd HH:mm" : "yy'/'MM'/'dd HH mm";
+        string format = showColon ? formatColon : formatNoColon;
         timeText.text = GM.dateTimeNow.ToString(format);
+    }
+
+    public string TimeNowToString()
+    {
+        return GM.dateTimeNow.ToString(formatStd);
     }
 
     void ToggleColon()
