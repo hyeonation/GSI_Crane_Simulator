@@ -22,7 +22,7 @@ public class MainLoopTOS : MonoBehaviour
     public TMP_Text textApply;
 
     public GameObject containerBlock;
-
+    public GameObject[] listTask;
 
 
     string strCrane, strContainerID, strSource, strDestination;
@@ -35,9 +35,11 @@ public class MainLoopTOS : MonoBehaviour
 
 
     enum StateContainerBlock { Active, Deactive, Null }
-    Color colorActive = new Color(255f, 255f, 0f, 255f);
-    Color colorDeactive = new Color(210f, 210f, 210f, 255f);
-    Color colorNull = new Color(0f, 0f, 0f, 255f);
+    Color colorActive = new(255f, 255f, 0f, 255f);
+    Color colorDeactive = new(210f, 210f, 210f, 255f);
+    Color colorNull = new(0f, 0f, 0f, 255f);
+    Color colorApplyActive = Color.green;
+    Color colorApplyDeactive = new(33f, 37f, 42f, 255f);
 
     Transform[,] containerTr;
 
@@ -69,38 +71,6 @@ public class MainLoopTOS : MonoBehaviour
 
         // Init data
         InitData();
-
-        // Transform rowA = containerBlock.transform.Find("Border Line");
-
-        // try
-        // {
-        //     Debug.Log(rowA.GetChild(0).name);
-        // }
-        // catch
-        // {
-        //     Debug.Log("not error");
-        // }
-
-
-
-        // for (int i = 0; i < rowA.childCount; i++)
-        // {
-        //     Debug.Log(rowA.GetChild(i).name);
-        // }
-
-        // Transform bb = rowA.transform.Find("Tier");
-        // Debug.Log(bb == null);
-        // Image cc = bb.GetComponent<Image>();
-        // cc.color = Color.red;
-
-        // Button aaa = rowA.transform.Find("Tier 1").GetComponent<Button>();
-        // aaa.onClick.AddListener(() => OnBtnRow(bb));
-
-        // aa.GetComponent<Button>().transition.
-
-
-
-
     }
 
     void AddListeners()
@@ -202,12 +172,40 @@ public class MainLoopTOS : MonoBehaviour
 
         // apply
         UpdateApplyText();
+
+        // init task text
+        for (int i = 0; i < listTask.Length; i++)
+        {
+            listTask[i].GetComponent<TMP_Text>().text = "";
+        }
     }
 
     void InitUIpropData()
     {
-        // disabled btnApply
-        btnApply.interactable = false;
+        // disabled Apply button 
+        BtnApplyOnOff(false);
+    }
+
+    void BtnApplyOnOff(bool interactable)
+    {
+        // interactable
+        btnApply.interactable = interactable;
+
+        // Enabled
+        if (interactable)
+        {
+            // color
+            // btnApply.GetComponent<Image>().color = colorApplyActive;
+            btnApply.transform.Find("Text (TMP)").GetComponent<TMP_Text>().color = Color.black;
+        }
+
+        // disabled
+        else
+        {
+            // color
+            // btnApply.GetComponent<Image>().color = colorApplyDeactive;
+            btnApply.transform.Find("Text (TMP)").GetComponent<TMP_Text>().color = Color.white;
+        }
     }
 
     // Apply text structure
@@ -376,7 +374,7 @@ public class MainLoopTOS : MonoBehaviour
         stateUI = StateUI.Ready;
 
         // Enable btnApply
-        btnApply.interactable = true;
+        BtnApplyOnOff(true);
     }
 
     void RollbackSource()
@@ -413,7 +411,7 @@ public class MainLoopTOS : MonoBehaviour
         btnDestination = null;
 
         // disable btnApply
-        btnApply.interactable = false;
+        BtnApplyOnOff(false);
     }
 
     void OnBtnApply()
