@@ -68,12 +68,15 @@ public class MainLoopTOS : MonoBehaviour
 
     void Start()
     {
+        // init values
+        InitDropdownData();
+
         //// UI setting
         // Add Listeners
         AddListeners();
 
-        // Init data
-        InitData();
+        // Init
+        Refresh();
     }
 
     void AddListeners()
@@ -91,6 +94,14 @@ public class MainLoopTOS : MonoBehaviour
 
         // Apply button
         if (btnApply) btnApply.onClick.AddListener(OnBtnApply);
+
+        // task list
+        for (int i = 0; i < listTaskObj.Length; i++)
+        {
+            int idx = i;    // int 새로 생성해야 값이 제대로 들어감.
+            listTaskObj[idx].GetComponent<Button>().onClick.AddListener(() => OnBtnTaskList(idx));
+        }
+
 
         // containerBlock setting
         // 버튼마다 기능 부여
@@ -128,10 +139,8 @@ public class MainLoopTOS : MonoBehaviour
     }
 
     // TOS Task 명령 작업이 끝나면 초기화하는 함수
-    void InitData()
+    void Refresh()
     {
-        // init values
-        InitDropdownData();
         InitTextData();
         InitUIpropData();
         UpdateStackProfileUI();
@@ -179,6 +188,12 @@ public class MainLoopTOS : MonoBehaviour
         // apply
         UpdateApplyText();
 
+        // RefreshTaskList
+        RefreshTaskList();
+    }
+
+    void RefreshTaskList()
+    {
         // init task text
         for (int i = 0; i < listTaskObj.Length; i++)
             GetTaskContent(i).text = "";
@@ -229,8 +244,7 @@ public class MainLoopTOS : MonoBehaviour
         textApply.text += $" {strSource} -> {strDestination}";
     }
 
-
-    // 드롭다운 값이 변경될 때 호출되는 함수
+    // Dropdown 값이 변경될 때 호출되는 함수
     void OnDdInputCraneValueChanged(int index)
     {
         // select crane
@@ -256,7 +270,7 @@ public class MainLoopTOS : MonoBehaviour
         // }
     }
 
-    // Bay 값 바뀔 때 호출되는 함수
+    // Dropdown Bay 값 바뀔 때 호출되는 함수
     void OnDdInputBayValueChanged(int index)
     {
         // stack profile update
@@ -280,6 +294,23 @@ public class MainLoopTOS : MonoBehaviour
         // load nextIndex to dropdown.
         // adding limit
         dropdown.value = Math.Clamp(nextIdx, 0, dropdown.options.Count);
+    }
+
+    // task 눌렀을 때 삭제되는 기능
+    // 메세지 박스 출력 후 삭제 여부 선택해야 삭제되도록
+    void OnBtnTaskList(int idx)
+    {
+        try
+        {
+            // delete task
+            listTaskInfo.RemoveAt(idx);
+            RefreshTaskList();
+        }
+        catch
+        {
+            // no item
+            Debug.Log("No Item");
+        }
     }
 
     void OnBtnRow(Transform btn)

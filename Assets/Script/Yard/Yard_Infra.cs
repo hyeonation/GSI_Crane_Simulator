@@ -9,14 +9,17 @@ public class Yard_Infra : MonoBehaviour
     //numbers
     public GameObject[] Number_Prefabs, Line_prefabs;
     List<Vector3> spawnedPositions = new List<Vector3>();
-    [HideInInspector]public float Number_z_interval = 3.24f;
-    
+    [HideInInspector] public float Number_z_interval = 3.24f;
+
     float start_val = GM.yard_start_val;
     float x_interval = GM.yard_x_interval;
     float z_interval = GM.yard_z_interval;
 
+    Vector3 yardOffset;
+
     void Start()
     {
+        yardOffset = transform.position;
         SpawnNumbers();
         SpawnLines();
         // RFID();
@@ -33,6 +36,7 @@ public class Yard_Infra : MonoBehaviour
             GameObject newObject = Instantiate(NumberPrefab); //오브젝트 생성
             newObject.GetComponent<TextMeshPro>().text = $"{i}"; //오브젝트 내용 변경
             spawnPosition = new Vector3(-5f, 0.2f, -8.45f + i * Number_z_interval); //오브젝트 포지션 설정
+            spawnPosition += yardOffset;
             newObject.transform.position = spawnPosition; //오브젝트에 설정한 포지션 넣기
 
             if (i > 6)
@@ -58,6 +62,7 @@ public class Yard_Infra : MonoBehaviour
             for (int j = 0; j < 16; j++)
             {
                 spawnPosition = new Vector3((i * x_interval) + start_val, 3.51f, (j * z_interval) + 7.75f);
+                spawnPosition += yardOffset;
                 spawnedPositions.Add(spawnPosition);
                 GameObject newObject = Instantiate(Line_prefabs[0], spawnPosition, Quaternion.identity);
 

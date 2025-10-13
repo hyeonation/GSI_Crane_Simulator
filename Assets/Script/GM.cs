@@ -18,13 +18,14 @@ public class GM : MonoBehaviour
     public static short lengthRow = 5;
     public static short lengthBay = 16;
     public static short lengthTier = 6;
-    public static int[,] stack_profile;     // SPSS 역할
     public static List<byte[]> listContainerID = new();
+    public static int[,] stack_profile;     // SPSS 역할. [row, bay] = tier(stack count)
     public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
+                                                    // 순서는? 무작위?
 
 
 
-    public static float yard_start_val = 8.32f;
+    public static float yard_start_val = 2.62f;
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;

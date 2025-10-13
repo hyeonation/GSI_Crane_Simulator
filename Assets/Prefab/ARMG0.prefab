@@ -1357,7 +1357,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5694549818463087425}
-  - component: {fileID: 5604887510692115715}
   m_Layer: 0
   m_Name: Laser5
   m_TagString: Untagged
@@ -1389,18 +1388,6 @@ Transform:
   - {fileID: 4372393796315856873}
   m_Father: {fileID: 3280217414681364084}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &5604887510692115715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569956227895920009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &577524847152222798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,7 +1430,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 450754672217326057}
-  - component: {fileID: 2027845405158386126}
   - component: {fileID: 7215967888067645995}
   m_Layer: 0
   m_Name: Spreader
@@ -1472,26 +1458,6 @@ Transform:
   - {fileID: 4812100811483186237}
   m_Father: {fileID: 8719107708132029202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2027845405158386126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606965343704481410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3316b4dc479229847b9fb857955a9f21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Lock: 0
-  Unlocked: 0
-  Disc_Cable: []
-  LandedCheck: 0
-  landed_individual: 
-  Container_Name: Container0
-  lockFlag: 0
-  spreader_num: 0
 --- !u!54 &7215967888067645995
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1979,7 +1945,6 @@ GameObject:
   - component: {fileID: 3717498916298201748}
   - component: {fileID: 999472924151402079}
   - component: {fileID: 3754823026596113803}
-  - component: {fileID: 7865814369473171250}
   - component: {fileID: 7750701934853649684}
   m_Layer: 0
   m_Name: land3
@@ -2053,19 +2018,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7865814369473171250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 819096751376738159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e9feefda95d2b4ea4a97316ccb2661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  landed_sensor: 0
 --- !u!65 &7750701934853649684
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3558,7 +3510,7 @@ GameObject:
   - component: {fileID: 7307533169428022168}
   - component: {fileID: 8163782509728477788}
   m_Layer: 0
-  m_Name: Disc6_Cable
+  m_Name: Cable6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3707,7 +3659,7 @@ GameObject:
   - component: {fileID: 3964975344417010888}
   - component: {fileID: 2322603429608979098}
   m_Layer: 0
-  m_Name: Disc1_Cable
+  m_Name: Cable1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4223,7 +4175,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7176042183836868379}
-  - component: {fileID: 6891522875754170285}
   m_Layer: 0
   m_Name: Trolley
   m_TagString: Untagged
@@ -4252,22 +4203,6 @@ Transform:
   - {fileID: 2885301092229445079}
   m_Father: {fileID: 647534931682426744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6891522875754170285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945394123648048854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55b63266aaae02649b785082b2c37cc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  laserLength: 27
-  Con_PosX: 0
-  Con_PosY: 0
-  Con_Ang: 0
 --- !u!1 &1994207764874169357
 GameObject:
   m_ObjectHideFlags: 0
@@ -4365,7 +4300,7 @@ GameObject:
   - component: {fileID: 1924894060975351836}
   - component: {fileID: 998959558416975814}
   m_Layer: 0
-  m_Name: Disc3_Cable
+  m_Name: Cable3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5482,7 +5417,6 @@ GameObject:
   - component: {fileID: 6378829329545474336}
   - component: {fileID: 3183893949311315138}
   - component: {fileID: 7125599686168638948}
-  - component: {fileID: 1043421559250474512}
   m_Layer: 0
   m_Name: Forward_Sensor2
   m_TagString: Untagged
@@ -5555,18 +5489,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1043421559250474512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2594316911223107658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2607071174172651269
 GameObject:
   m_ObjectHideFlags: 0
@@ -7281,7 +7203,6 @@ GameObject:
   - component: {fileID: 2016165564945523383}
   - component: {fileID: 9063673413271805017}
   - component: {fileID: 7160450257498973972}
-  - component: {fileID: 8571268279299378309}
   m_Layer: 0
   m_Name: land1
   m_TagString: Untagged
@@ -7375,19 +7296,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.057922363, y: 0.03, z: 0.05796449}
   m_Center: {x: -0.00028603617, y: 0.04, z: 0.000000030733645}
---- !u!114 &8571268279299378309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3546892080266980004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e9feefda95d2b4ea4a97316ccb2661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  landed_sensor: 0
 --- !u!1 &3585685818515795717
 GameObject:
   m_ObjectHideFlags: 0
@@ -7496,7 +7404,7 @@ GameObject:
   - component: {fileID: 8907806937175008083}
   - component: {fileID: 6584262131683082518}
   m_Layer: 0
-  m_Name: Disc0_Cable
+  m_Name: Cable0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7851,7 +7759,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3490735386488743050}
-  - component: {fileID: 6319943301921322295}
   m_Layer: 0
   m_Name: Laser0
   m_TagString: Untagged
@@ -7882,18 +7789,6 @@ Transform:
   - {fileID: 1733913511574797657}
   m_Father: {fileID: 3280217414681364084}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
---- !u!114 &6319943301921322295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3857269958523617387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3874352861864250231
 GameObject:
   m_ObjectHideFlags: 0
@@ -8015,7 +7910,6 @@ GameObject:
   - component: {fileID: 3095989742248363946}
   - component: {fileID: 7301060539306814727}
   - component: {fileID: 3042064355680030034}
-  - component: {fileID: 654090829006811412}
   m_Layer: 0
   m_Name: Right_Sensor
   m_TagString: Untagged
@@ -8088,18 +7982,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &654090829006811412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3951819767083744624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3968646665087681153
 GameObject:
   m_ObjectHideFlags: 0
@@ -9012,7 +8894,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3229361763212857806}
-  - component: {fileID: 5412134607456353217}
   m_Layer: 0
   m_Name: Laser1
   m_TagString: Untagged
@@ -9043,18 +8924,6 @@ Transform:
   - {fileID: 4488393105817732617}
   m_Father: {fileID: 3280217414681364084}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &5412134607456353217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4292884835337618409}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4317271015512052210
 GameObject:
   m_ObjectHideFlags: 0
@@ -9313,7 +9182,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5152318521648050289}
-  - component: {fileID: 6991355531678321756}
   m_Layer: 0
   m_Name: Laser3
   m_TagString: Untagged
@@ -9344,18 +9212,6 @@ Transform:
   - {fileID: 7006639926359994317}
   m_Father: {fileID: 2023862926038393526}
   m_LocalEulerAnglesHint: {x: 90, y: 180, z: 90}
---- !u!114 &6991355531678321756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484848746837828929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4492002204179439502
 GameObject:
   m_ObjectHideFlags: 0
@@ -9662,7 +9518,6 @@ GameObject:
   - component: {fileID: 975230390105703627}
   - component: {fileID: 7907592734239496534}
   - component: {fileID: 6356949479493525710}
-  - component: {fileID: 8838021865642542244}
   m_Layer: 0
   m_Name: Lidar3
   m_TagString: Untagged
@@ -9735,32 +9590,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8838021865642542244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4558841141970297776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f32a60820fd8045b9ffdb745729fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Trolley_Dis_Preset: 
-  Stack_F: []
-  Stack_R: []
-  arr_dist: []
-  Stack_H: []
-  Stack_FL: []
-  RightGap: 0
-  LeftGap: 0
-  R_FrontGap: 0
-  R_RearGap: 0
-  L_FrontGap: 0
-  L_RearGap: 0
-  Con_Pos_result: 0
-  Con_Ang_result: 0
 --- !u!1 &4597535905505439954
 GameObject:
   m_ObjectHideFlags: 0
@@ -10115,7 +9944,6 @@ GameObject:
   - component: {fileID: 4418686322222804101}
   - component: {fileID: 4363571520855815852}
   - component: {fileID: 8934248583580076990}
-  - component: {fileID: 1133932475521430681}
   m_Layer: 0
   m_Name: Lidar2
   m_TagString: Untagged
@@ -10188,32 +10016,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1133932475521430681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4679140418818123101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f32a60820fd8045b9ffdb745729fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Trolley_Dis_Preset: 
-  Stack_F: []
-  Stack_R: []
-  arr_dist: []
-  Stack_H: []
-  Stack_FL: []
-  RightGap: 0
-  LeftGap: 0
-  R_FrontGap: 0
-  R_RearGap: 0
-  L_FrontGap: 0
-  L_RearGap: 0
-  Con_Pos_result: 0
-  Con_Ang_result: 0
 --- !u!1 &4687206605042539961
 GameObject:
   m_ObjectHideFlags: 0
@@ -10339,7 +10141,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8404925372587448549}
-  - component: {fileID: 1311821852906144395}
   m_Layer: 0
   m_Name: Laser2
   m_TagString: Untagged
@@ -10370,18 +10171,6 @@ Transform:
   - {fileID: 6378829329545474336}
   m_Father: {fileID: 2023862926038393526}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &1311821852906144395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4738332870628218485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4790892351481343682
 GameObject:
   m_ObjectHideFlags: 0
@@ -10854,7 +10643,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9093047989277760632}
-  - component: {fileID: 898430665729059162}
   m_Layer: 0
   m_Name: Laser4
   m_TagString: Untagged
@@ -10885,18 +10673,6 @@ Transform:
   - {fileID: 6584367698721818720}
   m_Father: {fileID: 2023862926038393526}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &898430665729059162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5024597187011584387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5044960659058610446
 GameObject:
   m_ObjectHideFlags: 0
@@ -11572,7 +11348,7 @@ GameObject:
   - component: {fileID: 1613029700509796116}
   - component: {fileID: 3201372218767257790}
   m_Layer: 0
-  m_Name: Disc7_Cable
+  m_Name: Cable7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13825,7 +13601,7 @@ GameObject:
   - component: {fileID: 4134558219384988085}
   - component: {fileID: 581746400424423708}
   m_Layer: 0
-  m_Name: Disc4_Cable
+  m_Name: Cable4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14114,7 +13890,6 @@ GameObject:
   - component: {fileID: 2581614216815776426}
   - component: {fileID: 3243482700937428248}
   - component: {fileID: 5688599661598690934}
-  - component: {fileID: 439809010661730577}
   m_Layer: 0
   m_Name: Backward_Sensor1
   m_TagString: Untagged
@@ -14187,18 +13962,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &439809010661730577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6316251608858073871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ccda44aeeb9d3428af4b11cda68dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6360429007662126283
 GameObject:
   m_ObjectHideFlags: 0
@@ -15631,7 +15394,6 @@ GameObject:
   - component: {fileID: 3179188138303464259}
   - component: {fileID: 2481229551723233525}
   - component: {fileID: 5556074400870771297}
-  - component: {fileID: 3132116516030173971}
   m_Layer: 0
   m_Name: Lidar0
   m_TagString: Untagged
@@ -15704,32 +15466,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3132116516030173971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6845103704992290487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f32a60820fd8045b9ffdb745729fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Trolley_Dis_Preset: 
-  Stack_F: []
-  Stack_R: []
-  arr_dist: []
-  Stack_H: []
-  Stack_FL: []
-  RightGap: 0
-  LeftGap: 0
-  R_FrontGap: 0
-  R_RearGap: 0
-  L_FrontGap: 0
-  L_RearGap: 0
-  Con_Pos_result: 0
-  Con_Ang_result: 0
 --- !u!1 &6912849676579679209
 GameObject:
   m_ObjectHideFlags: 0
@@ -16287,7 +16023,7 @@ GameObject:
   - component: {fileID: 9146989246168038070}
   - component: {fileID: 6200308626785895045}
   m_Layer: 0
-  m_Name: Disc5_Cable
+  m_Name: Cable5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17013,7 +16749,6 @@ GameObject:
   - component: {fileID: 8373580436890894038}
   - component: {fileID: 1259341723636205548}
   - component: {fileID: 5419509704631192802}
-  - component: {fileID: 1210867403111579118}
   - component: {fileID: 4394174819101708758}
   m_Layer: 0
   m_Name: land0
@@ -17087,19 +16822,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1210867403111579118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7513918472923644091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e9feefda95d2b4ea4a97316ccb2661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  landed_sensor: 0
 --- !u!65 &4394174819101708758
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18435,7 +18157,7 @@ GameObject:
   - component: {fileID: 1018615799839705697}
   - component: {fileID: 5650740359490515483}
   m_Layer: 0
-  m_Name: Disc2_Cable
+  m_Name: Cable2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19563,7 +19285,6 @@ GameObject:
   - component: {fileID: 5060094143162140495}
   - component: {fileID: 2625210967910440156}
   - component: {fileID: 7814870998238642618}
-  - component: {fileID: 5170661349848641794}
   m_Layer: 0
   m_Name: Lidar1
   m_TagString: Untagged
@@ -19636,32 +19357,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5170661349848641794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8733060764287558939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f32a60820fd8045b9ffdb745729fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Trolley_Dis_Preset: 
-  Stack_F: []
-  Stack_R: []
-  arr_dist: []
-  Stack_H: []
-  Stack_FL: []
-  RightGap: 0
-  LeftGap: 0
-  R_FrontGap: 0
-  R_RearGap: 0
-  L_FrontGap: 0
-  L_RearGap: 0
-  Con_Pos_result: 0
-  Con_Ang_result: 0
 --- !u!1 &8767888620897838687
 GameObject:
   m_ObjectHideFlags: 0
@@ -20153,7 +19848,6 @@ GameObject:
   - component: {fileID: 2804650458503623722}
   - component: {fileID: 8245802569442559785}
   - component: {fileID: 7601880049480842049}
-  - component: {fileID: 7190424731093028781}
   m_Layer: 0
   m_Name: land2
   m_TagString: Untagged
@@ -20247,19 +19941,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.05793762, y: 0.03, z: 0.0579651}
   m_Center: {x: 0.00028026477, y: 0.04, z: -0.000000033527613}
---- !u!114 &7190424731093028781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9029282149446537468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e9feefda95d2b4ea4a97316ccb2661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  landed_sensor: 0
 --- !u!1 &9040575291611939848
 GameObject:
   m_ObjectHideFlags: 0

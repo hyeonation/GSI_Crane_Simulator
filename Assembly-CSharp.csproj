@@ -87,6 +87,7 @@
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
+    <Compile Include="Assets\Script\Crane\DrawingARMG.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\SpoolController.cs" />
     <Compile Include="Assets\Script\UI\TOS\MainLoopTOS.cs" />

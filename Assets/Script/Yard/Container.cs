@@ -162,8 +162,8 @@ public class Container : MonoBehaviour
                                             (i_bay * z_interval) + 7.75f);
 
         // 부모인 Containers에 맞춤
-        newObject.transform.position = transform.position;
-        newObject.transform.localPosition = spawnPosition;
+        newObject.transform.position = transform.position;      // 절대 좌표 이동
+        newObject.transform.localPosition = spawnPosition;      // 상대 좌표 이동
         newObject.transform.rotation = transform.rotation;
     }
 
