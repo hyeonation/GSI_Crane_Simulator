@@ -4,7 +4,7 @@ using UnityEngine;
 // Organizing data
 public class MainLoop : MonoBehaviour
 {
-    CommPLC[] plc;
+    public CommPLC[] plc;
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
@@ -69,10 +69,10 @@ public class MainLoop : MonoBehaviour
             for (int iCrane = 0; iCrane < GM.settingParams.listIP.Count; iCrane++)
             {
                 // Read PLC DB
-                plc[iCrane].ReadPLCdata(iCrane);
+                ReadPLCdata(iCrane);
 
                 // Write PLC DB
-                plc[iCrane].WriteUnitydataToPLC();
+                WriteUnitydataToPLC(iCrane);
             }
         }
 
@@ -84,6 +84,58 @@ public class MainLoop : MonoBehaviour
         // 시간 측정
         // Time.deltaTime: 프레임 간 시간 간격
         // Debug.Log($"loop time = {Time.deltaTime} sec");
+    }
+
+    public virtual void ReadPLCdata(int iCrane)
+    {
+        // DB start index
+        const int floatStartIdxGantryVelBWD = 0;
+        const int floatStartIdxGantryVelFWD = 4;
+        const int floatStartIdxTrolleyVel = 8;
+        const int floatStartIdxSpreaderVel = 12;
+        const int floatStartIdxMM0Vel = 16;
+        const int floatStartIdxMM1Vel = 20;
+        const int floatStartIdxMM2Vel = 24;
+        const int floatStartIdxMM3Vel = 28;
+
+        const int boolStartIdxTwistLock = 34;
+        const int boolStartPointTwlLock = 0;
+        const int boolStartPointTwlUnlock = 1;
+
+        // Read raw data from PLC
+        var rawData = plc[iCrane].ReadFromPLC();
+
+        // Read float data
+        GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.cmdGantryVelBWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.cmdTrolleyVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.cmdSpreaderVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.cmdMM0Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.cmdMM1Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);
+        GM.cmdMM2Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.cmdMM3Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
+
+        // Read boolean data
+        GM.cmdTwlLock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.cmdTwlUnlock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+    }
+
+    public virtual void WriteUnitydataToPLC(int iCrane)
+    {
+
+        float testFloat = 123.0f;
+        int startIdx = 0;
+        plc[iCrane].WriteFloat(testFloat, startIdx);
+
+        // byte boolByte = 0;  // init
+        // CommPLC.WriteBool(true, 0, boolByte);
+        // CommPLC.WriteBool(false, 1, boolByte);
+        // CommPLC.WriteBool(false, 2, boolByte);
+
+        // plc[iCrane].WriteByte(boolByte, 204);
+
+        // write to PLC
+        plc[iCrane].WriteToPLC();
     }
 
     void CmdKeyboard()

@@ -61,60 +61,40 @@ public class CommPLC
         return data;
     }
 
-    public void WriteToPLC(byte[] data)
+    public void WriteToPLC()
     {
-        plc.WriteBytes(DataType.DataBlock, info.writeDBNum, info.writeStartIdx, data);
+        plc.WriteBytes(DataType.DataBlock, info.writeDBNum, info.writeStartIdx, writeDB);
     }
 
-    public void WriteUnitydataToPLC()
-    {
-
-        float testFloat = 123.0f;
-        int startIdx = 0;
-        WriteFloat(testFloat, startIdx);
-
-        // byte boolByte = 0;  // init
-        // WriteBool(true, 0);
-        // WriteBool(false, 1);
-        // WriteBool(true, 2);
-        // WriteBool(false, 3);
-        // WriteBool(true, 4);
-
-        // writeDB[204] = boolByte;
-
-        // write to PLC
-        WriteToPLC(writeDB);
-    }
-
-    public void WriteUnitydataToPLCQC()
-    {
-
-        float testFloat = 123.0f;
-        int startIdx = 0;
-        WriteFloat(testFloat, startIdx);
-
-        // byte boolByte = 0;  // init
-        // WriteBool(true, 0);
-        // WriteBool(false, 1);
-        // WriteBool(true, 2);
-        // WriteBool(false, 3);
-        // WriteBool(true, 4);
-
-        // writeDB[204] = boolByte;
-
-        // write to PLC
-        WriteToPLC(writeDB);
-    }
-
-    void WriteFloat(float floatData, int startIdx)
+    public void WriteFloat(float floatData, int startIdx)
     {
         const int lengthFloat = 4;
         Array.Copy(FloatToByteArr(floatData), 0, writeDB, startIdx, lengthFloat);
     }
 
-    void WriteBool(bool boolData, int startPoint)
+    public void WriteInt(int intData, int startIdx)
     {
-        if (boolData) boolByte |= (byte)(1 << startPoint);
+        const int lengthInt = 2;
+        Array.Copy(reverseByteArr(BitConverter.GetBytes(intData)), 0, writeDB, startIdx, lengthInt);
+    }
+
+    public void WriteChar(char charData, int startIdx)
+    {
+        const int lengthChar = 1;
+        Array.Copy(reverseByteArr(BitConverter.GetBytes(charData)), 0, writeDB, startIdx, lengthChar);
+    }
+
+    public static byte WriteBool(bool boolData, int startPoint, byte boolByte)
+    {
+        byte outByte = boolByte;
+        if (boolData) outByte |= (byte)(1 << startPoint);
+
+        return outByte;
+    }
+
+    public void WriteByte(byte boolByte, int startidx)
+    {
+        writeDB[startidx] = boolByte;
     }
 
     byte[] FloatToByteArr(float floatData)
@@ -126,80 +106,7 @@ public class CommPLC
         return reverseByteArr(bytes);
     }
 
-    public void ReadPLCdata(int iCrane)
-    {
-        // DB start index
-        const int floatStartIdxGantryVelBWD = 0;
-        const int floatStartIdxGantryVelFWD = 4;
-        const int floatStartIdxTrolleyVel = 8;
-        const int floatStartIdxSpreaderVel = 12;
-        const int floatStartIdxMM0Vel = 16;
-        const int floatStartIdxMM1Vel = 20;
-        const int floatStartIdxMM2Vel = 24;
-        const int floatStartIdxMM3Vel = 28;
-
-        const int boolStartIdxTwistLock = 34;
-        const int boolStartPointTwlLock = 0;
-        const int boolStartPointTwlUnlock = 1;
-
-        // Read raw data from PLC
-        var rawData = ReadFromPLC();
-
-        // Read float data
-        GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-        GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
-        GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
-        GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
-        GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
-        GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
-        GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
-
-        // Read boolean data
-        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
-        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
-    }
-
-    public void ReadPLCdataQC(int iCrane)
-    {
-        // DB start index
-        const int floatStartIdxGantryVelBWD = 14;
-        const int floatStartIdxGantryVelFWD = 14;
-        const int floatStartIdxTrolleyVel = 8;
-        const int floatStartIdxSpreaderVel = 2;
-        // const int floatStartIdxMM0Vel = 16;
-        // const int floatStartIdxMM1Vel = 20;
-        // const int floatStartIdxMM2Vel = 24;
-        // const int floatStartIdxMM3Vel = 28;
-
-        const int boolStartIdxTwistLock = 28;
-        const int boolStartPointTwlLock = 0;
-        const int boolStartPointTwlUnlock = 1;
-
-        const int boolStartIdxFeet = 22;
-        const int boolStartPoint20Ft = 1;
-        const int boolStartPoint40Ft = 2;
-        const int boolStartPoint45Ft = 3;
-
-        // Read raw data from PLC
-        var rawData = ReadFromPLC();
-
-        // Read float data
-        GM.cmdGantryVelFWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-        GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
-        GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
-
-        // Read boolean data
-        GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
-        GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
-
-        GM.cmd20ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
-        GM.cmd40ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
-        GM.cmd45ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
-    }
-
-    float ReadFloatData(byte[] rawData, int startIndex)
+    public static float ReadFloatData(byte[] rawData, int startIndex)
     {
 
         // float 4 bytes
@@ -212,14 +119,14 @@ public class CommPLC
         return BitConverter.ToSingle(bytes, 0); // Convert to float
     }
 
-    bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
+    public static bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
     {
         // Check if the bit at bitIndex is set
         return (rawData[startIndex] & (1 << bitIndex)) != 0;
     }
 
     // for little-endian to big-endian conversion
-    byte[] reverseByteArr(byte[] byteArr)
+    public static byte[] reverseByteArr(byte[] byteArr)
     {
 
         byte[] output = new byte[byteArr.Length];
