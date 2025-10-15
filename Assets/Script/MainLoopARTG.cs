@@ -33,7 +33,11 @@ public class MainLoopARTG : MonoBehaviour
             GameObject crane;
             string craneType;
 
-            craneType = "ARTG";
+            // determine crane type
+            if (GM.craneType == GM.CraneType.ARTG) craneType = "ARTG";
+            else if (GM.craneType == GM.CraneType.ARMG) craneType = "ARMG";
+            else craneType = "";
+
             crane = GameObject.Find("Crane");
             for (int i = 1; i < GM.settingParams.listIP.Count; i++)
             {

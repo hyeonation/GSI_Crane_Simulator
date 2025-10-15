@@ -93,6 +93,7 @@
     <Compile Include="Assets\Script\UI\TOS\MainLoopTOS.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\RuntimeCableGenerator.cs" />
+    <Compile Include="Assets\Script\MainLoopARMG.cs" />
     <Compile Include="Assets\Script\MainLoopQC.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Laser.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Cable.cs" />

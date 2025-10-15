@@ -34,10 +34,15 @@ public class DrawingQC : MonoBehaviour
     bool landedContainer, landedFloor, locked;
     float hoistPos, gantryLength;
 
-    const float target20feet = 3; // 3m shift
-    const float target40feet = 0; // default
+    const float target20ft = 0; // 0m shift
+    const float target40ft = 3; // default
+    const float target45ft = 3.75f; // 3.75m shift
     const float spreaderFeetVel = 3.3f / 23;    // 어떤 계산식이지?
     const float landedHeight = 0.36f;   // spreader 바닥 landed 높이. flipper로 공중에 뜨기 때문.
+
+    float ftOPTarget = target40ft;  // default
+    float ftOPTargetOld = target40ft;  // default
+    int ftOPDir;
 
     bool[] cmdTwlLockOld, cmdTwlUnlockOld;
 
@@ -235,36 +240,36 @@ public class DrawingQC : MonoBehaviour
 
     void Feet_OP()
     {
-        // spreader feet dx
-        float spreaderFeetdx = Time.deltaTime * spreaderFeetVel;
+        //// target position
+        if (GM.cmd20ft[iSelf]) ftOPTarget = target20ft;
+        if (GM.cmd40ft[iSelf]) ftOPTarget = target40ft;
+        if (GM.cmd45ft[iSelf]) ftOPTarget = target45ft;
 
-        if (GM.cmd20ft[iSelf])
+        Debug.Log($"{GM.cmd20ft[iSelf]}, {GM.cmd40ft[iSelf]}, {GM.cmd45ft[iSelf]}");
+
+        //// init
+        // Target position 바뀌었을 때 1회만
+        float diff;
+        if (ftOPTarget != ftOPTargetOld)
         {
-            // shift spreader_0
-            if (feet[0].localPosition.z > -target20feet)
-            {
-                feet[0].Translate(Vector3.back * spreaderFeetdx);
-            }
+            // store direction
+            diff = ftOPTarget - feet[0].localPosition.z;
+            ftOPDir = Math.Sign(diff);
 
-            // shift spreader_1
-            if (feet[1].localPosition.z < target20feet)
-            {
-                feet[1].Translate(Vector3.forward * spreaderFeetdx);
-            }
+            // update old value
+            ftOPTargetOld = ftOPTarget;
         }
 
-        else if (GM.cmd40ft[iSelf])
-        {
-            // shift spreader_0
-            if (feet[0].localPosition.z < -target40feet)
-            {
-                feet[0].Translate(Vector3.forward * spreaderFeetdx);
-            }
+        // Targat과 차이
+        diff = ftOPTarget - feet[0].localPosition.z;
 
-            // shift spreader_1
-            if (feet[1].localPosition.z > target40feet)
+        // 방향 같을 때 이동
+        if (Math.Sign(diff) == ftOPDir)
+        {
+            //// shift spreader feet
+            for (int i = 0; i < feet.Length; i++)
             {
-                feet[1].Translate(Vector3.back * spreaderFeetdx);
+                feet[i].Translate(Vector3.forward * ftOPDir * spreaderFeetVel * Time.deltaTime);
             }
         }
     }

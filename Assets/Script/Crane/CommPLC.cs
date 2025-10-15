@@ -163,18 +163,23 @@ public class CommPLC
     public void ReadPLCdataQC(int iCrane)
     {
         // DB start index
-        const int floatStartIdxGantryVelBWD = 0;
-        const int floatStartIdxGantryVelFWD = 4;
+        const int floatStartIdxGantryVelBWD = 14;
+        const int floatStartIdxGantryVelFWD = 14;
         const int floatStartIdxTrolleyVel = 8;
-        const int floatStartIdxSpreaderVel = 12;
-        const int floatStartIdxMM0Vel = 16;
-        const int floatStartIdxMM1Vel = 20;
-        const int floatStartIdxMM2Vel = 24;
-        const int floatStartIdxMM3Vel = 28;
+        const int floatStartIdxSpreaderVel = 2;
+        // const int floatStartIdxMM0Vel = 16;
+        // const int floatStartIdxMM1Vel = 20;
+        // const int floatStartIdxMM2Vel = 24;
+        // const int floatStartIdxMM3Vel = 28;
 
-        const int boolStartIdxTwistLock = 34;
+        const int boolStartIdxTwistLock = 28;
         const int boolStartPointTwlLock = 0;
         const int boolStartPointTwlUnlock = 1;
+
+        const int boolStartIdxFeet = 22;
+        const int boolStartPoint20Ft = 1;
+        const int boolStartPoint40Ft = 2;
+        const int boolStartPoint45Ft = 3;
 
         // Read raw data from PLC
         var rawData = ReadFromPLC();
@@ -184,14 +189,14 @@ public class CommPLC
         GM.cmdGantryVelBWD[iCrane] = ReadFloatData(rawData, floatStartIdxGantryVelBWD);
         GM.cmdTrolleyVel[iCrane] = ReadFloatData(rawData, floatStartIdxTrolleyVel);
         GM.cmdSpreaderVel[iCrane] = ReadFloatData(rawData, floatStartIdxSpreaderVel);
-        GM.cmdMM0Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM0Vel);
-        GM.cmdMM1Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM1Vel);
-        GM.cmdMM2Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM2Vel);
-        GM.cmdMM3Vel[iCrane] = ReadFloatData(rawData, floatStartIdxMM3Vel);
 
         // Read boolean data
         GM.cmdTwlLock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
         GM.cmdTwlUnlock[iCrane] = ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+
+        GM.cmd20ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
+        GM.cmd40ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
+        GM.cmd45ft[iCrane] = ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
     }
 
     float ReadFloatData(byte[] rawData, int startIndex)

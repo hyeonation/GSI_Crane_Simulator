@@ -72,7 +72,12 @@ public class MenuController : MonoBehaviour
 
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        gameManager.GetComponent<MainLoopARTG>().enabled = true;
+        if (GM.craneType == GM.CraneType.ARTG)
+            gameManager.GetComponent<MainLoopARTG>().enabled = true;
+        else if (GM.craneType == GM.CraneType.ARMG)
+            gameManager.GetComponent<MainLoopARMG>().enabled = true;
+        else if (GM.craneType == GM.CraneType.QC)
+            gameManager.GetComponent<MainLoopQC>().enabled = true;
     }
 
     /// <summary>

@@ -54,8 +54,8 @@ public class MainLoopQC : MonoBehaviour
                 for (int i = 0; i < GM.settingParams.listIP.Count; i++)
                 {
                     plc[i] = new CommPLC(ip: GM.settingParams.listIP[i],
-                        readDBNum: 9101,
-                        readLength: 542,
+                        readDBNum: 9102,
+                        readLength: 30,
                         writeDBNum: 9101,
                         writeStartIdx: 542,
                         writeLength: 566 - 542  // 24 byte
@@ -118,17 +118,24 @@ public class MainLoopQC : MonoBehaviour
             GM.cmdMM2Vel[iCrane] = keyMM2Cmd.GetSpeed();
             GM.cmdMM3Vel[iCrane] = keyMM3Cmd.GetSpeed();
 
-            // 20ft, 40ft
+            // 20ft, 40ft, 45ft
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? true : GM.cmd20ft[iCrane];
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd20ft[iCrane];
+            GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd20ft[iCrane];
+
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd40ft[iCrane];
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? true : GM.cmd40ft[iCrane];
+            GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd40ft[iCrane];
+
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmd45ft[iCrane];
 
             // Twist Lock
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmdTwlUnlock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.B) ? false : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.B) ? true : GM.cmdTwlUnlock[iCrane];
         }
     }
 }
