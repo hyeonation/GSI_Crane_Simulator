@@ -242,10 +242,8 @@ public class DrawingQC : MonoBehaviour
     {
         //// target position
         if (GM.cmd20ft[iSelf]) ftOPTarget = target20ft;
-        if (GM.cmd40ft[iSelf]) ftOPTarget = target40ft;
-        if (GM.cmd45ft[iSelf]) ftOPTarget = target45ft;
-
-        Debug.Log($"{GM.cmd20ft[iSelf]}, {GM.cmd40ft[iSelf]}, {GM.cmd45ft[iSelf]}");
+        else if (GM.cmd40ft[iSelf]) ftOPTarget = target40ft;
+        else if (GM.cmd45ft[iSelf]) ftOPTarget = target45ft;
 
         //// init
         // Target position 바뀌었을 때 1회만
@@ -260,13 +258,14 @@ public class DrawingQC : MonoBehaviour
             ftOPTargetOld = ftOPTarget;
         }
 
+        //// shift spreader feet
         // Targat과 차이
         diff = ftOPTarget - feet[0].localPosition.z;
 
         // 방향 같을 때 이동
         if (Math.Sign(diff) == ftOPDir)
         {
-            //// shift spreader feet
+            // shift spreader feet
             for (int i = 0; i < feet.Length; i++)
             {
                 feet[i].Translate(Vector3.forward * ftOPDir * spreaderFeetVel * Time.deltaTime);

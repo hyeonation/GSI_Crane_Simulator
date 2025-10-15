@@ -18,6 +18,8 @@ public class GM : MonoBehaviour
     [Header("Crane Type")]
     public CraneType craneTypeInput;
     public static CraneType craneType;
+    public static string craneTypeStr;
+
 
     [Header("Container Stack info")]
     public short rowMax = 5;
@@ -70,6 +72,12 @@ public class GM : MonoBehaviour
         // update crane type
         craneType = craneTypeInput;
 
+        // determine crane type string
+        if (craneType == CraneType.ARTG) craneTypeStr = "ARTG";
+        else if (craneType == CraneType.ARMG) craneTypeStr = "ARMG";
+        else if (craneType == CraneType.QC) craneTypeStr = "QC";
+        else craneTypeStr = "";
+
         // init
         lengthRow = rowMax;
         lengthBay = bayMax;
@@ -85,11 +93,10 @@ public class GM : MonoBehaviour
     {
         // temp
         GameObject crane;
-        string craneType;
 
         // Crane
-        craneType = "Crane";
-        crane = GameObject.Find(craneType);
+        craneTypeStr = "Crane";
+        crane = GameObject.Find(craneTypeStr);
         nameCranes = new string[crane.transform.childCount];
         for (int i = 0; i < crane.transform.childCount; i++)
         {

@@ -31,18 +31,12 @@ public class MainLoopARTG : MonoBehaviour
             //// IP 개수만큼 크레인 생성
             // i = 1부터 시작. 기존 크레인은 유지.
             GameObject crane;
-            string craneType;
-
-            // determine crane type
-            if (GM.craneType == GM.CraneType.ARTG) craneType = "ARTG";
-            else if (GM.craneType == GM.CraneType.ARMG) craneType = "ARMG";
-            else craneType = "";
 
             crane = GameObject.Find("Crane");
             for (int i = 1; i < GM.settingParams.listIP.Count; i++)
             {
                 GameObject craneObject = Instantiate(cranePrefab, GM.cranePOS[i], Quaternion.identity);
-                craneObject.name = $"{craneType}{i + 1}";
+                craneObject.name = $"{GM.craneTypeStr}{i + 1}";
                 craneObject.transform.SetParent(crane.transform);
             }
 
