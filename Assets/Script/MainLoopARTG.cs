@@ -1,28 +1,20 @@
 using System;
 using UnityEngine;
 
-
 // Organizing data
 public class MainLoopARTG : MonoBehaviour
 {
     CommPLC[] plc;
 
-    KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
+    public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
 
     [SerializeField] private GameObject cranePrefab;
 
     void Start()
     {
-
-        // Initialize key commands with settings from GM
-        keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
-        keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
-        keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.E, KeyCode.D);
-        keyMM0Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.R, KeyCode.F);
-        keyMM1Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.T, KeyCode.G);
-        keyMM2Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.Y, KeyCode.H);
-        keyMM3Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.U, KeyCode.J);
+        // init KeyCmd
+        initKeyCmd();
 
         // Using PLC data
         if (GM.cmdWithPLC)
@@ -51,7 +43,13 @@ public class MainLoopARTG : MonoBehaviour
                 plc = new CommPLC[GM.settingParams.listIP.Count];
                 for (int i = 0; i < GM.settingParams.listIP.Count; i++)
                 {
-                    plc[i] = new CommPLC(ip: GM.settingParams.listIP[i]);
+                    plc[i] = new CommPLC(ip: GM.settingParams.listIP[i],
+                        readDBNum: GM.readDBNum,
+                        readLength: GM.readLength,
+                        writeDBNum: GM.writeDBNum,
+                        writeStartIdx: GM.writeStartIdx,
+                        writeLength: GM.writeLength
+                    );
                     plc[i].Connect();
                 }
             }
@@ -109,17 +107,36 @@ public class MainLoopARTG : MonoBehaviour
             GM.cmdMM2Vel[iCrane] = keyMM2Cmd.GetSpeed();
             GM.cmdMM3Vel[iCrane] = keyMM3Cmd.GetSpeed();
 
-            // 20ft, 40ft
+            // 20ft, 40ft, 45ft
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? true : GM.cmd20ft[iCrane];
             GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd20ft[iCrane];
+            GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd20ft[iCrane];
+
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd40ft[iCrane];
             GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? true : GM.cmd40ft[iCrane];
+            GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd40ft[iCrane];
+
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmd45ft[iCrane];
 
             // Twist Lock
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmdTwlUnlock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.B) ? false : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.B) ? true : GM.cmdTwlUnlock[iCrane];
         }
+    }
+
+    void initKeyCmd()
+    {
+        // Initialize key commands with settings from GM
+        keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
+        keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
+        keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.E, KeyCode.D);
+        keyMM0Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.R, KeyCode.F);
+        keyMM1Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.T, KeyCode.G);
+        keyMM2Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.Y, KeyCode.H);
+        keyMM3Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.U, KeyCode.J);
     }
 }

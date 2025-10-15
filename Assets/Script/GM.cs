@@ -20,12 +20,24 @@ public class GM : MonoBehaviour
     public static CraneType craneType;
     public static string craneTypeStr;
 
+    [Header("Crane Type")]
+    public short readDBNumInput;
+    public short readLengthInput;
+    public short writeDBNumInput;
+    public short writeStartIdxInput;
+    public short writeLengthInput;
+
+    // static values
+    public static short readDBNum;
+    public static short readLength;
+    public static short writeDBNum;
+    public static short writeStartIdx;
+    public static short writeLength;
 
     [Header("Container Stack info")]
     public short rowMax = 5;
     public short bayMax = 16;
     public short tierMax = 6;
-
 
     public static short lengthRow = 5;
     public static short lengthBay = 16;
@@ -34,8 +46,6 @@ public class GM : MonoBehaviour
     public static int[,] stack_profile;     // SPSS 역할. [row, bay] = tier(stack count)
     public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
                                                     // 순서는? 무작위?
-
-
 
     public const float yard_start_val = 2.63f;
     public const float yard_x_interval = 2.840f;
@@ -55,10 +65,6 @@ public class GM : MonoBehaviour
     public static string TimeToString(DateTime datetime)
         => datetime.ToString("yy'/'MM'/'dd HH:mm:ss");
 
-
-    // container name
-
-
     // crane position
     public static Vector3[] cranePOS = {
         new Vector3(0, 0, 0),
@@ -71,6 +77,11 @@ public class GM : MonoBehaviour
     {
         // update crane type
         craneType = craneTypeInput;
+        readDBNum = readDBNumInput;
+        readLength = readLengthInput;
+        writeDBNum = writeDBNumInput;
+        writeStartIdx = writeStartIdxInput;
+        writeLength = writeLengthInput;
 
         // determine crane type string
         if (craneType == CraneType.ARTG) craneTypeStr = "ARTG";
