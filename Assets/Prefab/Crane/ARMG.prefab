@@ -742,7 +742,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322446092460517449}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -760,7 +760,7 @@ Transform:
   - {fileID: 408379303102799504}
   - {fileID: 1710422909641132414}
   - {fileID: 7968637788737783794}
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &402534089495344003
 GameObject:
@@ -2488,13 +2488,13 @@ MonoBehaviour:
     spoolSeparation: 0.0145
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: -0.26984018, z: 0.535897}
+    outAnchor: {x: 9.313226e-10, y: -0.26984018, z: 0.5358977}
   - body: {fileID: 5685296272663735980}
     type: 3
     orientation: 0
     slack: 0
     hybridRolling: 1
-    storedCable: 0.5975088
+    storedCable: 0.5975066
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.5, z: -0.12}
@@ -3128,43 +3128,6 @@ Transform:
   - {fileID: 4016428214439825054}
   m_Father: {fileID: 2446631673552931362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1508768618302470732
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7017594904472584526}
-  m_Layer: 0
-  m_Name: Trolley
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7017594904472584526
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508768618302470732}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 27, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 795186276035712490}
-  - {fileID: 6495968357337574024}
-  - {fileID: 1153949184256876356}
-  - {fileID: 641867186485190733}
-  - {fileID: 1910432773130985740}
-  - {fileID: 1972170055497435413}
-  m_Father: {fileID: 6379770687955030657}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1530267514065652052
 GameObject:
   m_ObjectHideFlags: 0
@@ -3597,7 +3560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1694356980990011028}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3606,7 +3569,7 @@ Transform:
   - {fileID: 3929738952328773230}
   - {fileID: 1739557523103327451}
   - {fileID: 3011296513573218913}
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1713169088003730083
 GameObject:
@@ -5787,13 +5750,13 @@ MonoBehaviour:
     spoolSeparation: 0.0275
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: 0.5054779, z: -0.32325172}
+    outAnchor: {x: 9.313226e-10, y: 0.5054779, z: -0.32325178}
   - body: {fileID: 1967901161793647614}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 0.4641489
+    storedCable: 0.46414807
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -0.12, y: 0.5, z: 0}
@@ -5803,7 +5766,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 1
-    storedCable: 0.80985224
+    storedCable: 0.8098496
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -0.12, y: 0.225, z: 0}
@@ -9500,6 +9463,29 @@ MonoBehaviour:
   SPSS_x_gap: 1500
   SPSS_y_gap: 22500
   SPSS_z_gap: 2500
+  nameSelf: 
+  iSelf: 0
+  craneBody: {fileID: 0}
+  trolley: {fileID: 0}
+  spreader: {fileID: 0}
+  rtg_B: {fileID: 0}
+  rtg_F: {fileID: 0}
+  spreaderCam: {fileID: 0}
+  discs: []
+  SPSS: []
+  microMotion: []
+  twlLand: []
+  twlLock: []
+  laser: []
+  feet: []
+  cam: []
+  cables: []
+  container: {fileID: 0}
+  landedContainer: 0
+  landedFloor: 0
+  locked: 0
+  hoistPos: 0
+  gantryLength: 0
 --- !u!1 &4071940116499166265
 GameObject:
   m_ObjectHideFlags: 0
@@ -10075,7 +10061,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4439623226170253444}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10084,7 +10070,7 @@ Transform:
   - {fileID: 1200013129662276351}
   - {fileID: 1241072565348703735}
   - {fileID: 6448227048048809984}
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4447065211120676198
 GameObject:
@@ -10285,6 +10271,43 @@ Transform:
   - {fileID: 4105722428214735552}
   m_Father: {fileID: 2446631673552931362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4595170788423368055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1237699319232307319}
+  m_Layer: 0
+  m_Name: Trolley
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1237699319232307319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4595170788423368055}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 27, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 795186276035712490}
+  - {fileID: 6495968357337574024}
+  - {fileID: 1153949184256876356}
+  - {fileID: 641867186485190733}
+  - {fileID: 1910432773130985740}
+  - {fileID: 1972170055497435413}
+  m_Father: {fileID: 6379770687955030657}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &4616711430483874321
 GameObject:
   m_ObjectHideFlags: 0
@@ -10889,13 +10912,13 @@ MonoBehaviour:
     spoolSeparation: -0.014
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: -0.26984018, z: 0.535897}
+    outAnchor: {x: 9.313226e-10, y: -0.26984018, z: 0.5358977}
   - body: {fileID: 7617235386785444910}
     type: 3
     orientation: 0
     slack: 0
     hybridRolling: 1
-    storedCable: 0.59750867
+    storedCable: 0.59750646
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.5, z: -0.12}
@@ -11860,13 +11883,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5159223449825736775}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7880295970050577575}
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5180667448099135968
 GameObject:
@@ -12106,7 +12129,7 @@ Transform:
   m_Children:
   - {fileID: 1047530649351276703}
   - {fileID: 1641444137061776929}
-  - {fileID: 7017594904472584526}
+  - {fileID: 1237699319232307319}
   m_Father: {fileID: 6518279029587056796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4302311429021473471
@@ -13848,13 +13871,13 @@ MonoBehaviour:
     spoolSeparation: -0.006
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: -0.31354707, z: 0.51155424}
+    outAnchor: {x: 9.313226e-10, y: -0.31354707, z: 0.51155454}
   - body: {fileID: 6597721521031858890}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 0.67455477
+    storedCable: 0.674553
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -0.12, y: 0.5, z: 0}
@@ -13864,7 +13887,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 1
-    storedCable: 0.81218594
+    storedCable: 0.81218344
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -0.12, y: 0.5, z: 0}
@@ -14142,13 +14165,13 @@ MonoBehaviour:
     spoolSeparation: -0.0265
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: -0.31452745, z: 0.5109523}
+    outAnchor: {x: 9.313226e-10, y: -0.31452745, z: 0.5109528}
   - body: {fileID: 242813973905757630}
     type: 1
     orientation: 0
     slack: 0
     hybridRolling: 0
-    storedCable: 0.42989045
+    storedCable: 0.42988992
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0.12, y: 0.5, z: 0}
@@ -14158,7 +14181,7 @@ MonoBehaviour:
     orientation: 0
     slack: 0
     hybridRolling: 1
-    storedCable: 0.8095805
+    storedCable: 0.8095782
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0.12, y: 0.5, z: 0}
@@ -14173,7 +14196,7 @@ MonoBehaviour:
     cableSpawnSpeed: 0
     inAnchor: {x: 0.06, y: 0.225, z: 0}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 54.59683
+  restLength: 54.596825
 --- !u!23 &6344046945212362524
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14659,12 +14682,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6326568487777135530}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.291442, y: -0.65633017, z: 0.30605188, w: 0.62499964}
+  m_LocalRotation: {x: -0.010330736, y: -0.906037, z: 0.42249194, w: -0.022154002}
   m_LocalPosition: {x: 0, y: 0.87000084, z: 0}
-  m_LocalScale: {x: 0.9402512, y: 0.9987192, z: 0.9910295}
+  m_LocalScale: {x: 0.94025123, y: 0.9987192, z: 0.99102956}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 50, y: -92.801, z: 0}
 --- !u!20 &7271036974581821719
 Camera:
@@ -14879,13 +14902,13 @@ MonoBehaviour:
     spoolSeparation: -0.0185
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: 0.50595474, z: -0.32250664}
+    outAnchor: {x: 9.313226e-10, y: 0.50595474, z: -0.32250667}
   - body: {fileID: 1530303948730064778}
     type: 3
     orientation: 1
     slack: 0
     hybridRolling: 1
-    storedCable: 0.8143226
+    storedCable: 0.81432027
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0.12, y: 0.5, z: 0}
@@ -14900,7 +14923,7 @@ MonoBehaviour:
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.225, z: 0.06}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 53.450058
+  restLength: 53.450054
 --- !u!23 &1557034395479039161
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15944,12 +15967,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6887660894459315742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1.1436747, y: 1.001006, z: 1.0763192}
+  m_LocalScale: {x: 1.1436744, y: 1.0010058, z: 1.0763191}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7017594904472584526}
+  m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &6597829996514747958
 Camera:
@@ -18307,13 +18330,13 @@ MonoBehaviour:
     spoolSeparation: 0.0055
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: 0.5053711, z: -0.32342178}
+    outAnchor: {x: 9.313226e-10, y: 0.5053711, z: -0.32342175}
   - body: {fileID: 5749431218565337216}
     type: 1
     orientation: 0
     slack: 0
     hybridRolling: 0
-    storedCable: 0.67367405
+    storedCable: 0.6736725
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.5, z: 0.12}
@@ -18323,7 +18346,7 @@ MonoBehaviour:
     orientation: 0
     slack: 0
     hybridRolling: 1
-    storedCable: 0.8123499
+    storedCable: 0.81234735
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.225, z: 0.12}
@@ -18338,7 +18361,7 @@ MonoBehaviour:
     cableSpawnSpeed: 0
     inAnchor: {x: 0.06, y: 0.225, z: 0}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 56.233517
+  restLength: 56.23351
 --- !u!23 &2969298395348819764
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20692,13 +20715,13 @@ MonoBehaviour:
     spoolSeparation: 0.0188
     cableSpawnSpeed: 0
     inAnchor: {x: -8.18, y: 0.03, z: -0.66}
-    outAnchor: {x: 0, y: 0.50595474, z: -0.32250664}
+    outAnchor: {x: 9.313226e-10, y: 0.50595474, z: -0.3225066}
   - body: {fileID: 8815830166188933737}
     type: 3
     orientation: 1
     slack: 0
     hybridRolling: 1
-    storedCable: 0.81432265
+    storedCable: 0.81432027
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0.5, z: 0.12}

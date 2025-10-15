@@ -2,15 +2,15 @@ using UnityEngine;
 using System;
 using Filo;
 
-public class DrawingQC : DrawingARTG
+public class DrawingQC : DrawingCrane
 {
     float convHoistVel;
 
-    void InitValues()
+    public override void InitValues()
     {
     }
 
-    void FindObject()
+    public override void FindObject()
     {
 
         // self crane info
@@ -28,7 +28,7 @@ public class DrawingQC : DrawingARTG
         }
 
         // Get Objects From Trolley
-        trolley = craneBody.transform.Find("Upper Trolley");
+        trolley = craneBody.transform.Find("Trolley");
         var disc = trolley.transform.Find("Disc");
         discs = new Transform[disc.transform.childCount];
         for (short j = 0; j < discs.Length; j++)
@@ -91,7 +91,13 @@ public class DrawingQC : DrawingARTG
         cam[2] = cam_1.transform.Find("Camera3");
     }
 
-    void Hoist_OP()
+    public override void Gantry_OP()
+    {
+        float vecDx = GM.cmdGantryVelFWD[iSelf] * Time.deltaTime;
+        craneBody.position += new Vector3(vecDx, 0, 0);
+    }
+
+    public override void Hoist_OP()
     {
         var force = 0.0065f;
         var speed = GM.cmdSpreaderVel[iSelf] * convHoistVel;

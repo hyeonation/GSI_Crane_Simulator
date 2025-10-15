@@ -1,4 +1,4 @@
 
-public class DrawingARMG : DrawingARTG
+public class DrawingARMG : DrawingCrane
 {
 }
