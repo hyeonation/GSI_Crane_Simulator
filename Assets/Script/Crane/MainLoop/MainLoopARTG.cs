@@ -2,6 +2,6 @@ using System;
 using UnityEngine;
 
 // Organizing data
-public class MainLoopQC : MainLoopARTG
+public class MainLoopARTG : MainLoop
 {
 }

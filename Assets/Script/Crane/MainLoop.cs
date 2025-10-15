@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 // Organizing data
-public class MainLoopARTG : MonoBehaviour
+public class MainLoop : MonoBehaviour
 {
     CommPLC[] plc;
 
