@@ -43,6 +43,7 @@ public class MainLoop : MonoBehaviour
                 plc = new CommPLC[GM.settingParams.listIP.Count];
                 for (int i = 0; i < GM.settingParams.listIP.Count; i++)
                 {
+                    Debug.Log(GM.settingParams.listIP[i]);
                     plc[i] = new CommPLC(ip: GM.settingParams.listIP[i],
                         readDBNum: GM.readDBNum,
                         readLength: GM.readLength,

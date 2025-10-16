@@ -29,6 +29,7 @@ public class CommPLC
         short writeLength = 218
         )
     {
+        info.ip = ip;
         info.rack = rack;
         info.slot = slot;
         info.readDBNum = readDBNum;
@@ -72,16 +73,16 @@ public class CommPLC
         Array.Copy(FloatToByteArr(floatData), 0, writeDB, startIdx, lengthFloat);
     }
 
-    public void WriteInt(int intData, int startIdx)
+    public void WriteShort(short intData, int startIdx)
     {
-        const int lengthInt = 2;
-        Array.Copy(reverseByteArr(BitConverter.GetBytes(intData)), 0, writeDB, startIdx, lengthInt);
+        const int lengthShort = 2;
+        Array.Copy(reverseByteArr(BitConverter.GetBytes(intData)), 0, writeDB, startIdx, lengthShort);
     }
 
     public void WriteChar(char charData, int startIdx)
     {
         const int lengthChar = 1;
-        Array.Copy(reverseByteArr(BitConverter.GetBytes(charData)), 0, writeDB, startIdx, lengthChar);
+        Array.Copy(BitConverter.GetBytes(charData), 0, writeDB, startIdx, lengthChar);
     }
 
     public static byte WriteBool(bool boolData, int startPoint, byte boolByte)
