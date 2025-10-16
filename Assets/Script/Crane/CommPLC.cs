@@ -73,6 +73,8 @@ public class CommPLC
         Array.Copy(FloatToByteArr(floatData), 0, writeDB, startIdx, lengthFloat);
     }
 
+    // C#에서 int는 4바이트. Short는 2바이트.
+    // PLC에서 Int, Word를 Unity에서 Short로 처리한다.
     public void WriteShort(short intData, int startIdx)
     {
         const int lengthShort = 2;
