@@ -22,15 +22,23 @@ public class DrawingCrane : MonoBehaviour
     public float SPSS_y_gap = 22500f;
     public float SPSS_z_gap = 2500f;
 
+    [HideInInspector]
     public string nameSelf;
+    [HideInInspector]
     public int iSelf;
+    [HideInInspector]
     public Transform craneBody, trolley, spreader, rtg_B, rtg_F, spreaderCam;
 
+    [HideInInspector]
     public Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
+    [HideInInspector]
     public GameObject[] cables;
+    [HideInInspector]
     public GameObject container;
 
+    [HideInInspector]
     public bool landedContainer, landedFloor, locked;
+    [HideInInspector]
     public float hoistPos, gantryLength;
 
     const float target20ft = 0; // 0m shift
@@ -63,8 +71,8 @@ public class DrawingCrane : MonoBehaviour
         cmdTwlLockOld = (bool[])GM.cmdTwlLock.Clone();
         cmdTwlUnlockOld = (bool[])GM.cmdTwlUnlock.Clone();
 
-        InitValues();
         FindObject();
+        InitValues();
 
         // InitLaserPos(laser_x_gap, laser_y_gap);
         // InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);

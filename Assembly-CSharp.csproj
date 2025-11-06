@@ -72,6 +72,7 @@
     <Compile Include="Assets\Script\UI\Setting\SafeAreaFitter.cs" />
     <Compile Include="Assets\Script\Crane\Drawing\DrawingQC.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CablePoint.cs" />
+    <Compile Include="Assets\Script\Crane\MainLoop\InspectorQC.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Utils.cs" />
     <Compile Include="Assets\Script\UI\Setting\SettingsPanelBinder.cs" />
     <Compile Include="Assets\Script\Yard\Yard_Infra.cs" />
