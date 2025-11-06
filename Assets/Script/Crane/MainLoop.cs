@@ -128,6 +128,8 @@ public class MainLoop : MonoBehaviour
         int startIdx = 0;
         plc[iCrane].WriteFloat(testFloat, startIdx);
 
+
+
         // byte boolByte = 0;  // init
         // CommPLC.WriteBool(true, 0, boolByte);
         // CommPLC.WriteBool(false, 1, boolByte);

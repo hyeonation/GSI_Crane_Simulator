@@ -24,8 +24,8 @@ public class CommPLC
         short readDBNum = 1000,
         short readStartIdx = 0,
         short readLength = 36,
-        short writeDBNum = 1001,
-        short writeStartIdx = 0,
+        short writeDBNum = 1000,
+        short writeStartIdx = 46,
         short writeLength = 218
         )
     {
