@@ -57,6 +57,8 @@ public class GM : MonoBehaviour
     public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
+
+
     // settings
     public static SettingParams settingParams = new();
 

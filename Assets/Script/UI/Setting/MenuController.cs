@@ -19,6 +19,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
     [SerializeField] private GameObject gameManager;        // GameManager 오브젝트
     [SerializeField] private GameObject containerPreset;    // 컨테이너 프리셋 오브젝트. 컨테이너 생성
+    [SerializeField] private GameObject btnExit;              // "Exit" 버튼
 
 
     void Start()
@@ -30,6 +31,7 @@ public class MenuController : MonoBehaviour
         if (btnPLC) btnPLC.onClick.AddListener(OnPLCMode);
         if (btnSetting) btnSetting.onClick.AddListener(OnSetting);
         if (btnQuit) btnQuit.onClick.AddListener(OnQuit);
+        if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
 
         // load setting data
         settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
@@ -66,6 +68,7 @@ public class MenuController : MonoBehaviour
     public void StartSimulation()
     {
         gameObject.SetActive(false); // 현재 메뉴 숨김
+        btnExit.SetActive(true); // btnExit Active
 
         // container 생성
         containerPreset.GetComponent<Container>().enabled = true;
