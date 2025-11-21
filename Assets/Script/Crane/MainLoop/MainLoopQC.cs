@@ -94,7 +94,6 @@ public class MainLoopQC : MainLoop
 
 
         float testFloat = 123.0f;
-        int startIdx = 0;
         plc[iCrane].WriteFloat(testFloat, 84);
 
         // byte boolByte = 0;  // init

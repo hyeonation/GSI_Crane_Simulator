@@ -39,13 +39,19 @@ public class GM : MonoBehaviour
     public short bayMax = 16;
     public short tierMax = 6;
 
-    public static short lengthRow = 5;
+    public static short lengthRow = 9;
     public static short lengthBay = 16;
     public static short lengthTier = 6;
     public static List<byte[]> listContainerID = new();
     public static int[,] stack_profile;     // SPSS 역할. [row, bay] = tier(stack count)
+                                            // TOS Container 선택 시 해당 row 최상단 접근 위해
+                                            // Yard Overview 그릴 때도 사용 가능
     public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
-                                                    // 순서는? 무작위?
+                                                    // Container ID로 idx 접근하여 추출
+                                                    // Scene에서 row, bay, tier 파악 용이.
+                                                    // TOS에서 Bay 별 Container 그리기 용이.    
+                                                    // 순서는? 무작위? listContainerID와 index만 일치시키면?
+                                                    // containerStatus를 정의해야 한다. 용도는 무엇인가.
 
     public const float yard_start_val = 2.63f;
     public const float yard_x_interval = 2.840f;
@@ -56,8 +62,6 @@ public class GM : MonoBehaviour
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
     public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
-
-
 
     // settings
     public static SettingParams settingParams = new();
@@ -140,7 +144,7 @@ public class GM : MonoBehaviour
         cmdTwlUnlock = new bool[nameCranes.Length];
 
         // stack profile
-        stack_profile = new int[lengthRow, lengthBay];
+        stack_profile = new int[lengthRow + 2, lengthBay];  // WS, LS row 추가
 
     }
 
@@ -173,6 +177,7 @@ public class GM : MonoBehaviour
         }
         return new string(chars);
     }
+
 }
 
 // ----------------- 설정 데이터 모델 -----------------
@@ -192,7 +197,7 @@ public class SettingParams
     public float lidarResVertical_deg = 0.2f;
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
-    public int yardContainerNumberEA = 400;
+    public int yardContainerNumberEA = 100;
 }
 
 public class KeyCmd

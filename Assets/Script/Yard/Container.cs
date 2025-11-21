@@ -9,7 +9,6 @@ public class Container : MonoBehaviour
 
     float start_val, x_interval, y_interval, z_interval;
     int num_containers;
-    string containerID = "Container";
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
@@ -136,55 +135,63 @@ public class Container : MonoBehaviour
         // make containers
         for (int i = 0; i < num_containers; i++)
         {
-            mkContainer(i, GM.list_stack_profile[i]);
+            placementContainer(GM.list_stack_profile[i]);
         }
     }
 
-    void mkContainer(int num, int[] idx_pos)
+    void placementContainer(int[] idx_pos)
     {
+        // make GameObject
+        GameObject newObject = mkRandomPrefab(prefabs);
+        newObject.transform.SetParent(transform);
+
+        // stack position data
         int i_row = idx_pos[0];
         int i_bay = idx_pos[1];
         int i_tier = idx_pos[2];
-
-        GameObject randomPrefab = prefabs[Random.Range(0, prefabs.Length)];
-        GameObject newObject = Instantiate(randomPrefab, Vector3.zero, Quaternion.identity);
-
-        byte[] containerIDByteArr = mkContainerID();            // 랜덤 ID 생성
-        GM.listContainerID.Add(containerIDByteArr);             // ID 저장
-        containerID = GM.ByteArrayToString(containerIDByteArr);    // String 변환
-        newObject.name = containerID;                           // 이름 설정
-
-        newObject.transform.SetParent(transform);
 
         // 위치 배치
         Vector3 spawnPosition = new Vector3((i_row * x_interval) + start_val,
                                             (i_tier * y_interval) + y_interval / 2 + 0.1f,
                                             (i_bay * z_interval) + 7.75f);
 
-        // 부모인 Containers에 맞춤
+        // 부모인 Containers에 transform 맞춤
         newObject.transform.position = transform.position;      // 절대 좌표 이동
         newObject.transform.localPosition = spawnPosition;      // 상대 좌표 이동
         newObject.transform.rotation = transform.rotation;
     }
 
+    public static GameObject mkRandomPrefab(GameObject[] prefabs)
+    {
+        // make GameObject
+        GameObject randomPrefab = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+        GameObject newObject = Instantiate(randomPrefab, Vector3.zero, Quaternion.identity);
+
+        // Attaching a container ID
+        byte[] containerIDByteArr = mkContainerID();                // 랜덤 ID 생성
+        GM.listContainerID.Add(containerIDByteArr);                    // ID 저장
+        newObject.name = GM.ByteArrayToString(containerIDByteArr);     // 이름 설정
+
+        return newObject;
+    }
+
     // make container name
-    byte[] mkContainerID()
+    public static byte[] mkContainerID()
     {
         byte[] result = new byte[11];
 
         // 앞 4자리: 대문자 알파벳 (A=65 ~ Z=90)
         for (int i = 0; i < 4; i++)
         {
-            result[i] = (byte)Random.Range(65, 91);
+            result[i] = (byte)UnityEngine.Random.Range(65, 91);
         }
 
         // 뒤 7자리: 숫자 (0=48 ~ 9=57)
         for (int i = 4; i < 11; i++)
         {
-            result[i] = (byte)Random.Range(48, 58);
+            result[i] = (byte)UnityEngine.Random.Range(48, 58);
         }
 
         return result;
     }
-
 }
