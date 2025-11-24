@@ -18,7 +18,7 @@ public class MainLoopTOS : MonoBehaviour
     public Button btnSelectBayUp;
     public Button btnSelectBayDown;
     public Button btnApply;
-    public Button btnTask1;
+    public Button btnReset;
 
     //public TextMeshPro textApply;
     public TMP_Text textApply;
@@ -79,7 +79,7 @@ public class MainLoopTOS : MonoBehaviour
         AddListeners();
 
         // Init
-        Refresh();
+        Reset();
     }
 
     void AddListeners()
@@ -97,6 +97,9 @@ public class MainLoopTOS : MonoBehaviour
 
         // Apply button
         if (btnApply) btnApply.onClick.AddListener(OnBtnApply);
+
+        // Reset button
+        if (btnReset) btnReset.onClick.AddListener(Reset);
 
         // task list
         for (int i = 0; i < listTaskObj.Length; i++)
@@ -150,10 +153,11 @@ public class MainLoopTOS : MonoBehaviour
     }
 
     // TOS Task 명령 작업이 끝나면 초기화하는 함수
-    void Refresh()
+    void Reset()
     {
+        RollbackDestination();
+        RollbackSource();
         InitTextData();
-        InitUIpropData();
         UpdateStackProfileUI();
     }
 
@@ -218,12 +222,6 @@ public class MainLoopTOS : MonoBehaviour
 
     TMP_Text GetTaskContent(int i)
         => listTaskObj[i].transform.Find("Text (TMP)").GetComponent<TMP_Text>();
-
-    void InitUIpropData()
-    {
-        // disabled Apply button 
-        BtnApplyOnOff(false);
-    }
 
     void BtnApplyOnOff(bool interactable)
     {
@@ -505,7 +503,7 @@ public class MainLoopTOS : MonoBehaviour
         stateUI = StateUI.Normal;
 
         // deactive
-        btnSource.GetComponent<Image>().color = colorDeactive;
+        if (btnSource) btnSource.GetComponent<Image>().color = colorDeactive;
 
         // update button
         btnSource = null;
@@ -513,11 +511,15 @@ public class MainLoopTOS : MonoBehaviour
 
     void RollbackDestination()
     {
+        // Load iBay
+        int iBay = DropdownInputBay.value;
+
         // 기존 Destination의 Bay와 같은 경우에만 Null
         // Bay가 다르다면 기존 Destination container가 없으므로 할 필요 없음.
         // Bay와 관계 없이 null 하게 되면 다른 Bay의 deactive 상태였던 Container가 Null 될 수 있음.
-        int iBay = DropdownInputBay.value;
-        if (iBayDestination == iBay) btnDestination.GetComponent<Image>().color = colorNull;
+        // Destination block은 빈 block이 선택되므로 colorNull로 설정.
+        // btnDestination이 없는 초기에도 ftn을 사용하기 위해 발동 조건에 btnDestination을 &&로 추가
+        if (btnDestination && (iBayDestination == iBay)) btnDestination.GetComponent<Image>().color = colorNull;
 
         // update data
         iRowDestination = defaultIdx;
@@ -548,9 +550,7 @@ public class MainLoopTOS : MonoBehaviour
         listTaskInfo = listTaskInfo.Prepend(taskInfo).ToList();
 
         // initialization
-        RollbackDestination();
-        RollbackSource();
-        InitTextData();
+        Reset();
     }
 
     // update current stack profile UI
