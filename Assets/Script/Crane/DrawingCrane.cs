@@ -27,7 +27,7 @@ public class DrawingCrane : MonoBehaviour
     [HideInInspector]
     public int iSelf;
     [HideInInspector]
-    public Transform craneBody, trolley, spreader, rtg_B, rtg_F, spreaderCam;
+    public Transform craneBody, trolley, spreader, rtg_B, rtg_F;
 
     [HideInInspector]
     public Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
@@ -131,7 +131,7 @@ public class DrawingCrane : MonoBehaviour
         {
             SPSS[j] = spss.transform.Find($"Lidar{j}");
         }
-        spreaderCam = trolley.transform.Find("Get_View_Camera");
+        // spreaderCam = trolley.transform.Find("Get_View_Camera");
 
         // Get Objects From Spreader
         spreader = gameObject.transform.Find("Spreader");
@@ -260,7 +260,6 @@ public class DrawingCrane : MonoBehaviour
         if (speed < 0)
         {
             spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
-            spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
             if (locked)
             {
@@ -272,10 +271,6 @@ public class DrawingCrane : MonoBehaviour
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
             // spreader.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
-            if (!landedContainer)
-            {
-                spreaderCam.Translate(Vector3.up * Time.deltaTime * speed * force, Space.World);
-            }
         }
     }
 
