@@ -9417,10 +9417,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.25
     y: 0
-    width: 1
-    height: 1
+    width: 0.25
+    height: 0.5
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 90
@@ -9432,7 +9432,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 4
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -9500,10 +9500,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.25
+    y: 0.5
+    width: 0.25
+    height: 0.5
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 90
@@ -9515,7 +9515,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 4
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -10556,7 +10556,8 @@ MonoBehaviour:
   spreader: {fileID: 0}
   rtg_B: {fileID: 0}
   rtg_F: {fileID: 0}
-  spreaderCam: {fileID: 0}
+  camTrolley1: {fileID: 0}
+  camTrolley2: {fileID: 0}
   discs: []
   SPSS: []
   microMotion: []
