@@ -15,6 +15,7 @@ public class GM : MonoBehaviour
         ARMG,
         QC,
     }
+
     [Header("Crane Type")]
     public CraneType craneTypeInput;
     public static CraneType craneType;
@@ -104,6 +105,21 @@ public class GM : MonoBehaviour
         InitVar();
 
         // Application.targetFrameRate = 30;
+
+
+        Debug.Log("Displays connected: " + Display.displays.Length);
+
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate();
+            Debug.Log("Display 1 Activated");
+        }
+        if (Display.displays.Length > 2)
+        {
+            Display.displays[2].Activate();
+            Debug.Log("Display 2 Activated");
+        }
+
     }
 
     public static void InitVar()
@@ -145,7 +161,6 @@ public class GM : MonoBehaviour
 
         // stack profile
         stack_profile = new int[lengthRow + 2, lengthBay];  // WS, LS row 추가
-
     }
 
     public static void DestroyVar()
@@ -165,8 +180,6 @@ public class GM : MonoBehaviour
         // }
     }
 
-
-
     // 디버깅용: byte[] → string 변환
     public static string ByteArrayToString(byte[] arr)
     {
@@ -177,7 +190,6 @@ public class GM : MonoBehaviour
         }
         return new string(chars);
     }
-
 }
 
 // ----------------- 설정 데이터 모델 -----------------
@@ -198,32 +210,4 @@ public class SettingParams
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
     public int yardContainerNumberEA = 400;
-}
-
-public class KeyCmd
-{
-    float speedABS = 0f;
-    float[] direction = new float[3] { -1f, 0f, 1f };
-    int directionIdx = 1; // 0: BWD, 1: Stop, 2: FWD
-
-    KeyCode keyFWD;
-    KeyCode keyBWD;
-
-    public KeyCmd(float speedABS, KeyCode keyFWD, KeyCode keyBWD)
-    {
-        this.speedABS = speedABS;
-        this.keyFWD = keyFWD;
-        this.keyBWD = keyBWD;
-    }
-
-    public float GetSpeed()
-    {
-        if (Input.GetKeyDown(keyFWD)) directionIdx++;
-        else if (Input.GetKeyDown(keyBWD)) directionIdx--;
-
-        // Ensure directionIdx is within bounds
-        directionIdx = Mathf.Clamp(directionIdx, 0, 2);
-
-        return speedABS * direction[directionIdx];
-    }
 }

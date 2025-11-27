@@ -134,8 +134,8 @@ public class DrawingCrane : MonoBehaviour
         }
         // spreaderCam = trolley.transform.Find("Get_View_Camera");
         Transform camTrolley = trolley.transform.Find("Camera");
-        camTrolley1 = camTrolley.Find("Trolley Camera1").GetComponent<Camera>();
-        camTrolley2 = camTrolley.Find("Trolley Camera2").GetComponent<Camera>();
+        camTrolley1 = camTrolley.Find("Trolley1").GetComponent<Camera>();
+        camTrolley2 = camTrolley.Find("Trolley2").GetComponent<Camera>();
 
         // Get Objects From Spreader
         spreader = gameObject.transform.Find("Spreader");

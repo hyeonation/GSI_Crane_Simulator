@@ -8,6 +8,7 @@ public class MainLoop : MonoBehaviour
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
+    public KeyCode keyCode20ft, keyCode40ft, keyCode45ft, keyCodeTwlLock, keyCodeTwlUnlock;
 
     [SerializeField] private GameObject cranePrefab;
 
@@ -163,35 +164,70 @@ public class MainLoop : MonoBehaviour
             GM.cmdMM3Vel[iCrane] = keyMM3Cmd.GetSpeed();
 
             // 20ft, 40ft, 45ft
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? true : GM.cmd20ft[iCrane];
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd20ft[iCrane];
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd20ft[iCrane];
+            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? true : GM.cmd20ft[iCrane];
+            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? false : GM.cmd20ft[iCrane];
+            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? false : GM.cmd20ft[iCrane];
 
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd40ft[iCrane];
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? true : GM.cmd40ft[iCrane];
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? false : GM.cmd40ft[iCrane];
+            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? false : GM.cmd40ft[iCrane];
+            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? true : GM.cmd40ft[iCrane];
+            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? false : GM.cmd40ft[iCrane];
 
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.Z) ? false : GM.cmd45ft[iCrane];
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.X) ? false : GM.cmd45ft[iCrane];
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(KeyCode.C) ? true : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? false : GM.cmd45ft[iCrane];
+            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? true : GM.cmd45ft[iCrane];
 
             // Twist Lock
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.V) ? true : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(KeyCode.B) ? false : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.V) ? false : GM.cmdTwlUnlock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(KeyCode.B) ? true : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(keyCodeTwlLock) ? true : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? false : GM.cmdTwlLock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlLock) ? false : GM.cmdTwlUnlock[iCrane];
+            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? true : GM.cmdTwlUnlock[iCrane];
         }
     }
 
     void initKeyCmd()
     {
         // Initialize key commands with settings from GM
-        keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.Q, KeyCode.A);
-        keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.W, KeyCode.S);
-        keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.E, KeyCode.D);
-        keyMM0Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.R, KeyCode.F);
-        keyMM1Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.T, KeyCode.G);
-        keyMM2Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.Y, KeyCode.H);
-        keyMM3Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.U, KeyCode.J);
+        keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.D, KeyCode.A);
+        keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.S, KeyCode.W);
+        keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.R, KeyCode.F);
+        keyMM0Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.T, KeyCode.G);
+        keyMM1Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.Y, KeyCode.H);
+        keyMM2Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.U, KeyCode.J);
+        keyMM3Cmd = new KeyCmd(GM.settingParams.keyMMSpeed, KeyCode.I, KeyCode.K);
+
+        keyCode20ft = KeyCode.Alpha1;
+        keyCode40ft = KeyCode.Alpha2;
+        keyCode45ft = KeyCode.Alpha3;
+        keyCodeTwlLock = KeyCode.Q;
+        keyCodeTwlUnlock = KeyCode.E;
+    }
+}
+
+
+public class KeyCmd
+{
+    float speedABS = 0f;
+    float[] direction = new float[3] { -1f, 0f, 1f };
+    int directionIdx = 1; // 0: BWD, 1: Stop, 2: FWD
+
+    KeyCode keyFWD;
+    KeyCode keyBWD;
+
+    public KeyCmd(float speedABS, KeyCode keyFWD, KeyCode keyBWD)
+    {
+        this.speedABS = speedABS;
+        this.keyFWD = keyFWD;
+        this.keyBWD = keyBWD;
+    }
+
+    public float GetSpeed()
+    {
+        if (Input.GetKeyDown(keyFWD)) directionIdx++;
+        else if (Input.GetKeyDown(keyBWD)) directionIdx--;
+
+        // Ensure directionIdx is within bounds
+        directionIdx = Mathf.Clamp(directionIdx, 0, 2);
+
+        return speedABS * direction[directionIdx];
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 메인 메뉴 UI 컨트롤러.
@@ -48,7 +49,9 @@ public class MenuController : MonoBehaviour
         GM.cmdWithPLC = false; // PLC 모드 비활성화
         Debug.Log("PLC mode disabled");
 
-        StartSimulation(); // 시뮬레이션 시작
+        // StartSimulation(); // 시뮬레이션 시작
+
+        SceneManager.LoadScene("ARMG");
     }
 
     /// <summary>
@@ -68,7 +71,7 @@ public class MenuController : MonoBehaviour
     public void StartSimulation()
     {
         gameObject.SetActive(false); // 현재 메뉴 숨김
-        btnExit.SetActive(true); // btnExit Active
+        // btnExit.SetActive(true); // btnExit Active
 
         // container 생성
         containerPreset.GetComponent<Container>().enabled = true;
