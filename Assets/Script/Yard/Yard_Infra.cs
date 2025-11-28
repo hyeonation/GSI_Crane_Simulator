@@ -11,7 +11,7 @@ public class Yard_Infra : MonoBehaviour
     List<Vector3> spawnedPositions = new List<Vector3>();
     [HideInInspector] public float Number_z_interval = 3.24f;
 
-    float start_val = GM.yard_start_val;
+    float start_val = 0;
     float x_interval = GM.yard_x_interval;
     float z_interval = GM.yard_z_interval;
 
@@ -39,13 +39,6 @@ public class Yard_Infra : MonoBehaviour
             spawnPosition += yardOffset;
             newObject.transform.position = spawnPosition; //오브젝트에 설정한 포지션 넣기
 
-            if (i > 6)
-            {
-                RectTransform rectTransform = newObject.GetComponent<RectTransform>(); // 숫자 두자리면 넓이 증가
-                Vector2 newSize = new Vector2(1.7f, NumberPrefab.GetComponent<RectTransform>().sizeDelta.y);
-                rectTransform.sizeDelta = newSize;
-            }
-
             newObject.name = $"{i}"; // 이름 설정
             newObject.transform.SetParent(folder.transform); //폴더에 저장
 
@@ -57,12 +50,12 @@ public class Yard_Infra : MonoBehaviour
         GameObject folder = GameObject.Find("Line"); //오브젝트 저장 폴더 지정
 
         int ij = 0;
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < GM.lengthRow; i++)
         {
-            for (int j = 0; j < 16; j++)
+            for (int j = 0; j < GM.lengthBay; j++)
             {
                 spawnPosition = new Vector3((i * x_interval) + start_val, 3.51f, (j * z_interval) + 7.75f);
-                spawnPosition += yardOffset;
+                // spawnPosition += yardOffset;
                 spawnedPositions.Add(spawnPosition);
                 GameObject newObject = Instantiate(Line_prefabs[0], spawnPosition, Quaternion.identity);
 

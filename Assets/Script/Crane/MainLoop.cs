@@ -8,12 +8,25 @@ public class MainLoop : MonoBehaviour
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
-    public KeyCode keyCode20ft, keyCode40ft, keyCode45ft, keyCodeTwlLock, keyCodeTwlUnlock;
+    KeyCode keyCode20ft, keyCode40ft, keyCode45ft, keyCodeTwlLock, keyCodeTwlUnlock;
 
     [SerializeField] private GameObject cranePrefab;
 
-    void Start()
+    void Awake()
     {
+        Debug.Log("Displays connected: " + Display.displays.Length);
+
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate();
+            Debug.Log("Display 1 Activated");
+        }
+        if (Display.displays.Length > 2)
+        {
+            Display.displays[2].Activate();
+            Debug.Log("Display 2 Activated");
+        }
+
         // init KeyCmd
         initKeyCmd();
 
@@ -60,6 +73,12 @@ public class MainLoop : MonoBehaviour
             {
                 Debug.Log("GM.listIP is null. Please check the GameManager settings.");
             }
+        }
+
+        else
+        {
+            // init var
+            GM.InitVar();
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 
 // GameManager, GameMaster
-public class GM : MonoBehaviour
+public static class GM
 {
     // command with PLC
     public static bool cmdWithPLC = false;
@@ -17,16 +17,9 @@ public class GM : MonoBehaviour
     }
 
     [Header("Crane Type")]
-    public CraneType craneTypeInput;
-    public static CraneType craneType;
-    public static string craneTypeStr;
+    public static CraneType craneType = CraneType.ARMG;
+    public static string craneTypeStr = "ARMG";
 
-    [Header("Crane Type")]
-    public short readDBNumInput;
-    public short readLengthInput;
-    public short writeDBNumInput;
-    public short writeStartIdxInput;
-    public short writeLengthInput;
 
     // static values
     public static short readDBNum;
@@ -34,11 +27,6 @@ public class GM : MonoBehaviour
     public static short writeDBNum;
     public static short writeStartIdx;
     public static short writeLength;
-
-    [Header("Container Stack info")]
-    public short rowMax = 5;
-    public short bayMax = 16;
-    public short tierMax = 6;
 
     public static short lengthRow = 9;
     public static short lengthBay = 16;
@@ -54,7 +42,6 @@ public class GM : MonoBehaviour
                                                     // 순서는? 무작위? listContainerID와 index만 일치시키면?
                                                     // containerStatus를 정의해야 한다. 용도는 무엇인가.
 
-    public const float yard_start_val = 2.63f;
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
@@ -79,48 +66,6 @@ public class GM : MonoBehaviour
         new Vector3(0, 0, 200),
         new Vector3(0, 0, 300),
     };
-
-    void Awake()
-    {
-        // update crane type
-        craneType = craneTypeInput;
-        readDBNum = readDBNumInput;
-        readLength = readLengthInput;
-        writeDBNum = writeDBNumInput;
-        writeStartIdx = writeStartIdxInput;
-        writeLength = writeLengthInput;
-
-        // determine crane type string
-        if (craneType == CraneType.ARTG) craneTypeStr = "ARTG";
-        else if (craneType == CraneType.ARMG) craneTypeStr = "ARMG";
-        else if (craneType == CraneType.QC) craneTypeStr = "QC";
-        else craneTypeStr = "";
-
-        // init
-        lengthRow = rowMax;
-        lengthBay = bayMax;
-        lengthTier = tierMax;
-
-        // init variables
-        InitVar();
-
-        // Application.targetFrameRate = 30;
-
-
-        Debug.Log("Displays connected: " + Display.displays.Length);
-
-        if (Display.displays.Length > 1)
-        {
-            Display.displays[1].Activate();
-            Debug.Log("Display 1 Activated");
-        }
-        if (Display.displays.Length > 2)
-        {
-            Display.displays[2].Activate();
-            Debug.Log("Display 2 Activated");
-        }
-
-    }
 
     public static void InitVar()
     {
@@ -158,26 +103,6 @@ public class GM : MonoBehaviour
         cmd45ft = new bool[nameCranes.Length];
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
-
-        // stack profile
-        stack_profile = new int[lengthRow + 2, lengthBay];  // WS, LS row 추가
-    }
-
-    public static void DestroyVar()
-    {
-        // Crane
-        GameObject crane = GameObject.Find("Crane");
-        for (int i = 0; i < crane.transform.childCount; i++)
-        {
-            Destroy(crane.transform.GetChild(i));
-        }
-
-        // // Truck
-        // GameObject truck = GameObject.Find("Truck");
-        // for (int i = 0; i < truck.transform.childCount; i++)
-        // {
-        //     Destroy(truck.transform.GetChild(i));
-        // }
     }
 
     // 디버깅용: byte[] → string 변환
@@ -190,6 +115,23 @@ public class GM : MonoBehaviour
         }
         return new string(chars);
     }
+
+    // public static void DestroyVar()
+    // {
+    //     // Crane
+    //     GameObject crane = GameObject.Find("Crane");
+    //     for (int i = 0; i < crane.transform.childCount; i++)
+    //     {
+    //         Destroy(crane.transform.GetChild(i));
+    //     }
+
+    //     // // Truck
+    //     // GameObject truck = GameObject.Find("Truck");
+    //     // for (int i = 0; i < truck.transform.childCount; i++)
+    //     // {
+    //     //     Destroy(truck.transform.GetChild(i));
+    //     // }
+    // }
 }
 
 // ----------------- 설정 데이터 모델 -----------------

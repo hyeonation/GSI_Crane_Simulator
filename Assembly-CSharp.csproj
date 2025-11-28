@@ -84,9 +84,11 @@
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\PlatformController.cs" />
     <Compile Include="Assets\Script\GM.cs" />
     <Compile Include="Assets\Script\Yard\Container.cs" />
+    <Compile Include="Assets\Script\Yard\Line.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
+    <Compile Include="Assets\Script\Yard\Number.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\Script\Crane\Drawing\DrawingARTG.cs" />

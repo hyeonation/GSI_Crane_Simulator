@@ -24,9 +24,9 @@ public class CommPLC
         short readDBNum = 1000,
         short readStartIdx = 0,
         short readLength = 36,
-        short writeDBNum = 1000,
-        short writeStartIdx = 46,
-        short writeLength = 218
+        short writeDBNum = 213,
+        short writeStartIdx = 0,
+        short writeLength = 301
         )
     {
         info.ip = ip;
@@ -44,7 +44,6 @@ public class CommPLC
 
     public void Connect()
     {
-
         // connect PLC
         plc = new Plc(CpuType.S71500, info.ip, info.rack, info.slot);
         plc.Open();

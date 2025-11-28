@@ -7,15 +7,14 @@ public class Container : MonoBehaviour
     //containers
     public GameObject[] prefabs;
 
-    float start_val, x_interval, y_interval, z_interval;
+    float x_interval, y_interval, z_interval;
     int num_containers;
 
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
 
-    void Awake()
+    void Start()
     {
-
         // init values
         init();
 
@@ -25,7 +24,6 @@ public class Container : MonoBehaviour
 
     void init()
     {
-        start_val = GM.yard_start_val;
         x_interval = GM.yard_x_interval;
         y_interval = GM.yard_y_interval;
         z_interval = GM.yard_z_interval;
@@ -42,6 +40,9 @@ public class Container : MonoBehaviour
         // stack profile 생성
         stack_profile_idx_max = row_max * bay_max;
         GM.list_stack_profile = new List<int[]>();
+
+        // stack profile
+        GM.stack_profile = new int[GM.lengthRow + 2, GM.lengthBay];  // WS, LS row 추가
     }
 
     // Container 만드는 방식 변경
@@ -151,9 +152,9 @@ public class Container : MonoBehaviour
         int i_tier = idx_pos[2];
 
         // 위치 배치
-        Vector3 spawnPosition = new Vector3((i_row * x_interval) + start_val,
-                                            (i_tier * y_interval) + y_interval / 2 + 0.1f,
-                                            (i_bay * z_interval) + 7.75f);
+        Vector3 spawnPosition = new Vector3(i_row * x_interval,
+                                            i_tier * y_interval,
+                                            i_bay * z_interval);
 
         // 부모인 Containers에 transform 맞춤
         newObject.transform.position = transform.position;      // 절대 좌표 이동
