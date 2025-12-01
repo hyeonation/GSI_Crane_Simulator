@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI; // Dropdown을 사용하기 위한 네임스페이스
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 public class MainLoopTOS : MonoBehaviour
 {
@@ -24,7 +25,8 @@ public class MainLoopTOS : MonoBehaviour
     public TMP_Text textApply;
 
     public GameObject containerBlock;
-    public Transform containersTemp;
+    public Transform containers;
+    [HideInInspector] ContainerInfoSO ctInfoSO;
     public GameObject[] containerPrefabs;
 
     public GameObject[] listTaskObj;
@@ -43,11 +45,11 @@ public class MainLoopTOS : MonoBehaviour
     Color colorActive = new(255f, 255f, 0f, 255f);
     Color colorDeactive = new(210f, 210f, 210f, 255f);
     Color colorNull = new(0f, 0f, 0f, 255f);
-    Transform[,] containerTr;
+    Transform[,] containerBlockTr;
 
     Transform btnSource, btnDestination;
     const int defaultIdx = -1;
-    int iRowSource = defaultIdx, iRowDestination = defaultIdx;
+    int iRowSource = defaultIdx;
     int iBaySource = defaultIdx, iBayDestination = defaultIdx;
 
     // task
@@ -112,7 +114,7 @@ public class MainLoopTOS : MonoBehaviour
 
         // containerBlock setting
         // 버튼마다 기능 부여
-        containerTr = new Transform[GM.lengthRow + 2, GM.lengthTier];   // row : += WS, LS 2개 추가
+        containerBlockTr = new Transform[GM.lengthRow + 2, GM.lengthTier];   // row : += WS, LS 2개 추가
         Transform row;
         int iRow = 0;     // init
         for (int i = 0; i < containerBlock.transform.childCount; i++)
@@ -135,7 +137,7 @@ public class MainLoopTOS : MonoBehaviour
                     containerBlockUnit.GetComponent<Button>().onClick.AddListener(() => OnBtnRow(containerBlockUnit));
 
                     // set containerTr
-                    containerTr[iRow, iTier++] = containerBlockUnit;
+                    containerBlockTr[iRow, iTier++] = containerBlockUnit;
                 }
             }
 
@@ -338,11 +340,11 @@ public class MainLoopTOS : MonoBehaviour
             {
                 // make GameObject
                 GameObject newObject = Container.mkRandomPrefab(containerPrefabs);
-                newObject.transform.SetParent(containersTemp);
+                newObject.transform.SetParent(containers);
 
                 // update data
                 iTier = 0;
-                int[] sp = { iRow, iBay, iTier, 0 };
+                int[] sp = { iRow, iBay, iTier };
                 GM.list_stack_profile.Add(sp);
                 GM.stack_profile[iRow, iBay] = 1;
             }
@@ -355,21 +357,10 @@ public class MainLoopTOS : MonoBehaviour
                 // delete GameObject
                 string containerIDFormat = btn.transform.parent.Find("Tier").GetChild(0).GetComponent<TMP_Text>().text;
                 string strContainerIDTemp = Regex.Replace(containerIDFormat, @"\s", "");
-                Destroy(containersTemp.Find(strContainerIDTemp).gameObject);
-
-                // find idx
-                int idxDelete = -1;
-                for (int i = 0; i < GM.listContainerID.Count; i++)
-                {
-                    string cnid = GM.ByteArrayToString(GM.listContainerID[i]);
-                    if (cnid == strContainerIDTemp)
-                    {
-                        idxDelete = i;
-                        break;
-                    }
-                }
+                int idxDelete = FindContainerIndex(strContainerIDTemp);     // find idx
 
                 // delete data
+                Destroy(containers.GetChild(idxDelete).gameObject);
                 GM.listContainerID.RemoveAt(idxDelete);
                 GM.list_stack_profile.RemoveAt(idxDelete);
                 GM.stack_profile[iRow, iBay] = 0;
@@ -378,6 +369,24 @@ public class MainLoopTOS : MonoBehaviour
             // update UI
             UpdateStackProfileUI();
         }
+    }
+
+    int FindContainerIndex(string strContainerID)
+    {
+        // find idx
+        string cnid;
+        int idx = -1;
+        for (int i = 0; i < GM.listContainerID.Count; i++)
+        {
+            cnid = GM.ByteArrayToString(GM.listContainerID[i]);
+            if (cnid == strContainerID)
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        return idx;
     }
 
     void OnBtnRow(Transform btn)
@@ -391,10 +400,10 @@ public class MainLoopTOS : MonoBehaviour
         // strContainerLoc
         string strContainerLoc = mkStrContainerLoc(strIRow, iBay, iTier);
 
-        // Normal state에서 Source 선택
+        //// Normal state에서 Source 선택
         if (stateUI == StateUI.Normal) UpdateSource(strIRow);
 
-        // SrcSelected에서 Destination 선택
+        //// SrcSelected에서 Destination 선택
         else if (stateUI == StateUI.SrcSelected)
         {
             // 같은 row, bay 눌렀으면 취소
@@ -407,10 +416,9 @@ public class MainLoopTOS : MonoBehaviour
                 if (iTier < GM.lengthTier - 1) UpdateDestination(strIRow);
         }
 
-        // Ready 상태에서 선택
+        //// Ready 상태에서 선택
         else if (stateUI == StateUI.Ready)
         {
-
             // tier 초과하지 않았을 때만
             // 한 층 더 쌓을 수 있을 때
             if (iTier < GM.lengthTier - 1)
@@ -454,13 +462,16 @@ public class MainLoopTOS : MonoBehaviour
         if (iTier >= 0)
         {
             // 해당 row의 최상단 Container 선택
-            btnSource = containerTr[iRow, iTier];
+            btnSource = containerBlockTr[iRow, iTier];
             btnSource.GetComponent<Image>().color = colorActive;    // active
 
             //////////////////////////
             // update data
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
             strContainerID = Regex.Replace(containerIDFormat, @"\s", "");
+            int cnidx = FindContainerIndex(strContainerID);     // find idx
+            ctInfoSO = containers.GetChild(cnidx).GetComponent<ContainerInfo>().feet;
+
             iRowSource = iRow;
             iBaySource = iBay;
             strSource = mkStrContainerLoc(strIRow, iBay, iTier);
@@ -480,12 +491,11 @@ public class MainLoopTOS : MonoBehaviour
         int iTier = GM.stack_profile[iRow, iBay];
 
         // 해당 row의 최상단 Container 한 칸 위 선택
-        btnDestination = containerTr[iRow, iTier];
+        btnDestination = containerBlockTr[iRow, iTier];
         btnDestination.GetComponent<Image>().color = colorActive;    // active
 
         //////////////////////////
         // update data
-        iRowDestination = iRow;
         iBayDestination = iBay;
         strDestination = mkStrContainerLoc(strIRow, iBay, iTier);
         stateUI = StateUI.Ready;
@@ -500,6 +510,7 @@ public class MainLoopTOS : MonoBehaviour
         iRowSource = defaultIdx;
         iBaySource = defaultIdx;
         strContainerID = defaultStrContainerID;
+        ctInfoSO = null;
         strSource = defaultStrSource;
         stateUI = StateUI.Normal;
 
@@ -523,7 +534,6 @@ public class MainLoopTOS : MonoBehaviour
         if (btnDestination && (iBayDestination == iBay)) btnDestination.GetComponent<Image>().color = colorNull;
 
         // update data
-        iRowDestination = defaultIdx;
         iBayDestination = defaultIdx;
         strDestination = defaultStrDestination;
         stateUI = StateUI.SrcSelected;
@@ -538,18 +548,19 @@ public class MainLoopTOS : MonoBehaviour
     void OnBtnApply()
     {
         // generate Task
-        TaskInfo taskInfo = new();
-
-        // set task data
-        taskInfo.jobID = jobID++;
-        taskInfo.strCrane = strCrane;
-        taskInfo.strContainerID = strContainerID;
-        taskInfo.strSource = strSource;
-        taskInfo.strDestination = strDestination;
-        taskInfo.registerTime = DateTime.Now;
-
+        TaskInfo taskInfo = new()
+        {
+            // set task data
+            jobID = jobID++,
+            strCrane = strCrane,
+            strContainerID = strContainerID,
+            strSource = strSource,
+            strDestination = strDestination,
+            registerTime = DateTime.Now,
+            ctInfoSO = ctInfoSO,
+            block = 21    // block 8G
+        };
         taskInfo.getJobType();
-        taskInfo.block = 21;    // block 8G
 
         // adding task
         listTaskInfo = listTaskInfo.Prepend(taskInfo).ToList();
@@ -565,12 +576,12 @@ public class MainLoopTOS : MonoBehaviour
         // init data
         for (int iRow = 0; iRow < GM.lengthRow; iRow++)
         {
-            for (int iTier = 0; iTier < containerTr.GetLength(1); iTier++)
-                deactiveContainer(containerTr[iRow, iTier]);
+            for (int iTier = 0; iTier < containerBlockTr.GetLength(1); iTier++)
+                deactiveContainer(containerBlockTr[iRow, iTier]);
         }
         // WS, LS 별도 적용
-        deactiveContainer(containerTr[dictRow["WS"], 0]);
-        deactiveContainer(containerTr[dictRow["LS"], 0]);
+        deactiveContainer(containerBlockTr[dictRow["WS"], 0]);
+        deactiveContainer(containerBlockTr[dictRow["LS"], 0]);
 
         //// Enabled
 
@@ -590,7 +601,7 @@ public class MainLoopTOS : MonoBehaviour
             if (iBayNow == iBay)
             {
                 string ctID = GM.ByteArrayToString(GM.listContainerID[i]);
-                enabledContainer(containerTr[iRow, iTier], ctID);
+                enabledContainer(containerBlockTr[iRow, iTier], ctID);
             }
         }
 
@@ -639,6 +650,7 @@ public class TaskInfo
 
     public string strCrane;
     public string strContainerID;
+    public ContainerInfoSO ctInfoSO;
     public string strSource;
     public string strDestination;
 

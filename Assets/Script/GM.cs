@@ -35,12 +35,11 @@ public static class GM
     public static int[,] stack_profile;     // SPSS 역할. [row, bay] = tier(stack count)
                                             // TOS Container 선택 시 해당 row 최상단 접근 위해
                                             // Yard Overview 그릴 때도 사용 가능
-    public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier, containerStatus]
+    public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier]
                                                     // Container ID로 idx 접근하여 추출
                                                     // Scene에서 row, bay, tier 파악 용이.
-                                                    // TOS에서 Bay 별 Container 그리기 용이.    
+                                                    // TOS에서 Bay 별 Container 그리기 용이.
                                                     // 순서는? 무작위? listContainerID와 index만 일치시키면?
-                                                    // containerStatus를 정의해야 한다. 용도는 무엇인가.
 
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;

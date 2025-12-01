@@ -80,7 +80,7 @@ public class Container : MonoBehaviour
                 {
                     // list_stack_profile
                     i_tier = tier;
-                    int[] sp = { i_row, i_bay, i_tier, 0 };     // 마지막 0은 container state. None 의미.
+                    int[] sp = { i_row, i_bay, i_tier };     // 마지막 0은 container state. None 의미.
                     GM.list_stack_profile.Add(sp);
 
                     // 컨테이너 개수 추가
@@ -111,7 +111,7 @@ public class Container : MonoBehaviour
 
                     for (int i_tier = 1; i_tier <= tier_max; i_tier++)
                     {
-                        int[] sp = { i_row, i_bay, i_tier, 0 };
+                        int[] sp = { i_row, i_bay, i_tier };
                         GM.list_stack_profile.Add(sp);
                     }
                 }
