@@ -52,6 +52,7 @@ public class MainLoopTOS : MonoBehaviour
 
     // task
     List<TaskInfo> listTaskInfo = new();
+    int jobID = 0;
 
 
     readonly Dictionary<string, int> dictRow = new()
@@ -540,11 +541,15 @@ public class MainLoopTOS : MonoBehaviour
         TaskInfo taskInfo = new();
 
         // set task data
+        taskInfo.jobID = jobID++;
         taskInfo.strCrane = strCrane;
         taskInfo.strContainerID = strContainerID;
         taskInfo.strSource = strSource;
         taskInfo.strDestination = strDestination;
         taskInfo.registerTime = DateTime.Now;
+
+        taskInfo.getJobType();
+        taskInfo.block = 21;    // block 8G
 
         // adding task
         listTaskInfo = listTaskInfo.Prepend(taskInfo).ToList();
@@ -628,6 +633,10 @@ public class MainLoopTOS : MonoBehaviour
 public enum StateTask { Done, Working, Standby }
 public class TaskInfo
 {
+    public int jobID;
+    public int jobType;
+    public int block;   // Block : 8G = 21
+
     public string strCrane;
     public string strContainerID;
     public string strSource;
@@ -643,9 +652,21 @@ public class TaskInfo
     {
         // make text structure
         string content = $" {GM.TimeToString(registerTime)}\n";
-        content += $" {strCrane}\n #{strContainerID}\n";
+        content += $" {strCrane}, Job ID: {jobID}\n #{strContainerID}\n";
         content += $" {strSource} -> {strDestination}";
 
         return content;
+    }
+
+    public void getJobType()
+    {
+        // 1: Shuffling(Yard -> Yard)
+        // 2: GateIn(LS or WS -> Yard), 3: GateOut(Yard -> LS ow WS),
+        // 4: DischargeIn, 5: LoadOut, 6: Move, 7: Park , 8: InternalMove
+        if (strSource.Contains("S")) jobType = 2;
+        else if (strDestination.Contains("S")) jobType = 3;
+        else jobType = 1;
+
+        Debug.Log($"Job Type : {jobType}");
     }
 }

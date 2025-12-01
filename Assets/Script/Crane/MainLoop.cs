@@ -14,8 +14,8 @@ public class MainLoop : MonoBehaviour
 
     void Awake()
     {
+        // Display Activated
         Debug.Log("Displays connected: " + Display.displays.Length);
-
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
@@ -30,24 +30,21 @@ public class MainLoop : MonoBehaviour
         // init KeyCmd
         initKeyCmd();
 
+        // InitCraneSpecVar
+        InitCraneSpecVar();
+
         // Using PLC data
         if (GM.cmdWithPLC)
         {
-
             //// IP 개수만큼 크레인 생성
             // i = 1부터 시작. 기존 크레인은 유지.
-            GameObject crane;
-
-            crane = GameObject.Find("Crane");
+            GameObject crane = GameObject.Find("Crane");
             for (int i = 1; i < GM.settingParams.listIP.Count; i++)
             {
                 GameObject craneObject = Instantiate(cranePrefab, GM.cranePOS[i], Quaternion.identity);
                 craneObject.name = $"{GM.craneTypeStr}{i + 1}";
                 craneObject.transform.SetParent(crane.transform);
             }
-
-            // init var
-            GM.InitVar();
 
             //// PLC Connect
             // Check if listIP is not null
@@ -75,11 +72,9 @@ public class MainLoop : MonoBehaviour
             }
         }
 
-        else
-        {
-            // init var
-            GM.InitVar();
-        }
+        //// 생성된 Crane 대수만큼 배열크기 설정
+        // init var
+        GM.InitVar();
     }
 
     void Update()
@@ -102,10 +97,13 @@ public class MainLoop : MonoBehaviour
         {
             CmdKeyboard();
         }
+
         // 시간 측정
         // Time.deltaTime: 프레임 간 시간 간격
         // Debug.Log($"loop time = {Time.deltaTime} sec");
     }
+
+    public virtual void InitCraneSpecVar() { }
 
     public virtual void ReadPLCdata(int iCrane)
     {
@@ -229,8 +227,7 @@ public class KeyCmd
     float[] direction = new float[3] { -1f, 0f, 1f };
     int directionIdx = 1; // 0: BWD, 1: Stop, 2: FWD
 
-    KeyCode keyFWD;
-    KeyCode keyBWD;
+    KeyCode keyFWD, keyBWD;
 
     public KeyCmd(float speedABS, KeyCode keyFWD, KeyCode keyBWD)
     {

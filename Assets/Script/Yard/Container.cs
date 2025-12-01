@@ -13,14 +13,7 @@ public class Container : MonoBehaviour
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
 
-    void Start()
-    {
-        // init values
-        init();
-
-        // 컨테이너 생성
-        mkContainers();
-    }
+    void Awake() => init();
 
     void init()
     {
@@ -43,6 +36,9 @@ public class Container : MonoBehaviour
 
         // stack profile
         GM.stack_profile = new int[GM.lengthRow + 2, GM.lengthBay];  // WS, LS row 추가
+
+        // 컨테이너 생성
+        mkContainers();
     }
 
     // Container 만드는 방식 변경

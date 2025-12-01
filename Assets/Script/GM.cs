@@ -51,6 +51,8 @@ public static class GM
     public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
 
+    public static ContainerInfoSO info40ft = new();
+
     // settings
     public static SettingParams settingParams = new();
 
@@ -69,12 +71,8 @@ public static class GM
 
     public static void InitVar()
     {
-        // temp
-        GameObject crane;
-
         // Crane
-        craneTypeStr = "Crane";
-        crane = GameObject.Find(craneTypeStr);
+        GameObject crane = GameObject.Find("Crane");
         nameCranes = new string[crane.transform.childCount];
         for (int i = 0; i < crane.transform.childCount; i++)
         {
