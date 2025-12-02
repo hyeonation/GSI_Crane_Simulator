@@ -26,7 +26,7 @@ public class MainLoopTOS : MonoBehaviour
 
     public GameObject containerBlock;
     public Transform containers;
-    [HideInInspector] ContainerInfoSO ctInfoSO;
+    [HideInInspector] ContainerInfoSO cntrInfoSO;
     public GameObject[] containerPrefabs;
 
     public GameObject[] listTaskObj;
@@ -49,12 +49,12 @@ public class MainLoopTOS : MonoBehaviour
 
     Transform btnSource, btnDestination;
     const int defaultIdx = -1;
-    int iRowSource = defaultIdx;
-    int iBaySource = defaultIdx, iBayDestination = defaultIdx;
+    int iRowSource = defaultIdx,
+    iBaySource = defaultIdx,
+    iRowDestination = defaultIdx,
+    iBayDestination = defaultIdx;
 
-    // task
-    List<TaskInfo> listTaskInfo = new();
-    int jobID = 0;
+    short jobID = 0;
 
 
     readonly Dictionary<string, int> dictRow = new()
@@ -218,9 +218,9 @@ public class MainLoopTOS : MonoBehaviour
 
         // add task data
         // loop count가 taskObject 개수 초과하지 않는 선에서
-        int loopCount = Math.Clamp(listTaskInfo.Count, 0, listTaskObj.Length);
+        int loopCount = Math.Clamp(GM.listTaskInfo.Count, 0, listTaskObj.Length);
         for (int i = 0; i < loopCount; i++)
-            GetTaskContent(i).text = listTaskInfo[i].getContent();
+            GetTaskContent(i).text = GM.listTaskInfo[i].getContent();
     }
 
     TMP_Text GetTaskContent(int i)
@@ -315,7 +315,7 @@ public class MainLoopTOS : MonoBehaviour
         try
         {
             // delete task
-            listTaskInfo.RemoveAt(idx);
+            GM.listTaskInfo.RemoveAt(idx);
             RefreshTaskList();
         }
         catch
@@ -357,7 +357,7 @@ public class MainLoopTOS : MonoBehaviour
                 // delete GameObject
                 string containerIDFormat = btn.transform.parent.Find("Tier").GetChild(0).GetComponent<TMP_Text>().text;
                 string strContainerIDTemp = Regex.Replace(containerIDFormat, @"\s", "");
-                int idxDelete = FindContainerIndex(strContainerIDTemp);     // find idx
+                int idxDelete = GM.FindContainerIndex(strContainerIDTemp);     // find idx
 
                 // delete data
                 Destroy(containers.GetChild(idxDelete).gameObject);
@@ -371,23 +371,6 @@ public class MainLoopTOS : MonoBehaviour
         }
     }
 
-    int FindContainerIndex(string strContainerID)
-    {
-        // find idx
-        string cnid;
-        int idx = -1;
-        for (int i = 0; i < GM.listContainerID.Count; i++)
-        {
-            cnid = GM.ByteArrayToString(GM.listContainerID[i]);
-            if (cnid == strContainerID)
-            {
-                idx = i;
-                break;
-            }
-        }
-
-        return idx;
-    }
 
     void OnBtnRow(Transform btn)
     {
@@ -468,9 +451,9 @@ public class MainLoopTOS : MonoBehaviour
             //////////////////////////
             // update data
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
-            strContainerID = Regex.Replace(containerIDFormat, @"\s", "");
-            int cnidx = FindContainerIndex(strContainerID);     // find idx
-            ctInfoSO = containers.GetChild(cnidx).GetComponent<ContainerInfo>().feet;
+            strContainerID = Regex.Replace(containerIDFormat, @"\s", "");       // 공백 제거
+            int cnidx = GM.FindContainerIndex(strContainerID);     // find idx
+            cntrInfoSO = containers.GetChild(cnidx).GetComponent<ContainerInfo>().feet;
 
             iRowSource = iRow;
             iBaySource = iBay;
@@ -496,6 +479,7 @@ public class MainLoopTOS : MonoBehaviour
 
         //////////////////////////
         // update data
+        iRowDestination = iRow;
         iBayDestination = iBay;
         strDestination = mkStrContainerLoc(strIRow, iBay, iTier);
         stateUI = StateUI.Ready;
@@ -510,7 +494,7 @@ public class MainLoopTOS : MonoBehaviour
         iRowSource = defaultIdx;
         iBaySource = defaultIdx;
         strContainerID = defaultStrContainerID;
-        ctInfoSO = null;
+        cntrInfoSO = null;
         strSource = defaultStrSource;
         stateUI = StateUI.Normal;
 
@@ -534,6 +518,7 @@ public class MainLoopTOS : MonoBehaviour
         if (btnDestination && (iBayDestination == iBay)) btnDestination.GetComponent<Image>().color = colorNull;
 
         // update data
+        iRowDestination = defaultIdx;
         iBayDestination = defaultIdx;
         strDestination = defaultStrDestination;
         stateUI = StateUI.SrcSelected;
@@ -547,23 +532,42 @@ public class MainLoopTOS : MonoBehaviour
 
     void OnBtnApply()
     {
+        ContainerPosition srcPos, dstPos;
+
+        // source position
+        srcPos.block = 21;    // block 8G
+        srcPos.row = (short)iRowSource;
+        srcPos.bay = (short)iBaySource;
+        srcPos.tier = (short)GM.stack_profile[iRowSource, iBaySource];
+
+        // destination position
+        dstPos.block = 21;    // block 8G
+        dstPos.row = (short)iRowDestination;
+        dstPos.bay = (short)iBayDestination;
+        dstPos.tier = (short)(GM.stack_profile[iRowDestination, iBayDestination] + 1);
+
+        // container ID
+        cntrInfoSO.strContainerID = strContainerID;
+
         // generate Task
         TaskInfo taskInfo = new()
         {
             // set task data
             jobID = jobID++,
             strCrane = strCrane,
-            strContainerID = strContainerID,
+
             strSource = strSource,
+            srcPos = srcPos,
             strDestination = strDestination,
+            dstPos = dstPos,
+
             registerTime = DateTime.Now,
-            ctInfoSO = ctInfoSO,
-            block = 21    // block 8G
+            cntrInfoSO = cntrInfoSO,
         };
         taskInfo.getJobType();
 
         // adding task
-        listTaskInfo = listTaskInfo.Prepend(taskInfo).ToList();
+        GM.listTaskInfo = GM.listTaskInfo.Prepend(taskInfo).ToList();
 
         // initialization
         Reset();
@@ -644,15 +648,17 @@ public class MainLoopTOS : MonoBehaviour
 public enum StateTask { Done, Working, Standby }
 public class TaskInfo
 {
-    public int jobID;
-    public int jobType;
-    public int block;   // Block : 8G = 21
+    public short jobID;
+    public short jobType;
 
     public string strCrane;
-    public string strContainerID;
-    public ContainerInfoSO ctInfoSO;
+    public ContainerInfoSO cntrInfoSO;
+
     public string strSource;
+    public ContainerPosition srcPos;
+
     public string strDestination;
+    public ContainerPosition dstPos;
 
     public StateTask stateTask = StateTask.Standby;
     public DateTime registerTime;
@@ -664,7 +670,7 @@ public class TaskInfo
     {
         // make text structure
         string content = $" {GM.TimeToString(registerTime)}\n";
-        content += $" {strCrane}, Job ID: {jobID}\n #{strContainerID}\n";
+        content += $" {strCrane}, Job ID: {jobID}\n #{cntrInfoSO.strContainerID}\n";
         content += $" {strSource} -> {strDestination}";
 
         return content;
@@ -681,4 +687,12 @@ public class TaskInfo
 
         Debug.Log($"Job Type : {jobType}");
     }
+}
+
+public struct ContainerPosition
+{
+    public short block;    // Block : 8G = 21
+    public short row;
+    public short bay;
+    public short tier;
 }

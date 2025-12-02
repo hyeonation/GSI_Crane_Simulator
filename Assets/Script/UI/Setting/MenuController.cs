@@ -32,7 +32,7 @@ public class MenuController : MonoBehaviour
         if (btnPLC) btnPLC.onClick.AddListener(OnPLCMode);
         if (btnSetting) btnSetting.onClick.AddListener(OnSetting);
         if (btnQuit) btnQuit.onClick.AddListener(OnQuit);
-        if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
+        // if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
 
         // load setting data
         settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
@@ -49,9 +49,7 @@ public class MenuController : MonoBehaviour
         GM.cmdWithPLC = false; // PLC 모드 비활성화
         Debug.Log("PLC mode disabled");
 
-        // StartSimulation(); // 시뮬레이션 시작
-
-        SceneManager.LoadScene("ARMG");
+        StartSimulation(); // 시뮬레이션 시작
     }
 
     /// <summary>
@@ -74,14 +72,19 @@ public class MenuController : MonoBehaviour
         // btnExit.SetActive(true); // btnExit Active
 
         // container 생성
-        containerPreset.GetComponent<Container>().enabled = true;
+        // containerPreset.GetComponent<Container>().enabled = true;
 
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
         if (GM.craneType == GM.CraneType.ARTG)
             gameManager.GetComponent<MainLoopARTG>().enabled = true;
+
         else if (GM.craneType == GM.CraneType.ARMG)
+        {
             gameManager.GetComponent<MainLoopARMG>().enabled = true;
+            SceneManager.LoadScene("ARMG");
+        }
+
         else if (GM.craneType == GM.CraneType.QC)
             gameManager.GetComponent<MainLoopQC>().enabled = true;
     }

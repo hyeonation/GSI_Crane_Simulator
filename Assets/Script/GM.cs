@@ -6,7 +6,7 @@ using System;
 public static class GM
 {
     // command with PLC
-    public static bool cmdWithPLC = false;
+    public static bool cmdWithPLC = true;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
     public enum CraneType
@@ -40,6 +40,8 @@ public static class GM
                                                     // Scene에서 row, bay, tier 파악 용이.
                                                     // TOS에서 Bay 별 Container 그리기 용이.
                                                     // 순서는? 무작위? listContainerID와 index만 일치시키면?
+                                                    // task
+    public static List<TaskInfo> listTaskInfo = new();
 
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
@@ -113,6 +115,23 @@ public static class GM
         return new string(chars);
     }
 
+    public static int FindContainerIndex(string strContainerID)
+    {
+        // find idx
+        string cnid;
+        int idx = -1;
+        for (int i = 0; i < listContainerID.Count; i++)
+        {
+            cnid = ByteArrayToString(listContainerID[i]);
+            if (cnid == strContainerID)
+            {
+                idx = i;
+                break;
+            }
+        }
+        return idx;
+    }
+
     // public static void DestroyVar()
     // {
     //     // Crane
@@ -136,7 +155,7 @@ public static class GM
 // data load, save 용이하도록 structure로 정의
 public class SettingParams
 {
-    public List<string> listIP = new() { "192.168.100.101" };   // 기본 IP 주소. 최소 1개 이상.
+    public List<string> listIP = new() { "192.168.100.80" };   // 기본 IP 주소. 최소 1개 이상.
     public float keyGantrySpeed = 0.5f;
     public float keyTrolleySpeed = 0.5f;
     public float keySpreaderSpeed = 0.25f;
