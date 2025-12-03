@@ -71,12 +71,14 @@ public class MainLoopARMG : MainLoop
 
         // bay
         // x10 Converting
-        plc[iCrane].WriteShort((short)(cntrPos.bay * 10), startIdx);
+        short convBay = (short)(cntrPos.bay * 10);
+        plc[iCrane].WriteShort(convBay, startIdx);
         startIdx += shortLength;
 
         // row
         // x10 Converting
-        plc[iCrane].WriteShort((short)(cntrPos.row * 10), startIdx);
+        short convRow = (short)((cntrPos.row + 1) * 10);
+        plc[iCrane].WriteShort(convRow, startIdx);
         startIdx += shortLength;
 
         // tier
@@ -88,8 +90,7 @@ public class MainLoopARMG : MainLoop
         startIdx += blockMapLength * cntrPos.row;
 
         // row num
-        // Row, Bay 는 *10 으로 Converting
-        plc[iCrane].WriteShort(cntrPos.row, startIdx);
+        plc[iCrane].WriteShort(convRow, startIdx);
         startIdx += shortLength;
 
         // tier num

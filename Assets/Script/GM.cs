@@ -6,7 +6,7 @@ using System;
 public static class GM
 {
     // command with PLC
-    public static bool cmdWithPLC = true;
+    public static bool cmdWithPLC = false;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
     public enum CraneType
