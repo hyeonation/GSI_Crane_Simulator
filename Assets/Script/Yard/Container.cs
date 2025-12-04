@@ -23,19 +23,19 @@ public class Container : MonoBehaviour
         num_containers = GM.settingParams.yardContainerNumberEA;
 
         // load data
-        row_max = GM.lengthRow;
-        bay_max = GM.lengthBay;
-        tier_max = GM.lengthTier;
+        row_max = GM.stackProfile.lengthRow;
+        bay_max = GM.stackProfile.lengthBay;
+        tier_max = GM.stackProfile.lengthTier;
 
         // 컨테이너 최대 개수 계산
         num_containers_max = row_max * bay_max * tier_max;
 
         // stack profile 생성
         stack_profile_idx_max = row_max * bay_max;
-        GM.list_stack_profile = new List<int[]>();
+        GM.stackProfile.listPos = new List<int[]>();
 
         // stack profile
-        GM.stack_profile = new int[GM.lengthRow + 2, GM.lengthBay];  // WS, LS row 추가
+        GM.stackProfile.arrTier = new int[GM.stackProfile.lengthRow + 2, GM.stackProfile.lengthBay];  // WS, LS row 추가
 
         // 컨테이너 생성
         mkContainers();
@@ -73,18 +73,18 @@ public class Container : MonoBehaviour
                 // random row, bay 추출
                 i_row = idx % row_max;
                 i_bay = idx / row_max;
-                tier = GM.stack_profile[i_row, i_bay];
+                tier = GM.stackProfile.arrTier[i_row, i_bay];
 
                 // tier 최대 아니면 추가
                 if (tier < tier_max)
                 {
                     // list_stack_profile
                     i_tier = tier;
-                    int[] sp = { i_row, i_bay, i_tier };     // 마지막 0은 container state. None 의미.
-                    GM.list_stack_profile.Add(sp);
+                    int[] sp = { i_row, i_bay, i_tier };
+                    GM.stackProfile.listPos.Add(sp);
 
                     // 컨테이너 개수 추가
-                    GM.stack_profile[i_row, i_bay] = ++tier;
+                    GM.stackProfile.arrTier[i_row, i_bay] = ++tier;
                     num_containers_tmp++;
                 }
 
@@ -107,12 +107,12 @@ public class Container : MonoBehaviour
             {
                 for (int i_bay = 0; i_bay < bay_max; i_bay++)
                 {
-                    GM.stack_profile[i_row, i_bay] = tier_max;
+                    GM.stackProfile.arrTier[i_row, i_bay] = tier_max;
 
                     for (int i_tier = 1; i_tier <= tier_max; i_tier++)
                     {
                         int[] sp = { i_row, i_bay, i_tier };
-                        GM.list_stack_profile.Add(sp);
+                        GM.stackProfile.listPos.Add(sp);
                     }
                 }
             }
@@ -123,16 +123,16 @@ public class Container : MonoBehaviour
         int random_val;
         for (int i = 0; i < num_containers; i++)
         {
-            tmp = GM.list_stack_profile[i];
+            tmp = GM.stackProfile.listPos[i];
             random_val = Random.Range(0, num_containers);
-            GM.list_stack_profile[i] = GM.list_stack_profile[random_val];
-            GM.list_stack_profile[random_val] = tmp;
+            GM.stackProfile.listPos[i] = GM.stackProfile.listPos[random_val];
+            GM.stackProfile.listPos[random_val] = tmp;
         }
 
         // make containers
         for (int i = 0; i < num_containers; i++)
         {
-            placementContainer(GM.list_stack_profile[i]);
+            placementContainer(GM.stackProfile.listPos[i]);
         }
     }
 
@@ -166,7 +166,7 @@ public class Container : MonoBehaviour
 
         // Attaching a container ID
         byte[] containerIDByteArr = mkContainerID();                // 랜덤 ID 생성
-        GM.listContainerID.Add(containerIDByteArr);                    // ID 저장
+        GM.stackProfile.listID.Add(containerIDByteArr);                    // ID 저장
         newObject.name = GM.ByteArrayToString(containerIDByteArr);     // 이름 설정
 
         return newObject;

@@ -21,9 +21,9 @@ public class Line : MonoBehaviour
     void SpawnLines()
     {
         int ij = 0;
-        for (int i = 0; i < GM.lengthRow; i++)
+        for (int i = 0; i < GM.stackProfile.lengthRow; i++)
         {
-            for (int j = 0; j < GM.lengthBay; j++)
+            for (int j = 0; j < GM.stackProfile.lengthBay; j++)
             {
                 Vector3 spawnPosition = new Vector3(i * x_interval, 0, j * z_interval);                 // position
                 spawnPosition += transform.position;                                                    // Offset

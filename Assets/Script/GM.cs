@@ -28,19 +28,7 @@ public static class GM
     public static short writeStartIdx;
     public static short writeLength;
 
-    public static short lengthRow = 9;
-    public static short lengthBay = 16;
-    public static short lengthTier = 6;
-    public static List<byte[]> listContainerID = new();
-    public static int[,] stack_profile;     // SPSS 역할. [row, bay] = tier(stack count)
-                                            // TOS Container 선택 시 해당 row 최상단 접근 위해
-                                            // Yard Overview 그릴 때도 사용 가능
-    public static List<int[]> list_stack_profile;   // [i_row, i_bay, i_tier]
-                                                    // Container ID로 idx 접근하여 추출
-                                                    // Scene에서 row, bay, tier 파악 용이.
-                                                    // TOS에서 Bay 별 Container 그리기 용이.
-                                                    // 순서는? 무작위? listContainerID와 index만 일치시키면?
-                                                    // task
+    public static StackProfile stackProfile = new();
     public static List<TaskInfo> listTaskInfo = new();
 
     public const float yard_x_interval = 2.840f;
@@ -120,9 +108,9 @@ public static class GM
         // find idx
         string cnid;
         int idx = -1;
-        for (int i = 0; i < listContainerID.Count; i++)
+        for (int i = 0; i < stackProfile.listID.Count; i++)
         {
-            cnid = ByteArrayToString(listContainerID[i]);
+            cnid = ByteArrayToString(stackProfile.listID[i]);
             if (cnid == strContainerID)
             {
                 idx = i;
@@ -168,4 +156,23 @@ public class SettingParams
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
     public int yardContainerNumberEA = 400;
+}
+
+
+// Stack profile 일괄 관리하기 위해 class 정의
+public class StackProfile
+{
+    public short lengthRow = 9;
+    public short lengthBay = 16;
+    public short lengthTier = 6;
+    public List<byte[]> listID = new();
+    public int[,] arrTier;      // SPSS 역할. [row, bay] = tier(stack count)
+                                // TOS Container 선택 시 해당 row 최상단 접근 위해
+                                // Yard Overview 그릴 때도 사용 가능
+    public List<int[]> listPos;     // [i_row, i_bay, i_tier]
+                                    // Container ID로 idx 접근하여 추출
+                                    // Scene에서 row, bay, tier 파악 용이.
+                                    // TOS에서 Bay 별 Container 그리기 용이.
+                                    // 순서는? 무작위? listContainerID와 index만 일치시키면?
+                                    // task
 }

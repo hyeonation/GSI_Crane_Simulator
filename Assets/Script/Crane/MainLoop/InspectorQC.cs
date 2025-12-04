@@ -562,13 +562,13 @@ public struct SpssSv
 [Serializable]
 public struct SpssPv
 {
-    public StackProfile stackProfile;
+    public Stack_Profile stackProfile;
     public SpssPvTarget target;
     public SpssAntiCollision anticollision;
 }
 
 [Serializable]
-public class StackProfile
+public class Stack_Profile
 {
     public float[] apronHeight = new float[12];
     public float[] vesselHeight = new float[25];

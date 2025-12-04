@@ -114,7 +114,8 @@ public class MainLoopTOS : MonoBehaviour
 
         // containerBlock setting
         // 버튼마다 기능 부여
-        containerBlockTr = new Transform[GM.lengthRow + 2, GM.lengthTier];   // row : += WS, LS 2개 추가
+        containerBlockTr = new Transform[GM.stackProfile.lengthRow + 2,     // row : += WS, LS 2개 추가
+                                         GM.stackProfile.lengthTier];
         Transform row;
         int iRow = 0;     // init
         for (int i = 0; i < containerBlock.transform.childCount; i++)
@@ -186,7 +187,7 @@ public class MainLoopTOS : MonoBehaviour
         /// Bay
         // 드롭다운 옵션 목록을 생성합니다
         options = new List<Dropdown.OptionData>();
-        for (int i = 0; i < GM.lengthBay; i++)
+        for (int i = 0; i < GM.stackProfile.lengthBay; i++)
         {
             options.Add(new Dropdown.OptionData($"#{i}"));
         }
@@ -333,7 +334,7 @@ public class MainLoopTOS : MonoBehaviour
             string strIRow = btn.transform.parent.name;  // 부모 이름 접근. Row        
             int iRow = dictRow[strIRow];
             int iBay = DropdownInputBay.value;
-            int iTier = GM.stack_profile[iRow, iBay] - 1;   // iTier = Tier - 1
+            int iTier = GM.stackProfile.arrTier[iRow, iBay] - 1;   // iTier = Tier - 1
 
             // Container 없으면 추가
             if (iTier < 0)
@@ -345,8 +346,8 @@ public class MainLoopTOS : MonoBehaviour
                 // update data
                 iTier = 0;
                 int[] sp = { iRow, iBay, iTier };
-                GM.list_stack_profile.Add(sp);
-                GM.stack_profile[iRow, iBay] = 1;
+                GM.stackProfile.listPos.Add(sp);
+                GM.stackProfile.arrTier[iRow, iBay] = 1;
             }
 
             // Container 있으면 삭제
@@ -361,9 +362,9 @@ public class MainLoopTOS : MonoBehaviour
 
                 // delete data
                 Destroy(containers.GetChild(idxDelete).gameObject);
-                GM.listContainerID.RemoveAt(idxDelete);
-                GM.list_stack_profile.RemoveAt(idxDelete);
-                GM.stack_profile[iRow, iBay] = 0;
+                GM.stackProfile.listID.RemoveAt(idxDelete);
+                GM.stackProfile.listPos.RemoveAt(idxDelete);
+                GM.stackProfile.arrTier[iRow, iBay] = 0;
             }
 
             // update UI
@@ -378,7 +379,7 @@ public class MainLoopTOS : MonoBehaviour
         string strIRow = btn.transform.parent.name;  // 부모 이름 접근. Row
         int iRow = dictRow[strIRow];
         int iBay = DropdownInputBay.value;
-        int iTier = GM.stack_profile[iRow, iBay] - 1;   // iTier = Tier - 1
+        int iTier = GM.stackProfile.arrTier[iRow, iBay] - 1;   // iTier = Tier - 1
 
         // strContainerLoc
         string strContainerLoc = mkStrContainerLoc(strIRow, iBay, iTier);
@@ -396,7 +397,7 @@ public class MainLoopTOS : MonoBehaviour
             // 준비 완료
             // tier 초과하지 않았을 때만
             else
-                if (iTier < GM.lengthTier - 1) UpdateDestination(strIRow);
+                if (iTier < GM.stackProfile.lengthTier - 1) UpdateDestination(strIRow);
         }
 
         //// Ready 상태에서 선택
@@ -404,7 +405,7 @@ public class MainLoopTOS : MonoBehaviour
         {
             // tier 초과하지 않았을 때만
             // 한 층 더 쌓을 수 있을 때
-            if (iTier < GM.lengthTier - 1)
+            if (iTier < GM.stackProfile.lengthTier - 1)
             {
                 // iTier = iTier + 1
                 strContainerLoc = mkStrContainerLoc(strIRow, iBay, ++iTier);
@@ -439,7 +440,7 @@ public class MainLoopTOS : MonoBehaviour
         int iBay = DropdownInputBay.value;
 
         // iTier = Tier - 1
-        int iTier = GM.stack_profile[iRow, iBay] - 1;
+        int iTier = GM.stackProfile.arrTier[iRow, iBay] - 1;
 
         // not empty row
         if (iTier >= 0)
@@ -471,7 +472,7 @@ public class MainLoopTOS : MonoBehaviour
         // iTier = Tier - 1
         // Destination은 한층 더 높은 값으로 해야 하므로 + 1
         // iTier = Tier - 1 (+ 1) = Tier
-        int iTier = GM.stack_profile[iRow, iBay];
+        int iTier = GM.stackProfile.arrTier[iRow, iBay];
 
         // 해당 row의 최상단 Container 한 칸 위 선택
         btnDestination = containerBlockTr[iRow, iTier];
@@ -538,13 +539,13 @@ public class MainLoopTOS : MonoBehaviour
         srcPos.block = 21;    // block 8G
         srcPos.row = (short)iRowSource;
         srcPos.bay = (short)iBaySource;
-        srcPos.tier = (short)GM.stack_profile[iRowSource, iBaySource];
+        srcPos.tier = (short)GM.stackProfile.arrTier[iRowSource, iBaySource];
 
         // destination position
         dstPos.block = 21;    // block 8G
         dstPos.row = (short)iRowDestination;
         dstPos.bay = (short)iBayDestination;
-        dstPos.tier = (short)(GM.stack_profile[iRowDestination, iBayDestination] + 1);
+        dstPos.tier = (short)(GM.stackProfile.arrTier[iRowDestination, iBayDestination] + 1);
 
         // container ID
         cntrInfoSO.strContainerID = strContainerID;
@@ -578,7 +579,7 @@ public class MainLoopTOS : MonoBehaviour
     {
         //// Deactive
         // init data
-        for (int iRow = 0; iRow < GM.lengthRow; iRow++)
+        for (int iRow = 0; iRow < GM.stackProfile.lengthRow; iRow++)
         {
             for (int iTier = 0; iTier < containerBlockTr.GetLength(1); iTier++)
                 deactiveContainer(containerBlockTr[iRow, iTier]);
@@ -593,10 +594,10 @@ public class MainLoopTOS : MonoBehaviour
         int iBayNow = DropdownInputBay.value;
 
         // 해당 bay로 containerID 배치 및 enabled
-        for (int i = 0; i < GM.list_stack_profile.Count; i++)
+        for (int i = 0; i < GM.stackProfile.listPos.Count; i++)
         {
             // [i_row, i_bay, i_tier, containerStatus]
-            int[] containerData = GM.list_stack_profile[i];
+            int[] containerData = GM.stackProfile.listPos[i];
             int iRow = containerData[0];
             int iBay = containerData[1];
             int iTier = containerData[2];
@@ -604,7 +605,7 @@ public class MainLoopTOS : MonoBehaviour
             // bay 같을 때 enabled
             if (iBayNow == iBay)
             {
-                string ctID = GM.ByteArrayToString(GM.listContainerID[i]);
+                string ctID = GM.ByteArrayToString(GM.stackProfile.listID[i]);
                 enabledContainer(containerBlockTr[iRow, iTier], ctID);
             }
         }
@@ -639,7 +640,7 @@ public class MainLoopTOS : MonoBehaviour
         int iRow = dictRow[strIRow];
 
         // WS, LS 구분
-        string output = (iRow < GM.lengthRow) ? $"{strIRow}{iBay}-{iTier + 1}" : $"{strIRow}{iBay}";
+        string output = (iRow < GM.stackProfile.lengthRow) ? $"{strIRow}{iBay}-{iTier + 1}" : $"{strIRow}{iBay}";
 
         return output;
     }

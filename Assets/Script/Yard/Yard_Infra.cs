@@ -50,9 +50,9 @@ public class Yard_Infra : MonoBehaviour
         GameObject folder = GameObject.Find("Line"); //오브젝트 저장 폴더 지정
 
         int ij = 0;
-        for (int i = 0; i < GM.lengthRow; i++)
+        for (int i = 0; i < GM.stackProfile.lengthRow; i++)
         {
-            for (int j = 0; j < GM.lengthBay; j++)
+            for (int j = 0; j < GM.stackProfile.lengthBay; j++)
             {
                 spawnPosition = new Vector3((i * x_interval) + start_val, 3.51f, (j * z_interval) + 7.75f);
                 // spawnPosition += yardOffset;
