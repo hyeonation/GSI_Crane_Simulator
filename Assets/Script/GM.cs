@@ -173,6 +173,6 @@ public class StackProfile
                                     // Container ID로 idx 접근하여 추출
                                     // Scene에서 row, bay, tier 파악 용이.
                                     // TOS에서 Bay 별 Container 그리기 용이.
-                                    // 순서는? 무작위? listContainerID와 index만 일치시키면?
+                                    // 순서는? 무작위? listID와 index만 일치시키면?
                                     // task
 }

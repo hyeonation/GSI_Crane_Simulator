@@ -339,6 +339,11 @@ public class MainLoopTOS : MonoBehaviour
             // Container 없으면 추가
             if (iTier < 0)
             {
+                // (트럭 + 컨테이너) 생성
+
+                // update Stack Profile data
+
+
                 // make GameObject
                 GameObject newObject = Container.mkRandomPrefab(containerPrefabs);
                 newObject.transform.SetParent(containers);
@@ -353,6 +358,8 @@ public class MainLoopTOS : MonoBehaviour
             // Container 있으면 삭제
             else
             {
+                // (트럭 + 컨테이너) 삭제
+
                 //// delete data
 
                 // delete GameObject
