@@ -26,4 +26,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ARTG.unity
     guid: 0591ac6f8f80b054a88fccf05ddccbec
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 8c6fccda3890c3443bdd3c5ba2e7371b, type: 2}

@@ -25,6 +25,19 @@ public class Define
         TOS = 2,
     }
 
+    public enum ControlMode
+    {
+        PLC,
+        Keyboard,
+    }
+
+     public enum CraneType
+    {
+        RTGC,
+        RMGC,
+        QC,
+    }
+
     public const int SCREEN_WIDTH = 1920;
     public const int SCREEN_HEIGHT = 1080;
 

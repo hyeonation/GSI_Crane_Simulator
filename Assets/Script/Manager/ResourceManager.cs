@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-// using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
 
@@ -61,50 +61,50 @@ public class ResourceManager
 
     public void LoadAsync<T>(string resourceKey, Action<T> callback = null) where T : Object
     {
-        // if (_loadedResources.TryGetValue(resourceKey, out Object resource))
-        // {
-        //     callback?.Invoke(resource as T);
-        //     return;
-        // }
+        if (_loadedResources.TryGetValue(resourceKey, out Object resource))
+        {
+            callback?.Invoke(resource as T);
+            return;
+        }
 
-        // string loadKey = resourceKey;
-        // if (resourceKey.Contains(".sprite"))
-        //     loadKey = $"{resourceKey}[{resourceKey.Replace(".sprite", "")}]";
+        string loadKey = resourceKey;
+        if (resourceKey.Contains(".sprite"))
+            loadKey = $"{resourceKey}[{resourceKey.Replace(".sprite", "")}]";
            
-        // // ���ҽ� �񵿱� �ε�
-        // Addressables.LoadAssetAsync<T>(loadKey).Completed += handle =>
-        // {
-        //     _loadedResources.Add(resourceKey, handle.Result);
-        //     callback?.Invoke(handle.Result );
-        // };
+        // ���ҽ� �񵿱� �ε�
+        Addressables.LoadAssetAsync<T>(loadKey).Completed += handle =>
+        {
+            _loadedResources.Add(resourceKey, handle.Result);
+            callback?.Invoke(handle.Result );
+        };
     }
 
     public void LoadAllAsync<T>(string label, Action<string, int, int> callback) where T : Object
     { 
-        // Addressables.LoadResourceLocationsAsync(label,typeof(T)).Completed += handle =>
-        // {
-        //     var locations = handle.Result;
-        //     int totalCount = locations.Count;
-        //     int loadedCount = 0;
-        //     foreach (var location in locations)
-        //     {
-        //         if (location.PrimaryKey.Contains(".sprite"))
-        //         {
-        //             LoadAsync<Sprite>(location.PrimaryKey, (obj) =>
-        //             {
-        //                 loadedCount++;
-        //                 callback?.Invoke(location.PrimaryKey, loadedCount, totalCount);
-        //             });
-        //         }
-        //         else {
-        //             LoadAsync<T>(location.PrimaryKey, resource =>
-        //             {
-        //                 loadedCount++;
-        //                 callback?.Invoke(location.PrimaryKey, loadedCount, totalCount);
-        //             });
-        //         }
+        Addressables.LoadResourceLocationsAsync(label,typeof(T)).Completed += handle =>
+        {
+            var locations = handle.Result;
+            int totalCount = locations.Count;
+            int loadedCount = 0;
+            foreach (var location in locations)
+            {
+                if (location.PrimaryKey.Contains(".sprite"))
+                {
+                    LoadAsync<Sprite>(location.PrimaryKey, (obj) =>
+                    {
+                        loadedCount++;
+                        callback?.Invoke(location.PrimaryKey, loadedCount, totalCount);
+                    });
+                }
+                else {
+                    LoadAsync<T>(location.PrimaryKey, resource =>
+                    {
+                        loadedCount++;
+                        callback?.Invoke(location.PrimaryKey, loadedCount, totalCount);
+                    });
+                }
                     
-        //     }
-        // };
+            }
+        };
     }
 }

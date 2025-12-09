@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-
+using System.Collections.Generic;
+using System.Linq;
+using System;
 /// <summary>
 /// 메인 메뉴 UI 컨트롤러.
 /// - 타이틀/버튼 레퍼런스를 인스펙터에서 연결
@@ -13,8 +15,10 @@ public class MenuController : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI titleText;   // 상단 타이틀 텍스트
-    [SerializeField] private Button btnKeyboard;          // "Keyboard Mode" 버튼
-    [SerializeField] private Button btnPLC;               // "PLC Mode" 버튼
+    [SerializeField] private Button btnPLC;   
+    [SerializeField] private TextMeshProUGUI btnPLCText;            // "PLC Mode" 버튼
+    [SerializeField] private Dropdown dropdownControlMode;    // Input Bay 드롭다운
+    [SerializeField] private Button btnStart;      
     [SerializeField] private Button btnSetting;           // "Setting" 버튼
     [SerializeField] private Button btnQuit;              // "Quit" 버튼
     [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
@@ -28,65 +32,67 @@ public class MenuController : MonoBehaviour
         // 버튼 클릭 이벤트 연결
         // OnEnable/OnDisable에서 Add/Remove를 관리하면
         // 오브젝트 활성/비활성 반복 시 중복 Add 방지에 안전합니다.
-        if (btnKeyboard) btnKeyboard.onClick.AddListener(OnKeyboardMode);
-        if (btnPLC) btnPLC.onClick.AddListener(OnPLCMode);
+        if (btnPLC) btnPLC.onClick.AddListener(OnCraneSelect);
         if (btnSetting) btnSetting.onClick.AddListener(OnSetting);
         if (btnQuit) btnQuit.onClick.AddListener(OnQuit);
+        btnStart.onClick.AddListener(StartSimulation);
         // if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
 
         // load setting data
         settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
+        GM.OnChangeCraneType -= OnChangeCraneType;
+        GM.OnChangeCraneType += OnChangeCraneType;
+        OnChangeCraneType();
+
+        string[] enumNames = Enum.GetNames(typeof(Define.ControlMode));
+
+        // 2. LINQ의 Select 구문으로 문자열 배열을 Dropdown.OptionData 리스트로 변환합니다.
+        List<Dropdown.OptionData> options = enumNames
+            .Select(name => new Dropdown.OptionData(name))
+            .ToList();
+
+        // 3. 생성된 옵션을 드롭다운에 설정합니다.
+        dropdownControlMode.options = options;
+
+        dropdownControlMode.onValueChanged.AddListener(ondropdownControlModeValueChanged);
+        // 드랍다운 초기값 설정
+        if (GM.settingParams.cmdWithPLC)
+            dropdownControlMode.value = enumNames.ToList().IndexOf("PLC");
+        else
+            dropdownControlMode.value = enumNames.ToList().IndexOf("Keyboard");
     }
 
     /// <summary>
     /// Keyboard Mode 선택 시 호출
     /// </summary>
-    public void OnKeyboardMode()
-    {
-        GameMode.Set(GameMode.Mode.Keyboard);    // 전역 모드 저장
-        Debug.Log("Mode set to: Keyboard");
-
-        GM.cmdWithPLC = false; // PLC 모드 비활성화
-        Debug.Log("PLC mode disabled");
-
-        StartSimulation(); // 시뮬레이션 시작
-    }
+   
 
     /// <summary>
     /// PLC Mode 선택 시 호출
     /// </summary>
-    public void OnPLCMode()
-    {
-        GameMode.Set(GameMode.Mode.PLC);         // 전역 모드 저장
-        Debug.Log("Mode set to: PLC");
-
-        GM.cmdWithPLC = true; // PLC 모드 활성화
-        Debug.Log("PLC mode enabled");
-
-        StartSimulation(); // 시뮬레이션 시작
-    }
+   
 
     public void StartSimulation()
     {
-        gameObject.SetActive(false); // 현재 메뉴 숨김
-        // btnExit.SetActive(true); // btnExit Active
-
-        // container 생성
-        // containerPreset.GetComponent<Container>().enabled = true;
-
+        
+        settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk(GM.settingParams);
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        if (GM.craneType == GM.CraneType.ARTG)
-            gameManager.GetComponent<MainLoopARTG>().enabled = true;
-
-        else if (GM.craneType == GM.CraneType.ARMG)
+        if (GM.craneType == Define.CraneType.RTGC)
         {
-            gameManager.GetComponent<MainLoopARMG>().enabled = true;
+            SceneManager.LoadScene("ARTG");
+        }
+
+        else if (GM.craneType == Define.CraneType.RMGC)
+        {
+            
             SceneManager.LoadScene("ARMG");
         }
 
-        else if (GM.craneType == GM.CraneType.QC)
-            gameManager.GetComponent<MainLoopQC>().enabled = true;
+        else if (GM.craneType == Define.CraneType.QC)
+        {
+            SceneManager.LoadScene("QC");
+        }
     }
 
     /// <summary>
@@ -108,6 +114,35 @@ public class MenuController : MonoBehaviour
             Debug.LogWarning("Setting panel not assigned in inspector!");
         }
     }
+
+    private void OnCraneSelect()
+    {
+        Managers.UI.ShowPopupUI<UI_CraneSelectPopup>();
+    }
+
+    private void OnChangeCraneType()
+    {
+        btnPLCText.text = $"{GM.craneType.ToString()}";
+    }
+
+    private void ondropdownControlModeValueChanged(int value)
+    {
+            string selectedMode = dropdownControlMode.options[value].text;
+            if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.Keyboard)
+            {
+               GM.settingParams.cmdWithPLC = false;
+                Debug.Log(GM.settingParams.cmdWithPLC);
+            }
+            else if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.PLC)
+            {
+                GM.settingParams.cmdWithPLC = true;
+                Debug.Log(GM.settingParams.cmdWithPLC);
+            }
+            
+            
+    }
+
+   
 
     /// <summary>
     /// 종료 버튼 클릭 시 호출

@@ -6,21 +6,26 @@ using System;
 public static class GM
 {
     // command with PLC
-    public static bool cmdWithPLC = false;
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
-    public enum CraneType
-    {
-        ARTG,
-        ARMG,
-        QC,
-    }
+   
 
     [Header("Crane Type")]
-    public static CraneType craneType = CraneType.ARMG;
+    public static Action OnChangeCraneType;
+    public static Define.CraneType craneType
+    {
+        get { return settingParams.craneType; }
+        set
+        {
+            if (settingParams.craneType != value)
+            {
+                settingParams.craneType = value;
+                OnChangeCraneType?.Invoke();
+            }
+        }
+    }
+
     public static string craneTypeStr = "ARMG";
-
-
     // static values
     public static short readDBNum;
     public static short readLength;
@@ -161,6 +166,8 @@ public class SettingParams
     public float lidarNoiseStd = 0.01f;
     public float laserMaxDistance_m = 50f;
     public int yardContainerNumberEA = 400;
+    public bool cmdWithPLC = false;
+    public Define.CraneType craneType = Define.CraneType.RMGC;
 }
 
 

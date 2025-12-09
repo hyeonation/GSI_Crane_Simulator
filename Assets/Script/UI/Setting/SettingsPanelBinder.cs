@@ -428,7 +428,7 @@ public class SettingsPanelBinder : MonoBehaviour
     }
 
     // ----------------- 저장/로드 -----------------
-    private static void SaveToDisk(SettingParams s)
+    public void SaveToDisk(SettingParams s)
     {
         try
         {

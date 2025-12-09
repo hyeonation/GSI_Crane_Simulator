@@ -34,7 +34,7 @@ public class MainLoop : MonoBehaviour
         InitCraneSpecVar();
 
         // Using PLC data
-        if (GM.cmdWithPLC)
+        if (GM.settingParams.cmdWithPLC)
         {
             //// IP 개수만큼 크레인 생성
             // i = 1부터 시작. 기존 크레인은 유지.
@@ -80,7 +80,7 @@ public class MainLoop : MonoBehaviour
     void Update()
     {
         // Using PLC data
-        if (GM.cmdWithPLC)
+        if (GM.settingParams.cmdWithPLC)
         {
             for (int iCrane = 0; iCrane < GM.settingParams.listIP.Count; iCrane++)
             {

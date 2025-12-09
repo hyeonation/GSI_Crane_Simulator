@@ -103,6 +103,7 @@
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoop.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
+    <Compile Include="Assets\Script\Manager\GameManager.cs" />
     <Compile Include="Assets\Script\Yard\Number.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Assets\Script\UI\TOS\MainLoopTOS.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\RuntimeCableGenerator.cs" />
+    <Compile Include="Assets\Script\UI\UI_Popup\UI_CraneSelectPopup.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopARMG.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Laser.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Cable.cs" />
