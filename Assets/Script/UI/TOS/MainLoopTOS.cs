@@ -21,11 +21,15 @@ public class MainLoopTOS : MonoBehaviour
     public Button btnApply;
     public Button btnReset;
 
+    [SerializeField]
+    private GameObject truckPrefab;
+    [SerializeField]
+    private GameObject truckP;
+
     //public TextMeshPro textApply;
     public TMP_Text textApply;
 
     public GameObject containerBlock;
-    public Transform containers;
     [HideInInspector] ContainerInfoSO cntrInfoSO;
     public GameObject[] containerPrefabs;
 
@@ -339,39 +343,59 @@ public class MainLoopTOS : MonoBehaviour
             // Container 없으면 추가
             if (iTier < 0)
             {
+                // position
+                float xPos = (strIRow == "WS") ? GM.yardWSxInterval : GM.yardLSxInterval;
+                Vector3 targetpos = new Vector3(xPos, 0, GM.yard_z_interval * iBay);
+                Vector3 truckPos = targetpos;
+                truckPos.z = GM.TruckSpawnPosZ;
+                Vector3 containerPos = truckPos;
+                containerPos.y = GM.containerYPosOnTruck;
+
+                
+
                 // (트럭 + 컨테이너) 생성
 
                 // update Stack Profile data
-
-
+                GameObject newTruck = Instantiate(truckPrefab, truckPos, Quaternion.identity);
+                newTruck.GetComponent<TruckController>().SetInfo(iRow, iBay,strIRow ,targetpos);
+                newTruck.name = $"{strIRow}{iBay}";
+                newTruck.transform.SetParent(truckP.transform);
                 // make GameObject
-                GameObject newObject = Container.mkRandomPrefab(containerPrefabs);
-                newObject.transform.SetParent(containers);
+                GameObject newObject = Container.mkRandomPrefab(containerPrefabs, containerPos);
+                newObject.transform.SetParent(newTruck.transform);
 
                 // update data
                 iTier = 0;
                 int[] sp = { iRow, iBay, iTier };
                 GM.stackProfile.listPos.Add(sp);
                 GM.stackProfile.arrTier[iRow, iBay] = 1;
+
+                // newTruck.SetActive(false); // 트럭은 처음에 비활성화 상태로 생성
+                Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{strIRow}{iBay}").gameObject.SetActive(false);
+                
             }
 
             // Container 있으면 삭제
             else
             {
                 // (트럭 + 컨테이너) 삭제
+                GameObject truck = truckP.transform.Find($"{strIRow}{iBay}").gameObject;
 
                 //// delete data
 
                 // delete GameObject
                 string containerIDFormat = btn.transform.parent.Find("Tier").GetChild(0).GetComponent<TMP_Text>().text;
                 string strContainerIDTemp = Regex.Replace(containerIDFormat, @"\s", "");
+
                 int idxDelete = GM.FindContainerIndex(strContainerIDTemp);     // find idx
 
                 // delete data
-                Destroy(containers.GetChild(idxDelete).gameObject);
                 GM.stackProfile.listID.RemoveAt(idxDelete);
                 GM.stackProfile.listPos.RemoveAt(idxDelete);
                 GM.stackProfile.arrTier[iRow, iBay] = 0;
+                GM.stackProfile.listContainerGO.RemoveAt(idxDelete);
+
+                Destroy(truck);
             }
 
             // update UI
@@ -461,7 +485,8 @@ public class MainLoopTOS : MonoBehaviour
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
             strContainerID = Regex.Replace(containerIDFormat, @"\s", "");       // 공백 제거
             int cnidx = GM.FindContainerIndex(strContainerID);     // find idx
-            cntrInfoSO = containers.GetChild(cnidx).GetComponent<ContainerInfo>().feet;
+
+            cntrInfoSO = GM.stackProfile.listContainerGO[cnidx].GetComponent<ContainerInfo>().feet;
 
             iRowSource = iRow;
             iBaySource = iBay;
@@ -576,6 +601,10 @@ public class MainLoopTOS : MonoBehaviour
 
         // adding task
         GM.listTaskInfo = GM.listTaskInfo.Prepend(taskInfo).ToList();
+
+        // GameObject truck = truckP.transform.Find($"{srcPos.row}{srcPos.bay}").gameObject;
+        String _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == srcPos.row).Key;
+        Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{_strRow}{srcPos.bay}").gameObject.SetActive(true);
 
         // initialization
         Reset();

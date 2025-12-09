@@ -34,6 +34,11 @@ public static class GM
     public const float yard_x_interval = 2.840f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
+    public const float yardWSxInterval = -19;
+    public const float yardLSxInterval = 19;
+    public const float containerYPosOnTruck = 2.7f;
+
+    public const float TruckSpawnPosZ = 270f;
 
     // command data
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
@@ -175,4 +180,6 @@ public class StackProfile
                                     // TOS에서 Bay 별 Container 그리기 용이.
                                     // 순서는? 무작위? listID와 index만 일치시키면?
                                     // task
+    public List<GameObject> listContainerGO = new(); // Scene 내 Container GameObject 배열
+
 }

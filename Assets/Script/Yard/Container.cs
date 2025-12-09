@@ -139,7 +139,7 @@ public class Container : MonoBehaviour
     void placementContainer(int[] idx_pos)
     {
         // make GameObject
-        GameObject newObject = mkRandomPrefab(prefabs);
+        GameObject newObject = mkRandomPrefab(prefabs , Vector3.zero);
         newObject.transform.SetParent(transform);
 
         // stack position data
@@ -158,16 +158,19 @@ public class Container : MonoBehaviour
         newObject.transform.rotation = transform.rotation;
     }
 
-    public static GameObject mkRandomPrefab(GameObject[] prefabs)
+    public static GameObject mkRandomPrefab(GameObject[] prefabs, Vector3 position)
     {
         // make GameObject
         GameObject randomPrefab = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
-        GameObject newObject = Instantiate(randomPrefab, Vector3.zero, Quaternion.identity);
+        GameObject newObject = Instantiate(randomPrefab, position, Quaternion.identity);
 
         // Attaching a container ID
         byte[] containerIDByteArr = mkContainerID();                // 랜덤 ID 생성
         GM.stackProfile.listID.Add(containerIDByteArr);                    // ID 저장
         newObject.name = GM.ByteArrayToString(containerIDByteArr);     // 이름 설정
+        newObject.GetComponent<ContainerController>().TemplateID = GM.ByteArrayToString(containerIDByteArr); // ContainerInfo에 ID 저장
+
+        GM.stackProfile.listContainerGO.Add(newObject);                             // GameObject 리스트에 추가
 
         return newObject;
     }
