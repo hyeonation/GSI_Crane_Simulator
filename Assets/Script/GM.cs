@@ -174,7 +174,7 @@ public class SettingParams
 // Stack profile 일괄 관리하기 위해 class 정의
 public class StackProfile
 {
-    public short lengthRow = 9;
+    public short lengthRow = 7;
     public short lengthBay = 16;
     public short lengthTier = 6;
     public List<byte[]> listID = new();
