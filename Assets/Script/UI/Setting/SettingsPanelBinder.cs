@@ -122,10 +122,10 @@ public class SettingsPanelBinder : MonoBehaviour
         current = updated;
 
         // UI에서 읽은 값을 데이터 모델에 반영
-        GM.settingParams = current;
-
+        GM.settingParams.UpdateUISettings(current);
+        
         // 저장
-        SaveToDisk(current);
+        SaveToDisk();
 
         Debug.Log("[SettingsPanelBinder] 설정 적용/저장 완료: " + FilePath);
 
@@ -428,11 +428,11 @@ public class SettingsPanelBinder : MonoBehaviour
     }
 
     // ----------------- 저장/로드 -----------------
-    public void SaveToDisk(SettingParams s)
+    public void SaveToDisk()
     {
         try
         {
-            var json = JsonUtility.ToJson(s, true);
+            var json = JsonUtility.ToJson(GM.settingParams, true);
             File.WriteAllText(FilePath, json, Encoding.UTF8);
         }
         catch (Exception e)

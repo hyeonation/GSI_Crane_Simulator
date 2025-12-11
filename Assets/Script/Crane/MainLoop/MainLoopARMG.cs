@@ -22,7 +22,40 @@ public class MainLoopARMG : MainLoop
 
     public override void ReadPLCdata(int iCrane)
     {
+        // DB start index
+        const int floatStartIdxGantryVelFWD = 60;
+        const int floatStartIdxTrolleyVel = 64;
+        const int floatStartIdxSpreaderVel = 68;
+        const int floatStartIdxMM0Vel = 16;
+        const int floatStartIdxMM1Vel = 20;
+        const int floatStartIdxMM2Vel = 24;
+        const int floatStartIdxMM3Vel = 28;
 
+        const int boolStartIdxSprdStatus = 74;
+        const int boolStartPoint20ft = 0;
+        const int boolStartPoint40ft = 1;
+        const int boolStartPoint45ft = 2;
+        const int boolStartPointTwlUnlock = 3;
+
+        // Read raw data from PLC
+        var rawData = plc[iCrane].ReadFromPLC();
+
+        // Read float data
+        GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.cmdGantryVelBWD[iCrane] = GM.cmdGantryVelFWD[iCrane];
+        GM.cmdTrolleyVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.cmdSpreaderVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.cmdMM0Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.cmdMM1Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);
+        GM.cmdMM2Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.cmdMM3Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
+
+        // Read boolean data
+        GM.cmd20ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint20ft);
+        GM.cmd40ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint40ft);
+        GM.cmd45ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint45ft);
+        GM.cmdTwlLock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
+        GM.cmdTwlUnlock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
     }
 
 

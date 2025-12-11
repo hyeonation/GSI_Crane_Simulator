@@ -75,23 +75,22 @@ public class MenuController : MonoBehaviour
     public void StartSimulation()
     {
         
-        settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk(GM.settingParams);
         // OrganizingData 켜기
         // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
         if (GM.craneType == Define.CraneType.RTGC)
         {
-            SceneManager.LoadScene("ARTG");
+            Managers.Scene.LoadScene(Define.SceneType.RTGC);
         }
 
         else if (GM.craneType == Define.CraneType.RMGC)
         {
             
-            SceneManager.LoadScene("ARMG");
+            Managers.Scene.LoadScene(Define.SceneType.RMGC);
         }
 
         else if (GM.craneType == Define.CraneType.QC)
         {
-            SceneManager.LoadScene("QC");
+            Managers.Scene.LoadScene(Define.SceneType.QC);
         }
     }
 
@@ -123,21 +122,27 @@ public class MenuController : MonoBehaviour
     private void OnChangeCraneType()
     {
         btnPLCText.text = $"{GM.craneType.ToString()}";
+
+        // save setting data
+        settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
     }
 
     private void ondropdownControlModeValueChanged(int value)
     {
-            string selectedMode = dropdownControlMode.options[value].text;
-            if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.Keyboard)
-            {
-               GM.settingParams.cmdWithPLC = false;
-                Debug.Log(GM.settingParams.cmdWithPLC);
-            }
-            else if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.PLC)
-            {
-                GM.settingParams.cmdWithPLC = true;
-                Debug.Log(GM.settingParams.cmdWithPLC);
-            }
+        string selectedMode = dropdownControlMode.options[value].text;
+        if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.Keyboard)
+        {
+            GM.settingParams.cmdWithPLC = false;
+            Debug.Log(GM.settingParams.cmdWithPLC);
+        }
+        else if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.PLC)
+        {
+            GM.settingParams.cmdWithPLC = true;
+            Debug.Log(GM.settingParams.cmdWithPLC);
+        }
+
+        // save setting data
+        settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
             
             
     }

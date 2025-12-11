@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Container : MonoBehaviour
 {
@@ -17,6 +18,29 @@ public class Container : MonoBehaviour
 
     void init()
     {
+
+        if (GM.craneType == Define.CraneType.RTGC)
+        {
+            GM.stackProfile.lengthRow = 7;
+            GM.stackProfile.lengthBay = 16;
+            GM.stackProfile.lengthTier = 6;
+        }
+
+        else if (GM.craneType == Define.CraneType.RMGC)
+        {
+            
+            GM.stackProfile.lengthRow = 9;
+            GM.stackProfile.lengthBay = 16;
+            GM.stackProfile.lengthTier = 6;
+        }
+
+        else if (GM.craneType == Define.CraneType.QC)
+        {
+            GM.stackProfile.lengthRow = 10;
+            GM.stackProfile.lengthBay = 12;
+            GM.stackProfile.lengthTier = 6;
+        }
+
         x_interval = GM.yard_x_interval;
         y_interval = GM.yard_y_interval;
         z_interval = GM.yard_z_interval;

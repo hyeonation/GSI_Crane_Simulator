@@ -20,9 +20,11 @@ public class Define
     public enum SceneType
     {
         Unknown = -1,
-        Login = 0,
-        Lobby = 1,
-        TOS = 2,
+        StartMenu,
+        RMGC,
+        RTGC,   
+        QC
+        
     }
 
     public enum ControlMode
@@ -36,6 +38,14 @@ public class Define
         RTGC,
         RMGC,
         QC,
+    }
+
+    public enum ContainerPosition
+    {
+        OnYardTruck,
+        OnETruck,
+        OnYard,
+        OnShip
     }
 
     public const int SCREEN_WIDTH = 1920;

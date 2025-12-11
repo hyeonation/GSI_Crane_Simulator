@@ -262,6 +262,7 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour
 
         stopwatch.Stop();
         UnityEngine.Debug.Log($"{gameObject.name} 코드 실행 시간: {stopwatch.ElapsedMilliseconds} ms, Time.deltaTime : {Time.deltaTime} s");
+        UnityEngine.Debug.Log($"  - batch/total : {innerloopBatchCount}/{totalSteps}, minCmdPerJob: {minCommandsPerJob}");
     }
 
     // ========================= 유틸 =========================

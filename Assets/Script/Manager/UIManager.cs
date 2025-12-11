@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,9 +6,9 @@ using UnityEngine.UI;
 public class UIManager
 {
     int _order = 20;
-
+    int _toastOrder = 500;
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
-
+    Stack<UI_Toast> _toastStack = new Stack<UI_Toast>();
     UI_Scene _sceneUI = null;
 
     public UI_Scene SceneUI
@@ -27,7 +28,7 @@ public class UIManager
         }
     }
 
-    public void SetCanvas(GameObject go, bool sort = true, int sortOrder = 0)
+    public void SetCanvas(GameObject go, bool sort = true, int sortOrder = 0, bool isToast = false)
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         if(canvas == null)
@@ -50,7 +51,12 @@ public class UIManager
         }
         else
             canvas.sortingOrder = sortOrder;
-       
+
+        if (isToast)
+        {
+            _toastOrder++;
+            canvas.sortingOrder = _toastOrder;
+        }
     }
 
     public T MakeWorldSpaceUI<T>(Transform parent = null, string name =null ) where T : UI_Base
@@ -165,6 +171,36 @@ public class UIManager
         CloseAllPopupUI();
         Time.timeScale = 1;
         _sceneUI = null;
+    }
+
+
+    public UI_Toast ShowToast(string msg)
+    {
+        string name = typeof(UI_Toast).Name;
+        GameObject go = Managers.Resource.Instantiate($"{name}");
+        UI_Toast popup = Util.GetOrAddComponent<UI_Toast>(go);
+        popup.SetInfo(msg);
+        _toastStack.Push(popup);
+        go.transform.SetParent(Root.transform);
+        CoroutineManager.StartCoroutine(CoCloseToastUI());
+        return popup;
+    }
+
+    IEnumerator CoCloseToastUI()
+    {
+       yield return new WaitForSeconds(1f);
+       CloseToastUI();
+    }
+
+    public void CloseToastUI()
+    {
+        if (_toastStack.Count == 0)
+            return;
+
+        UI_Toast toast = _toastStack.Pop();
+        Managers.Resource.Destroy(toast.gameObject);
+        toast = null;
+        _toastOrder--;
     }
 
    

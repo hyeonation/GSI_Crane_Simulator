@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI; // Dropdown을 사용하기 위한 네임스페이스
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using UnityEngine.SceneManagement;
 public class MainLoopTOS : MonoBehaviour
 {
     [Header("Dropdown")]
@@ -18,13 +18,14 @@ public class MainLoopTOS : MonoBehaviour
     public Button btnSelectCraneDown;
     public Button btnSelectBayUp;
     public Button btnSelectBayDown;
+    public Button btnHome;
     public Button btnApply;
     public Button btnReset;
 
     [SerializeField]
     private GameObject truckPrefab;
     [SerializeField]
-    private GameObject truckP;
+    private GameObject truckParent;
 
     //public TextMeshPro textApply;
     public TMP_Text textApply;
@@ -101,6 +102,7 @@ public class MainLoopTOS : MonoBehaviour
         if (btnSelectCraneDown) btnSelectCraneDown.onClick.AddListener(OnBtnSelectCraneDown);
         if (btnSelectBayUp) btnSelectBayUp.onClick.AddListener(OnBtnSelectBayUp);
         if (btnSelectBayDown) btnSelectBayDown.onClick.AddListener(OnBtnSelectBayDown);
+        if (btnHome) btnHome.onClick.AddListener(onClickHome);
 
         // Apply button
         if (btnApply) btnApply.onClick.AddListener(OnBtnApply);
@@ -359,7 +361,7 @@ public class MainLoopTOS : MonoBehaviour
                 GameObject newTruck = Instantiate(truckPrefab, truckPos, Quaternion.identity);
                 newTruck.GetComponent<TruckController>().SetInfo(iRow, iBay,strIRow ,targetpos);
                 newTruck.name = $"{strIRow}{iBay}";
-                newTruck.transform.SetParent(truckP.transform);
+                newTruck.transform.SetParent(truckParent.transform);
                 // make GameObject
                 GameObject newObject = Container.mkRandomPrefab(containerPrefabs, containerPos);
                 newObject.transform.SetParent(newTruck.transform);
@@ -379,7 +381,7 @@ public class MainLoopTOS : MonoBehaviour
             else
             {
                 // (트럭 + 컨테이너) 삭제
-                GameObject truck = truckP.transform.Find($"{strIRow}{iBay}").gameObject;
+                GameObject truck = truckParent.transform.Find($"{strIRow}{iBay}").gameObject;
 
                 //// delete data
 
@@ -508,6 +510,10 @@ public class MainLoopTOS : MonoBehaviour
 
         // 해당 row의 최상단 Container 한 칸 위 선택
         btnDestination = containerBlockTr[iRow, iTier];
+
+        if (btnDestination == null)
+            return;
+            
         btnDestination.GetComponent<Image>().color = colorActive;    // active
 
         //////////////////////////
@@ -604,7 +610,10 @@ public class MainLoopTOS : MonoBehaviour
 
         // GameObject truck = truckP.transform.Find($"{srcPos.row}{srcPos.bay}").gameObject;
         String _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == srcPos.row).Key;
-        Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{_strRow}{srcPos.bay}").gameObject.SetActive(true);
+
+        // ws, ls에서 생성되 었던 트럭 활성화
+        if (Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{_strRow}{srcPos.bay}") is TruckController truckController)
+            truckController.gameObject.SetActive(true);
 
         // initialization
         Reset();
@@ -667,6 +676,12 @@ public class MainLoopTOS : MonoBehaviour
     {
         cntr.GetComponent<Image>().color = colorNull;
         cntr.GetChild(0).GetComponent<TMP_Text>().text = "";
+    }
+
+    void onClickHome()
+    {
+        // Go to Main Scene
+        Managers.Scene.LoadScene(Define.SceneType.StartMenu);
     }
 
     // container 위치 string 생성

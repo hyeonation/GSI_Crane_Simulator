@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Crane
+  m_EditorClassIdentifier: 
+  m_GroupName: Crane
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 05d6006ca15123b418419020960b986e
+  m_SerializeEntries:
+  - m_GUID: 30482b8c6d9f20943b103633175d4f54
+    m_Address: ARMG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7844ddf6af1fcaf4f8b296036ea34f66
+    m_Address: QC
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6eb9fb6aa6bfe441bfb1326c62a3cd5
+    m_Address: ARTG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a45e19ebc29569a4eb347d14d352c0df, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: dbac8f104db2dee4b9dfbad93499f393, type: 2}
+    - {fileID: 11400000, guid: b6c28ebd7cc702a46bb112588431b3e6, type: 2}

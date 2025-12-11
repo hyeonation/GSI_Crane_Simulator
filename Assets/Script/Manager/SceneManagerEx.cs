@@ -7,9 +7,7 @@ public class SceneManagerEx
 
     public void LoadScene(Define.SceneType sceneType)
     {
-        string sceneName = sceneType.ToString() + "Scene";
-
-        // 로딩으로 이동
+        string sceneName = sceneType.ToString();
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 

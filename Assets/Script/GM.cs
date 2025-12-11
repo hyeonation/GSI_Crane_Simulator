@@ -168,13 +168,33 @@ public class SettingParams
     public int yardContainerNumberEA = 400;
     public bool cmdWithPLC = false;
     public Define.CraneType craneType = Define.CraneType.RMGC;
+
+
+    // 설정 UI에서 변경가능한 값만 업데이트
+    // 설정 UI에서 변경 불가능한 값(예: cmdWithPLC, craneType)은 제외
+    public void UpdateUISettings(SettingParams newParams)
+    {
+        listIP = newParams.listIP;
+        keyGantrySpeed = newParams.keyGantrySpeed;
+        keyTrolleySpeed = newParams.keyTrolleySpeed;
+        keySpreaderSpeed = newParams.keySpreaderSpeed;
+        keyMMSpeed = newParams.keyMMSpeed;
+        lidarMaxDistance_m = newParams.lidarMaxDistance_m;
+        lidarFovHorizontal_deg = newParams.lidarFovHorizontal_deg;
+        lidarFovVertical_deg = newParams.lidarFovVertical_deg;
+        lidarResHorizontal_deg = newParams.lidarResHorizontal_deg;
+        lidarResVertical_deg = newParams.lidarResVertical_deg;
+        lidarNoiseStd = newParams.lidarNoiseStd;
+        laserMaxDistance_m = newParams.laserMaxDistance_m;
+        yardContainerNumberEA = newParams.yardContainerNumberEA;
+    }
 }
 
 
 // Stack profile 일괄 관리하기 위해 class 정의
 public class StackProfile
 {
-    public short lengthRow = 7;
+    public short lengthRow = 9;
     public short lengthBay = 16;
     public short lengthTier = 6;
     public List<byte[]> listID = new();
