@@ -29,6 +29,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e044ac4a54d48148a6331a39ae74884
+    m_Address: Btn_Truck
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e7a4ac184252b74185155c7995f7474
+    m_Address: UI_TruckControlPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: a45e19ebc29569a4eb347d14d352c0df, type: 2}
   m_SchemaSet:

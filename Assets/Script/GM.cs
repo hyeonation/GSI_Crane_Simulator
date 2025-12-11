@@ -12,11 +12,12 @@ public static class GM
 
     [Header("Crane Type")]
     public static Action OnChangeCraneType;
-    public static Define.CraneType craneType
+    public static Define.CraneType CraneType
     {
         get { return settingParams.craneType; }
         set
         {
+            Debug.Log($"Crane Type changed to {value}");
             if (settingParams.craneType != value)
             {
                 settingParams.craneType = value;
@@ -24,6 +25,29 @@ public static class GM
             }
         }
     }
+
+    public static bool CmdWithPLC
+    {
+        get { return settingParams.cmdWithPLC; }
+        set
+        {
+            Debug.Log($"CmdWithPLC changed to {value}");
+            if (settingParams.cmdWithPLC != value)
+            {
+                settingParams.cmdWithPLC = value;
+            }
+        }
+    }
+
+    public static Action UI_OnUpdateTruckList;
+    public static void UI_UpdateTruckList()
+    {
+        UI_OnUpdateTruckList?.Invoke();
+    }
+
+    // 프로그램 시작 처음만 데이터 불러오기
+    public static bool isDataLoaded = false;
+
     public static CommPLC[] plc;
 
     public static string craneTypeStr = "ARMG";
@@ -101,6 +125,9 @@ public static class GM
         cmd45ft = new bool[nameCranes.Length];
         cmdTwlLock = new bool[nameCranes.Length];
         cmdTwlUnlock = new bool[nameCranes.Length];
+
+        // init Stack profile
+        stackProfile.InitStackProfile();
     }
 
     // 디버깅용: byte[] → string 변환
@@ -202,12 +229,22 @@ public class StackProfile
     public int[,] arrTier;      // SPSS 역할. [row, bay] = tier(stack count)
                                 // TOS Container 선택 시 해당 row 최상단 접근 위해
                                 // Yard Overview 그릴 때도 사용 가능
-    public List<int[]> listPos;     // [i_row, i_bay, i_tier]
+    public List<int[]> listPos = new();     // [i_row, i_bay, i_tier]
                                     // Container ID로 idx 접근하여 추출
                                     // Scene에서 row, bay, tier 파악 용이.
                                     // TOS에서 Bay 별 Container 그리기 용이.
                                     // 순서는? 무작위? listID와 index만 일치시키면?
                                     // task
     public List<GameObject> listContainerGO = new(); // Scene 내 Container GameObject 배열
+
+    // Stack profile 초기화
+    public void InitStackProfile()
+    {
+        listID.Clear();
+        listPos.Clear();
+        listContainerGO.Clear();
+        arrTier = null;
+    }
+        
 
 }

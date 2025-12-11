@@ -20,7 +20,7 @@ public abstract class UI_Base : MonoBehaviour
         _init = true;
         return true;
     }
-    private void Start()
+    private void Awake()
     {
         Init();
     }
@@ -103,7 +103,7 @@ public abstract class UI_Base : MonoBehaviour
         }
     }
 
-    //public void PopupOpenAnimation(GameObject contentObject) // ÆË¾÷ ¿ÀÇÂ ¿¬Ãâ
+    //public void PopupOpenAnimation(GameObject contentObject) // ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     //{
     //    contentObject.transform.localScale = new Vector3(0.8f, 0.8f, 1);
     //    contentObject.transform.DOScale(1f, 0.1f).SetEase(Ease.InOutBack).SetUpdate(true);

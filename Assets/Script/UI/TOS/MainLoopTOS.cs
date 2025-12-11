@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using Unity.VisualScripting;
-public class MainLoopTOS : MonoBehaviour
+public class MainLoopTOS : UI_Base
 {
     [Header("Dropdown")]
     public Dropdown DropdownInputCrane; // 인스펙터에서 드롭다운을 할당합니다
@@ -20,7 +20,7 @@ public class MainLoopTOS : MonoBehaviour
     public Button btnSelectCraneDown;
     public Button btnSelectBayUp;
     public Button btnSelectBayDown;
-    public Button btnHome;
+    
     public Button btnApply;
     public Button btnReset;
 
@@ -79,6 +79,26 @@ public class MainLoopTOS : MonoBehaviour
         {"LS", 10},
     };
 
+    #region Bindings
+    public enum Buttons
+    {
+        Btn_Menu,
+        ClickBlockPanel,
+        Btn_Back,
+        Btn_Home,
+        Btn_TruckControl,
+        Btn_CameraControl,
+
+    }
+
+    public enum GameObjects
+    {
+        Sidebar,
+        SidebarPanel,
+    }
+
+    #endregion
+
     void Start()
     {
         // init values
@@ -88,6 +108,20 @@ public class MainLoopTOS : MonoBehaviour
         // Add Listeners
         AddListeners();
 
+        #region  Bindings
+        
+        BindButton((Type)typeof(Buttons));
+        BindObject((Type)typeof(GameObjects));
+
+        GetObject((int)GameObjects.SidebarPanel).SetActive(false);
+        GetButton((int)Buttons.Btn_Menu).onClick.AddListener(onClickMenu);
+        GetButton((int)Buttons.Btn_Back).onClick.AddListener(onClickBack);
+        GetButton((int)Buttons.ClickBlockPanel).onClick.AddListener(onClickBack);
+        GetButton((int)Buttons.Btn_TruckControl).onClick.AddListener(onClickTruckControl);
+        GetButton((int)Buttons.Btn_CameraControl).onClick.AddListener(onClickCameraControl);
+        GetButton((int)Buttons.Btn_Home).onClick.AddListener(onClickHome);
+
+        #endregion 
         // Init
         Reset();
     }
@@ -104,7 +138,6 @@ public class MainLoopTOS : MonoBehaviour
         if (btnSelectCraneDown) btnSelectCraneDown.onClick.AddListener(OnBtnSelectCraneDown);
         if (btnSelectBayUp) btnSelectBayUp.onClick.AddListener(OnBtnSelectBayUp);
         if (btnSelectBayDown) btnSelectBayDown.onClick.AddListener(OnBtnSelectBayDown);
-        if (btnHome) btnHome.onClick.AddListener(onClickHome);
 
         // Apply button
         if (btnApply) btnApply.onClick.AddListener(OnBtnApply);
@@ -489,7 +522,7 @@ public class MainLoopTOS : MonoBehaviour
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
             strContainerID = Regex.Replace(containerIDFormat, @"\s", "");       // 공백 제거
             int cnidx = GM.FindContainerIndex(strContainerID);     // find idx
-
+            
             cntrInfoSO = GM.stackProfile.listContainerGO[cnidx].GetComponent<ContainerInfo>().feet;
 
             iRowSource = iRow;
@@ -610,15 +643,46 @@ public class MainLoopTOS : MonoBehaviour
         // adding task
         GM.listTaskInfo = GM.listTaskInfo.Prepend(taskInfo).ToList();
 
-        // GameObject truck = truckP.transform.Find($"{srcPos.row}{srcPos.bay}").gameObject;
-        String _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == srcPos.row).Key;
+        // Job type 2일 경우 트럭 + 컨테이너 활성화
+        if (taskInfo.jobType == 2)
+        {
+            // row string
+            String _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == srcPos.row).Key;
 
-        // ws, ls에서 생성되 었던 트럭 활성화
-        if (Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{_strRow}{srcPos.bay}") is TruckController truckController)
-            truckController.gameObject.SetActive(true);
+            // ws, ls에서 생성되 었던 트럭 활성화
+            if (Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{_strRow}{srcPos.bay}") is TruckController truckController)
+            {
+                truckController.gameObject.SetActive(true);
+                truckController.Job = taskInfo.jobType.ToString();
+                truckController.CraneName = taskInfo.strCrane;
+            }
+        }
+
+        // Job type3일 경우 빈트럭 생성
+        else if (taskInfo.jobType == 3)
+        {
+            // row string
+            String _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == dstPos.row).Key;
+
+            // position
+            float xPos = (_strRow == "WS") ? GM.yardWSxInterval : GM.yardLSxInterval;
+            Vector3 targetpos = new Vector3(xPos, 0, GM.yard_z_interval * dstPos.bay);
+            Vector3 truckPos = targetpos;
+            truckPos.z = GM.TruckSpawnPosZ;
+
+            // (트럭) 생성
+            GameObject newTruck = Instantiate(truckPrefab, truckPos, Quaternion.identity);
+            newTruck.GetComponent<TruckController>().SetInfo(dstPos.row, dstPos.bay, _strRow, targetpos);
+            newTruck.name = $"{_strRow}{dstPos.bay}";
+            newTruck.transform.SetParent(truckParent.transform);
+        } 
+
 
         // initialization
         Reset();
+
+        // TruckControlPopup UI update truck list
+        GM.UI_UpdateTruckList();
     }
 
     // update current stack profile UI
@@ -683,12 +747,13 @@ public class MainLoopTOS : MonoBehaviour
     void onClickHome()
     {
         // Disconnect PLCs
-        for (int i = 0; i < GM.plc.Length; i++)
+        if (GM.CmdWithPLC)
+        {
+            for (int i = 0; i < GM.plc.Length; i++)
             GM.plc[i].Disconnect();        
-
-        // init plc
-        GM.plc = new CommPLC[0];
-
+            // init plc
+            GM.plc = new CommPLC[0];
+        }
         // Go to Main Scene
         Managers.Scene.LoadScene(Define.SceneType.StartMenu);
     }
@@ -701,8 +766,29 @@ public class MainLoopTOS : MonoBehaviour
 
         // WS, LS 구분
         string output = (iRow < GM.stackProfile.lengthRow) ? $"{strIRow}{iBay}-{iTier + 1}" : $"{strIRow}{iBay}";
-
         return output;
+    }
+
+    void onClickMenu()
+    {
+        // Show Sidebar
+        GetObject((int)GameObjects.SidebarPanel).SetActive(true);
+    }
+
+    void onClickBack()
+    {
+        // Hide Sidebar
+        GetObject((int)GameObjects.SidebarPanel).SetActive(false);
+    }
+
+    void onClickTruckControl()
+    {
+        Managers.UI.ShowPopupUI<UI_TruckControlPopup>();
+    }
+    void onClickCameraControl()
+    {
+        //TODO Popup Camera Control UI
+        Debug.Log("Camera Control Clicked");
     }
 }
 

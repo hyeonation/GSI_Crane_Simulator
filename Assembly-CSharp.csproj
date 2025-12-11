@@ -104,9 +104,11 @@
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoop.cs" />
     <Compile Include="Assets\Script\Manager\CoroutineManager.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
+    <Compile Include="Assets\Script\UI\UI_Popup\UI_TruckControlPopup.cs" />
     <Compile Include="Assets\Script\Manager\GameManager.cs" />
     <Compile Include="Assets\Script\Yard\Number.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
+    <Compile Include="Assets\Script\UI\UI_Widget\Btn_Truck.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
     <Compile Include="Assets\Script\Utils\BillboardUI_SceneViewTracker.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />

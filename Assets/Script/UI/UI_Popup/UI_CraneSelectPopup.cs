@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.Pkcs;
 using UnityEngine;
 
 public class UI_CraneSelectPopup : UI_Popup
@@ -30,25 +31,22 @@ public class UI_CraneSelectPopup : UI_Popup
 
     private void OnClickRMGC()
     {
-        GM.craneType = Define.CraneType.RMGC;
-        GM.craneTypeStr = "RMGC";
-        Debug.Log($"Crane type set to: {GM.craneTypeStr}, ");
+        GM.CraneType = Define.CraneType.RMGC;
+        GM.craneTypeStr = GM.CraneType.ToString();
         Managers.UI.ClosePopupUI(this);
     }
 
     private void OnClickRTGC()
     {
-        GM.craneType = Define.CraneType.RTGC;
-        GM.craneTypeStr = "RTGC";
-        Debug.Log($"Crane type set to: {GM.craneTypeStr}, ");
+        GM.CraneType = Define.CraneType.RTGC;
+        GM.craneTypeStr = GM.CraneType.ToString();
         Managers.UI.ClosePopupUI(this);
     }
 
     private void OnClickQC()
     {
-        GM.craneType = Define.CraneType.QC;
-        GM.craneTypeStr = "QC";
-        Debug.Log($"Crane type set to: {GM.craneTypeStr}, ");
+        GM.CraneType = Define.CraneType.QC;
+        GM.craneTypeStr = GM.CraneType.ToString();
         Managers.UI.ClosePopupUI(this);
     }
 

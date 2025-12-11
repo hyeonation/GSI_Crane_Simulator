@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -39,7 +38,13 @@ public class MenuController : MonoBehaviour
         // if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
 
         // load setting data
-        settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
+        if(GM.isDataLoaded == false)
+        {
+            settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
+            GM.isDataLoaded = true;
+            Debug.Log("SettingsParams Data Loaded");
+        }
+
         GM.OnChangeCraneType -= OnChangeCraneType;
         GM.OnChangeCraneType += OnChangeCraneType;
         OnChangeCraneType();
@@ -56,39 +61,33 @@ public class MenuController : MonoBehaviour
 
         dropdownControlMode.onValueChanged.AddListener(ondropdownControlModeValueChanged);
         // 드랍다운 초기값 설정
-        if (GM.settingParams.cmdWithPLC)
-            dropdownControlMode.value = enumNames.ToList().IndexOf("PLC");
+        if (GM.CmdWithPLC)
+            dropdownControlMode.value = enumNames.ToList().IndexOf(Define.ControlMode.PLC.ToString());
         else
-            dropdownControlMode.value = enumNames.ToList().IndexOf("Keyboard");
+            dropdownControlMode.value = enumNames.ToList().IndexOf(Define.ControlMode.Keyboard.ToString());
     }
 
-    /// <summary>
-    /// Keyboard Mode 선택 시 호출
-    /// </summary>
-   
-
-    /// <summary>
-    /// PLC Mode 선택 시 호출
-    /// </summary>
-   
+  
 
     public void StartSimulation()
     {
+        // save setting data
+        // 현재는 Crane Type 변경 시점, control mode 변경 시점에서 저장 2025-12-11
+        // settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
         
-        // OrganizingData 켜기
-        // SettingsPanel에서 변경한 키보드 모드 속도값 초기화 위해
-        if (GM.craneType == Define.CraneType.RTGC)
+        // Crane Type에 맞게 씬 전환
+        if (GM.CraneType == Define.CraneType.RTGC)
         {
             Managers.Scene.LoadScene(Define.SceneType.RTGC);
         }
 
-        else if (GM.craneType == Define.CraneType.RMGC)
+        else if (GM.CraneType == Define.CraneType.RMGC)
         {
             
             Managers.Scene.LoadScene(Define.SceneType.RMGC);
         }
 
-        else if (GM.craneType == Define.CraneType.QC)
+        else if (GM.CraneType == Define.CraneType.QC)
         {
             Managers.Scene.LoadScene(Define.SceneType.QC);
         }
@@ -121,7 +120,7 @@ public class MenuController : MonoBehaviour
 
     private void OnChangeCraneType()
     {
-        btnPLCText.text = $"{GM.craneType.ToString()}";
+        btnPLCText.text = $"{GM.CraneType.ToString()}";
 
         // save setting data
         settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
@@ -132,22 +131,17 @@ public class MenuController : MonoBehaviour
         string selectedMode = dropdownControlMode.options[value].text;
         if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.Keyboard)
         {
-            GM.settingParams.cmdWithPLC = false;
-            Debug.Log(GM.settingParams.cmdWithPLC);
+            GM.CmdWithPLC = false;
         }
         else if (Util.ParseEnum<Define.ControlMode>(selectedMode) == Define.ControlMode.PLC)
         {
-            GM.settingParams.cmdWithPLC = true;
-            Debug.Log(GM.settingParams.cmdWithPLC);
+            GM.CmdWithPLC = true;
         }
 
         // save setting data
         settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
-            
-            
     }
 
-   
 
     /// <summary>
     /// 종료 버튼 클릭 시 호출

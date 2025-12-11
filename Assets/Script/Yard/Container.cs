@@ -19,14 +19,14 @@ public class Container : MonoBehaviour
     void init()
     {
 
-        if (GM.craneType == Define.CraneType.RTGC)
+        if (GM.CraneType == Define.CraneType.RTGC)
         {
             GM.stackProfile.lengthRow = 7;
             GM.stackProfile.lengthBay = 16;
             GM.stackProfile.lengthTier = 6;
         }
 
-        else if (GM.craneType == Define.CraneType.RMGC)
+        else if (GM.CraneType == Define.CraneType.RMGC)
         {
             
             GM.stackProfile.lengthRow = 9;
@@ -34,7 +34,7 @@ public class Container : MonoBehaviour
             GM.stackProfile.lengthTier = 6;
         }
 
-        else if (GM.craneType == Define.CraneType.QC)
+        else if (GM.CraneType == Define.CraneType.QC)
         {
             GM.stackProfile.lengthRow = 10;
             GM.stackProfile.lengthBay = 12;
@@ -158,6 +158,8 @@ public class Container : MonoBehaviour
         {
             placementContainer(GM.stackProfile.listPos[i]);
         }
+        Debug.Log($"Container 생성 완료: {num_containers}개");
+        Debug.Log($"Container 전체 개수: {Managers.Object.GetGroup<ContainerController>().Count}개");
     }
 
     void placementContainer(int[] idx_pos)

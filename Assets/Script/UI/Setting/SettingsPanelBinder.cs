@@ -434,10 +434,11 @@ public class SettingsPanelBinder : MonoBehaviour
         {
             var json = JsonUtility.ToJson(GM.settingParams, true);
             File.WriteAllText(FilePath, json, Encoding.UTF8);
+            Debug.Log("[SettingsParams] 설정 저장 완료: " + FilePath);
         }
         catch (Exception e)
         {
-            Debug.LogError("[SettingsPanelBinder] 저장 실패: " + e.Message);
+            Debug.LogError("[SettingsParams] 저장 실패: " + e.Message);
         }
     }
 
@@ -454,7 +455,7 @@ public class SettingsPanelBinder : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogWarning("[SettingsPanelBinder] 로드 실패(기본값 사용): " + e.Message);
+            Debug.LogWarning("[SettingsParams] 로드 실패(기본값 사용): " + e.Message);
             current = new SettingParams();
         }
 
