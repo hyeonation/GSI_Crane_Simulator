@@ -4,7 +4,7 @@ using UnityEngine;
 // Organizing data
 public class MainLoop : MonoBehaviour
 {
-    public CommPLC[] plc;
+    
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
@@ -15,7 +15,7 @@ public class MainLoop : MonoBehaviour
     void Awake()
     {
         // Display Activated
-        Debug.Log("Displays connected: " + Display.displays.Length);
+        // Debug.Log("Displays connected: " + Display.displays.Length);
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
@@ -51,18 +51,18 @@ public class MainLoop : MonoBehaviour
             if (GM.settingParams.listIP != null)
             {
                 // connect
-                plc = new CommPLC[GM.settingParams.listIP.Count];
+                GM.plc = new CommPLC[GM.settingParams.listIP.Count];
                 for (int i = 0; i < GM.settingParams.listIP.Count; i++)
                 {
                     Debug.Log(GM.settingParams.listIP[i]);
-                    plc[i] = new CommPLC(ip: GM.settingParams.listIP[i],
+                    GM.plc[i] = new CommPLC(ip: GM.settingParams.listIP[i],
                         readDBNum: GM.readDBNum,
                         readLength: GM.readLength,
                         writeDBNum: GM.writeDBNum,
                         writeStartIdx: GM.writeStartIdx,
                         writeLength: GM.writeLength
                     );
-                    plc[i].Connect();
+                    GM.plc[i].Connect();
                 }
             }
 
@@ -82,7 +82,7 @@ public class MainLoop : MonoBehaviour
         // Using PLC data
         if (GM.settingParams.cmdWithPLC)
         {
-            for (int iCrane = 0; iCrane < GM.settingParams.listIP.Count; iCrane++)
+            for (int iCrane = 0; iCrane < GM.plc.Length; iCrane++)
             {
                 // Read PLC DB
                 ReadPLCdata(iCrane);
@@ -122,7 +122,7 @@ public class MainLoop : MonoBehaviour
         const int boolStartPointTwlUnlock = 1;
 
         // Read raw data from PLC
-        var rawData = plc[iCrane].ReadFromPLC();
+        var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
         GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
@@ -144,7 +144,7 @@ public class MainLoop : MonoBehaviour
 
         float testFloat = 123.0f;
         int startIdx = 0;
-        plc[iCrane].WriteFloat(testFloat, startIdx);
+        GM.plc[iCrane].WriteFloat(testFloat, startIdx);
 
 
 
@@ -156,7 +156,7 @@ public class MainLoop : MonoBehaviour
         // plc[iCrane].WriteByte(boolByte, 204);
 
         // write to PLC
-        plc[iCrane].WriteToPLC();
+        GM.plc[iCrane].WriteToPLC();
     }
 
     void CmdKeyboard()

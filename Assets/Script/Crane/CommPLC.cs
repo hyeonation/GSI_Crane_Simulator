@@ -13,9 +13,8 @@ public struct InfoPLC
 public class CommPLC
 {
     public InfoPLC info;
-    Plc plc;
+    public Plc plc;
     byte[] writeDB;
-    byte boolByte;
 
     public CommPLC(
         string ip,
@@ -53,6 +52,12 @@ public class CommPLC
 
         // output log
         Debug.Log($"{info.ip} Connected {plcState}");
+    }
+
+    public void Disconnect()
+    {
+        Debug.Log($"PLC {info.ip} Disconnected");
+        plc.Close();
     }
 
     public byte[] ReadFromPLC()

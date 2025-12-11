@@ -32,7 +32,7 @@ public class MainLoopQC : MainLoop
         const int boolStartPoint45Ft = 3;
 
         // Read raw data from PLC
-        var rawData = plc[iCrane].ReadFromPLC();
+        var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
         GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
@@ -64,7 +64,7 @@ public class MainLoopQC : MainLoop
         CommPLC.WriteBool(mi.sprdSingle, 6, boolByte);
         CommPLC.WriteBool(mi.sprdTwin, 7, boolByte);
 
-        plc[iCrane].WriteByte(boolByte, 0);
+        GM.plc[iCrane].WriteByte(boolByte, 0);
 
         boolByte = 0;  // init
         CommPLC.WriteBool(mi.sprd20Ft, 0, boolByte);
@@ -77,24 +77,24 @@ public class MainLoopQC : MainLoop
         CommPLC.WriteBool(mi.flipSsLeftUp, 7, boolByte);
 
 
-        plc[iCrane].WriteShort(-1231, 230);
+        GM.plc[iCrane].WriteShort(-1231, 230);
 
 
-        plc[iCrane].WriteByte(boolByte, 1);
+        GM.plc[iCrane].WriteByte(boolByte, 1);
 
         // int
-        plc[iCrane].WriteShort(-123, 216);
+        GM.plc[iCrane].WriteShort(-123, 216);
 
 
         // word
-        plc[iCrane].WriteShort(-1231, 230);
+        GM.plc[iCrane].WriteShort(-1231, 230);
 
         // char
-        plc[iCrane].WriteChar('d', 200);
+        GM.plc[iCrane].WriteChar('d', 200);
 
 
         float testFloat = 123.0f;
-        plc[iCrane].WriteFloat(testFloat, 84);
+        GM.plc[iCrane].WriteFloat(testFloat, 84);
 
         // byte boolByte = 0;  // init
         // CommPLC.WriteBool(true, 0, boolByte);
@@ -104,7 +104,7 @@ public class MainLoopQC : MainLoop
         // plc[iCrane].WriteByte(boolByte, 204);
 
         // write to PLC
-        plc[iCrane].WriteToPLC();
+        GM.plc[iCrane].WriteToPLC();
 
     }
 }

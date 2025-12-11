@@ -7,6 +7,8 @@ using UnityEngine.UI; // Dropdown을 사용하기 위한 네임스페이스
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+using Unity.VisualScripting;
 public class MainLoopTOS : MonoBehaviour
 {
     [Header("Dropdown")]
@@ -680,6 +682,13 @@ public class MainLoopTOS : MonoBehaviour
 
     void onClickHome()
     {
+        // Disconnect PLCs
+        for (int i = 0; i < GM.plc.Length; i++)
+            GM.plc[i].Disconnect();        
+
+        // init plc
+        GM.plc = new CommPLC[0];
+
         // Go to Main Scene
         Managers.Scene.LoadScene(Define.SceneType.StartMenu);
     }

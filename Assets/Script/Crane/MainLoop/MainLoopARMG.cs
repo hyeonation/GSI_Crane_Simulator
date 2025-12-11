@@ -38,7 +38,7 @@ public class MainLoopARMG : MainLoop
         const int boolStartPointTwlUnlock = 3;
 
         // Read raw data from PLC
-        var rawData = plc[iCrane].ReadFromPLC();
+        var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
         GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
@@ -76,8 +76,8 @@ public class MainLoopARMG : MainLoop
         {
             TaskInfo taskInfo = GM.listTaskInfo[0];
 
-            plc[iCrane].WriteShort(taskInfo.jobID, shortStartIdxJobID);
-            plc[iCrane].WriteShort(taskInfo.jobType, shortStartIdxJobType);
+            GM.plc[iCrane].WriteShort(taskInfo.jobID, shortStartIdxJobID);
+            GM.plc[iCrane].WriteShort(taskInfo.jobType, shortStartIdxJobType);
 
             WriteShiftPos(iCrane, taskInfo.srcPos, startIdxSRC, taskInfo.cntrInfoSO);
             WriteShiftPos(iCrane, taskInfo.dstPos, startIdxDST, taskInfo.cntrInfoSO);
@@ -87,7 +87,7 @@ public class MainLoopARMG : MainLoop
         }
 
         // write to PLC
-        plc[iCrane].WriteToPLC();
+        GM.plc[iCrane].WriteToPLC();
     }
 
     public void WriteShiftPos(int iCrane, ContainerPosition cntrPos, int startIdxCntrPos, ContainerInfoSO cntrInfoSO)
@@ -99,23 +99,23 @@ public class MainLoopARMG : MainLoop
         const int blockMapLength = 8;   // short(2) + short(2) + float(4) = 8
 
         // block
-        plc[iCrane].WriteShort(cntrPos.block, startIdx);
+        GM.plc[iCrane].WriteShort(cntrPos.block, startIdx);
         startIdx += shortLength;
 
         // bay
         // x10 Converting
         short convBay = (short)(cntrPos.bay * 10);
-        plc[iCrane].WriteShort(convBay, startIdx);
+        GM.plc[iCrane].WriteShort(convBay, startIdx);
         startIdx += shortLength;
 
         // row
         // x10 Converting
         short convRow = (short)((cntrPos.row + 1) * 10);
-        plc[iCrane].WriteShort(convRow, startIdx);
+        GM.plc[iCrane].WriteShort(convRow, startIdx);
         startIdx += shortLength;
 
         // tier
-        plc[iCrane].WriteShort(cntrPos.tier, startIdx);
+        GM.plc[iCrane].WriteShort(cntrPos.tier, startIdx);
         startIdx += shortLength;
 
         //// Block Map
@@ -123,16 +123,16 @@ public class MainLoopARMG : MainLoop
         startIdx += blockMapLength * cntrPos.row;
 
         // row num
-        plc[iCrane].WriteShort(convRow, startIdx);
+        GM.plc[iCrane].WriteShort(convRow, startIdx);
         startIdx += shortLength;
 
         // tier num
-        plc[iCrane].WriteShort(cntrPos.tier, startIdx);
+        GM.plc[iCrane].WriteShort(cntrPos.tier, startIdx);
         startIdx += shortLength;
 
         // max height
         float maxHeight = cntrPos.tier * cntrInfoSO.height;
-        plc[iCrane].WriteFloat(maxHeight, startIdx);
+        GM.plc[iCrane].WriteFloat(maxHeight, startIdx);
     }
 
     public void WriteContainerInfo(int iCrane, ContainerInfoSO cntrInfoSO, int startIdxCtProp)
@@ -141,16 +141,16 @@ public class MainLoopARMG : MainLoop
         int startIdx = startIdxCtProp;
 
         // size
-        plc[iCrane].WriteShort(cntrInfoSO.size, startIdx);
+        GM.plc[iCrane].WriteShort(cntrInfoSO.size, startIdx);
         startIdx += shortLength;
 
         // type
-        plc[iCrane].WriteShort(cntrInfoSO.type, startIdx);
+        GM.plc[iCrane].WriteShort(cntrInfoSO.type, startIdx);
         startIdx += shortLength;
 
         // position
         // -1: Undefined, 1: Front, 2: Center, 3: Rear
-        plc[iCrane].WriteShort(2, startIdx);
+        GM.plc[iCrane].WriteShort(2, startIdx);
         startIdx += shortLength;
         startIdx += shortLength;    // number
 
@@ -158,6 +158,6 @@ public class MainLoopARMG : MainLoop
         int idxContainerID = GM.FindContainerIndex(cntrInfoSO.strContainerID);
         byte[] byteContainerID = GM.stackProfile.listID[idxContainerID];
         for (int i = 0; i < byteContainerID.Length; i++)
-            plc[iCrane].WriteByte(byteContainerID[i], startIdx + (charLength * i));
+            GM.plc[iCrane].WriteByte(byteContainerID[i], startIdx + (charLength * i));
     }
 }

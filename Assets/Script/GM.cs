@@ -24,6 +24,7 @@ public static class GM
             }
         }
     }
+    public static CommPLC[] plc;
 
     public static string craneTypeStr = "ARMG";
     // static values
@@ -79,7 +80,7 @@ public static class GM
         }
 
         // Truck
-        GameObject truck = GameObject.Find("Truck");
+        GameObject truck = GameObject.Find("Trucks");
         nameTrucks = new string[truck.transform.childCount];
         for (int i = 0; i < truck.transform.childCount; i++)
         {
