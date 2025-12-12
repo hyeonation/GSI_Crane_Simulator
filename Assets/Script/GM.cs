@@ -39,11 +39,40 @@ public static class GM
         }
     }
 
-    public static Action UI_OnUpdateTruckList;
-    public static void UI_UpdateTruckList()
+    // UI_TruckControlPopup의 Truck List 업데이트
+    public static Action OnUpdateTruckList;
+    public static void UpdateTruckList()
     {
-        UI_OnUpdateTruckList?.Invoke();
+        OnUpdateTruckList?.Invoke();
     }
+
+    // TruckContrl을 위한 Truck 선택. 선택된 Truck을 미세조정
+    private static TruckController _selectedTruck;
+    public static TruckController SelectedTruck
+    {
+        get { return _selectedTruck; }
+        set
+        {
+            _selectedTruck = value;
+            OnSelectTruck?.Invoke();
+        }
+    }
+    public static Action OnSelectTruck;
+
+    // Crane 선택. 선택된 Crane을 조정
+    private static DrawingCrane _selectedCrane;
+    public static DrawingCrane SelectedCrane
+    {
+        get { return _selectedCrane; }
+        set
+        {
+            _selectedCrane = value;
+            OnSelectCrane?.Invoke();
+        }
+    }
+
+    // Camera 선택. 선택된 Camera를 조정
+    public static Action OnSelectCrane;
 
     // 프로그램 시작 처음만 데이터 불러오기
     public static bool isDataLoaded = false;
@@ -74,6 +103,8 @@ public static class GM
     public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
     public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
+
+    public static float cmdTruckVel;
 
     public static ContainerInfoSO info40ft = new();
 
@@ -186,6 +217,7 @@ public class SettingParams
     public float keyTrolleySpeed = 0.5f;
     public float keySpreaderSpeed = 0.25f;
     public float keyMMSpeed = 0.05f;
+    public float keyTruckSpeed = 0.1f;
     public float lidarMaxDistance_m = 100f;
     public float lidarFovHorizontal_deg = 90f;
     public float lidarFovVertical_deg = 30f;

@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using Filo;
 
-public class DrawingCrane : MonoBehaviour
+public class DrawingCrane : BaseController
 {
 
     [Header("Laser Preset")]

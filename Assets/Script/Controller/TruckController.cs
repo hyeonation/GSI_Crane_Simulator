@@ -12,8 +12,10 @@ public class TruckController : BaseController
     int bay;
     string sRow;
     Vector3 targetPosition;
-    String truckName;
+    public String truckName;
     string job;  // 작업 종류
+    float truckSpeed = 50f; 
+    public bool isSelected {get;set;} = false;
     public string Job
     {
         get { return job; }
@@ -51,13 +53,14 @@ public class TruckController : BaseController
 
     void FixedUpdate()
     {
+
+        // 목표 위치로 이동중일때 작동 
         if (targetPosition != Vector3.zero)
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
 
-            // 시속 30km/h
-            float speed = 8.33f;    
-            transform.position += direction * speed * Time.fixedDeltaTime;
+           
+            transform.position += direction * truckSpeed * Time.fixedDeltaTime;
 
             // 목표 위치에 도달했는지 확인
             if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
@@ -67,9 +70,18 @@ public class TruckController : BaseController
                 isArrived = true;
 
                 // 트럭 도착 시 UI_TruckControlPopup 업데이트
-                GM.UI_UpdateTruckList();
+                GM.UpdateTruckList();
             }
         }
+
+        // truck 미세조정 모드일때 선택된 트럭일경우. UI_TruckControlPopup에서 선택된 트럭을 미세조정
+        if(isSelected)
+        {
+            transform.position += Vector3.forward * GM.cmdTruckVel * Time.fixedDeltaTime;
+        }
+
+        
     }
+
 
 }

@@ -39,12 +39,12 @@ public class Managers : MonoBehaviour
         }
     }
     private void Start()
-{
-    Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalcount) =>
     {
-        Debug.Log($"Loaded character prefab: {key} .. {count}/{totalcount}");
-        
-    });
-}
+        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalcount) =>
+        {
+            Debug.Log($"Loaded character prefab: {key} .. {count}/{totalcount}");
+            
+        });
+    }
     
 }

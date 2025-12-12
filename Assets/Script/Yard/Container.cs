@@ -194,7 +194,7 @@ public class Container : MonoBehaviour
         byte[] containerIDByteArr = mkContainerID();                // 랜덤 ID 생성
         GM.stackProfile.listID.Add(containerIDByteArr);                    // ID 저장
         newObject.name = GM.ByteArrayToString(containerIDByteArr);     // 이름 설정
-        newObject.GetComponent<ContainerController>().TemplateID = GM.ByteArrayToString(containerIDByteArr); // ContainerInfo에 ID 저장
+        newObject.GetComponent<ContainerController>().strContainerID = GM.ByteArrayToString(containerIDByteArr); // ContainerInfo에 ID 저장
 
         GM.stackProfile.listContainerGO.Add(newObject);                             // GameObject 리스트에 추가
 

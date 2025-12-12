@@ -57,6 +57,8 @@ public class SettingsPanelBinder : MonoBehaviour
     // public static SettingParams Current { get; private set; } = new SimulatorSettings();
     public SettingParams current = new();
     public SettingParams settingDefault = new();
+    [SerializeField]
+    private Button btn_init;
 
     // ----------------- 범위(필요시 인스펙터에서 조정) -----------------
     [Header("Validation Ranges")]
@@ -85,6 +87,7 @@ public class SettingsPanelBinder : MonoBehaviour
         if (btnApply) btnApply.onClick.AddListener(ApplyAndSave);
         if (btnAddIP) btnAddIP.onClick.AddListener(AddIP);
         if (btnRemoveIP) btnRemoveIP.onClick.AddListener(RemoveIP);
+        if (btn_init) btn_init.onClick.AddListener(SettingsParamsInit);
 
         // UI 채우기
         InitUIFromData();
@@ -328,6 +331,12 @@ public class SettingsPanelBinder : MonoBehaviour
         if (!TryInt(yardContainerNumberEA, range_Containers, out s.yardContainerNumberEA)) return false;
 
         return true;
+    }
+    void SettingsParamsInit()
+    {
+        GM.settingParams = new SettingParams();
+        GM.CraneType = GM.settingParams.craneType;
+        GM.CmdWithPLC = GM.settingParams.cmdWithPLC;
     }
 
     // ----------------- Helpers: TMP 값 입출력 -----------------

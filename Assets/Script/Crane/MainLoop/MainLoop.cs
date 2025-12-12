@@ -7,7 +7,8 @@ public class MainLoop : MonoBehaviour
     
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
-           keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd;
+           keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd,
+           keyTruckCmd;
     KeyCode keyCode20ft, keyCode40ft, keyCode45ft, keyCodeTwlLock, keyCodeTwlUnlock;
 
     [SerializeField] private GameObject cranePrefab;
@@ -28,6 +29,8 @@ public class MainLoop : MonoBehaviour
         }
 
         // init KeyCmd
+        GM.OnSelectTruck -= initKeyCmdTruck;
+        GM.OnSelectTruck += initKeyCmdTruck;
         initKeyCmd();
 
         // InitCraneSpecVar
@@ -97,6 +100,9 @@ public class MainLoop : MonoBehaviour
         {
             CmdKeyboard();
         }
+
+        // GameMode 상관없이 항상 키입력 받는것
+        AlwaysCmdKeyboard();
 
         // 시간 측정
         // Time.deltaTime: 프레임 간 시간 간격
@@ -198,12 +204,22 @@ public class MainLoop : MonoBehaviour
             GM.cmdTwlLock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? false : GM.cmdTwlLock[iCrane];
             GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlLock) ? false : GM.cmdTwlUnlock[iCrane];
             GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? true : GM.cmdTwlUnlock[iCrane];
+
+            
         }
+    }
+    
+    // GameMode 상관없이 항상 키입력 받는것
+    void AlwaysCmdKeyboard()
+    {
+        // Truck
+        GM.cmdTruckVel = keyTruckCmd.GetSpeed();
     }
 
     void initKeyCmd()
     {
         // Initialize key commands with settings from GM
+        // crane
         keyGantryCmd = new KeyCmd(GM.settingParams.keyGantrySpeed, KeyCode.D, KeyCode.A);
         keyTrolleyCmd = new KeyCmd(GM.settingParams.keyTrolleySpeed, KeyCode.S, KeyCode.W);
         keySpreaderCmd = new KeyCmd(GM.settingParams.keySpreaderSpeed, KeyCode.R, KeyCode.F);
@@ -217,7 +233,22 @@ public class MainLoop : MonoBehaviour
         keyCode45ft = KeyCode.Alpha3;
         keyCodeTwlLock = KeyCode.Q;
         keyCodeTwlUnlock = KeyCode.E;
+
+        // truck
+        initKeyCmdTruck();
     }
+
+    void initKeyCmdTruck()
+    {
+        keyTruckCmd = new KeyCmd(GM.settingParams.keyTruckSpeed, KeyCode.UpArrow, KeyCode.DownArrow);
+    }
+
+    void Destroy()
+    {
+        GM.OnSelectTruck -= initKeyCmd;
+    }
+
+
 }
 
 

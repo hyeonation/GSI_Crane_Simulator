@@ -29,14 +29,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7e044ac4a54d48148a6331a39ae74884
-    m_Address: Btn_Truck
+  - m_GUID: 4e7a4ac184252b74185155c7995f7474
+    m_Address: UI_TruckControlPopup
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4e7a4ac184252b74185155c7995f7474
-    m_Address: UI_TruckControlPopup
+  - m_GUID: a008a4e401b46b541ae66136955ad682
+    m_Address: Toggle_Truck
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92031c5132219f848b23e026c903bc9f
+    m_Address: UI_AlertPopup
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

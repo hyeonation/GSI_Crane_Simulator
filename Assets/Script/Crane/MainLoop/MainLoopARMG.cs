@@ -81,7 +81,7 @@ public class MainLoopARMG : MainLoop
 
             WriteShiftPos(iCrane, taskInfo.srcPos, startIdxSRC, taskInfo.cntrInfoSO);
             WriteShiftPos(iCrane, taskInfo.dstPos, startIdxDST, taskInfo.cntrInfoSO);
-            WriteContainerInfo(iCrane, taskInfo.cntrInfoSO, startIdxCntrProp);
+            WriteContainerInfo(iCrane, taskInfo.cntrInfoSO, taskInfo.strContainerID, startIdxCntrProp);
 
             // UnityEngine.Debug.Log($"List Count: {GM.listTaskInfo.Count}, jobID: {taskInfo.jobID}, jobType: {taskInfo.jobType}");
         }
@@ -135,7 +135,7 @@ public class MainLoopARMG : MainLoop
         GM.plc[iCrane].WriteFloat(maxHeight, startIdx);
     }
 
-    public void WriteContainerInfo(int iCrane, ContainerInfoSO cntrInfoSO, int startIdxCtProp)
+    public void WriteContainerInfo(int iCrane, ContainerInfoSO cntrInfoSO, string strContainerID, int startIdxCtProp)
     {
         // init start index
         int startIdx = startIdxCtProp;
@@ -155,7 +155,7 @@ public class MainLoopARMG : MainLoop
         startIdx += shortLength;    // number
 
         // container code
-        int idxContainerID = GM.FindContainerIndex(cntrInfoSO.strContainerID);
+        int idxContainerID = GM.FindContainerIndex(strContainerID);
         byte[] byteContainerID = GM.stackProfile.listID[idxContainerID];
         for (int i = 0; i < byteContainerID.Length; i++)
             GM.plc[iCrane].WriteByte(byteContainerID[i], startIdx + (charLength * i));

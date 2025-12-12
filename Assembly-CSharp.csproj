@@ -67,6 +67,7 @@
     <Compile Include="Assets\Script\Crane\Drawing\DrawingARMG.cs" />
     <Compile Include="Assets\Script\Manager\Managers.cs" />
     <Compile Include="Assets\Script\Truck\TruckDrawing.cs" />
+    <Compile Include="Assets\Script\UI\UI_Popup\UI_AlertPopup.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Landed.cs" />
     <Compile Include="Assets\Script\Manager\ResourceManager.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopQC.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\Script\Crane\Drawing\DrawingCrane.cs" />
     <Compile Include="Assets\Script\Controller\BaseController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
+    <Compile Include="Assets\Script\UI\UI_Widget\Toggle_Truck.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoop.cs" />
     <Compile Include="Assets\Script\Manager\CoroutineManager.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
@@ -108,9 +110,9 @@
     <Compile Include="Assets\Script\Manager\GameManager.cs" />
     <Compile Include="Assets\Script\Yard\Number.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
-    <Compile Include="Assets\Script\UI\UI_Widget\Btn_Truck.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
     <Compile Include="Assets\Script\Utils\BillboardUI_SceneViewTracker.cs" />
+    <Compile Include="Assets\Script\Controller\CameraController.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
     <Compile Include="Assets\Script\Utils\Extension.cs" />
     <Compile Include="Assets\Script\Crane\Drawing\DrawingARTG.cs" />

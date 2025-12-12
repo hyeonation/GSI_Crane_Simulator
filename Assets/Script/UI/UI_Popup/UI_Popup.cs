@@ -22,36 +22,7 @@ public class UI_Popup : UI_Base
         return true;
     }
 
-    void Update()
-    {
-        if (Managers.UI.GetTopPopup() != this)
-            return;
-
-        // 2. ���콺 Ŭ�� Ȯ�� ����� ���ο� Input System ������� ����
-        if (Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame)
-            return;
-
-        PointerEventData eventData = new PointerEventData(_eventSystem);
-        eventData.position = Mouse.current.position.ReadValue(); // ���콺 ��ġ�� ���ο� ��� ���
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        _raycaster.Raycast(eventData, results);
-
-        bool isClickOnPopup = false;
-        foreach (var result in results)
-        {
-            if (result.gameObject.transform.IsChildOf(this.transform))
-            {
-                isClickOnPopup = true;
-                break;
-            }
-        }
-
-        if (!isClickOnPopup)
-        {
-            ClosePopup();
-        }
-    }
+    
 
     public void ClosePopup()
     {
