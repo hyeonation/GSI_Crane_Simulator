@@ -41,7 +41,10 @@ public class BaseController : MonoBehaviour
     // }
 
     protected virtual void OnDestroy() {
-        Managers.Object.Unregister(this);
+        if (Managers.Instance != null) 
+        {
+            Managers.Object.Unregister(this);
+        }
     }
     
 

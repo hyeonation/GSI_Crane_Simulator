@@ -35,18 +35,17 @@ public class MainLoopQC : MainLoop
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
-        GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.cmdGantryVelBWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-        GM.cmdTrolleyVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
-        GM.cmdSpreaderVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.arrayCraneDataBase[iCrane].readGantryVelFWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.arrayCraneDataBase[iCrane].readGantryVelBWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.arrayCraneDataBase[iCrane].readTrolleyVel = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);    
+        GM.arrayCraneDataBase[iCrane].readSpreaderVel = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
 
         // Read boolean data
-        GM.cmdTwlLock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
-        GM.cmdTwlUnlock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
-
-        GM.cmd20ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
-        GM.cmd40ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
-        GM.cmd45ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
+        GM.arrayCraneDataBase[iCrane].readTwlLock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.arrayCraneDataBase[iCrane].readTwlUnlock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+        GM.arrayCraneDataBase[iCrane].read20ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
+        GM.arrayCraneDataBase[iCrane].read40ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
+        GM.arrayCraneDataBase[iCrane].read45ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
     }
 
     public override void WriteUnitydataToPLC(int iCrane)

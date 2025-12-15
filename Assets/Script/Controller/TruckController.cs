@@ -14,7 +14,7 @@ public class TruckController : BaseController
     Vector3 targetPosition;
     public String truckName;
     string job;  // 작업 종류
-    float truckSpeed = 50f; 
+    float truckSpeed = 30f; 
     public bool isSelected {get;set;} = false;
     public string Job
     {

@@ -5,7 +5,21 @@ using UnityEngine;
 public class Managers : MonoBehaviour
 {
     static Managers s_instance; // ���ϼ��� ����ȴ�
-    static Managers Instance { get { Init(); return s_instance; } } // ������ �Ŵ����� �����´�
+    public static Managers Instance 
+    { 
+        get 
+        { 
+            // 게임 종료 중이라면 null을 반환하여 객체 생성을 원천 차단
+            if (s_isQuitting) 
+            {
+                return null;    
+            }
+            
+            Init(); 
+            return s_instance; 
+        } 
+    }
+    static bool s_isQuitting = false;
 
     #region Managers
     UIManager _ui = new UIManager();
@@ -24,6 +38,9 @@ public class Managers : MonoBehaviour
 
     public static void Init()
     {
+        // 종료 중이면 초기화 로직 수행 안 함
+        if (s_isQuitting) return;
+
         if (s_instance == null)
         {
             GameObject go = GameObject.Find("@Managers");
@@ -35,9 +52,12 @@ public class Managers : MonoBehaviour
 
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
-                               
+
+            // [심화] 혹시 모를 매니저 초기화 로직이 있다면 여기서 호출
+            // s_instance._pool.Init(); 
         }
     }
+
     private void Start()
     {
         Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalcount) =>
@@ -47,4 +67,8 @@ public class Managers : MonoBehaviour
         });
     }
     
+    private void OnApplicationQuit()
+    {
+        s_isQuitting = true;
+    }
 }

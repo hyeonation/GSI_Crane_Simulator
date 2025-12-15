@@ -17,7 +17,7 @@ public class MainLoopARMG : MainLoop
         GM.readLength = 178;
         GM.writeDBNum = 2130;
         GM.writeStartIdx = 0;
-        GM.writeLength = 302;
+        GM.writeLength = 314;
     }
 
     public override void ReadPLCdata(int iCrane)
@@ -41,26 +41,27 @@ public class MainLoopARMG : MainLoop
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
-        GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.cmdGantryVelBWD[iCrane] = GM.cmdGantryVelFWD[iCrane];
-        GM.cmdTrolleyVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
-        GM.cmdSpreaderVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
-        GM.cmdMM0Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
-        GM.cmdMM1Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);
-        GM.cmdMM2Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
-        GM.cmdMM3Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
+        GM.arrayCraneDataBase[iCrane].readGantryVelFWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);    
+        GM.arrayCraneDataBase[iCrane].readGantryVelBWD = GM.arrayCraneDataBase[iCrane].readGantryVelFWD;
+        GM.arrayCraneDataBase[iCrane].readTrolleyVel = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.arrayCraneDataBase[iCrane].readSpreaderVel = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.arrayCraneDataBase[iCrane].readMM0Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.arrayCraneDataBase[iCrane].readMM1Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);    
+        GM.arrayCraneDataBase[iCrane].readMM2Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.arrayCraneDataBase[iCrane].readMM3Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
 
         // Read boolean data
-        GM.cmd20ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint20ft);
-        GM.cmd40ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint40ft);
-        GM.cmd45ft[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint45ft);
-        GM.cmdTwlLock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
-        GM.cmdTwlUnlock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
+        GM.arrayCraneDataBase[iCrane].read20ft = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint20ft);
+        GM.arrayCraneDataBase[iCrane].read40ft = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint40ft);
+        GM.arrayCraneDataBase[iCrane].read45ft = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint45ft);
+        GM.arrayCraneDataBase[iCrane].readTwlLock = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
+        GM.arrayCraneDataBase[iCrane].readTwlUnlock = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
     }
 
 
     public override void WriteUnitydataToPLC(int iCrane)
     {
+        CraneDataBase craneData = GM.arrayCraneDataBase[iCrane];
         // DB start index
         const int shortStartIdxJobID = 12;
         const int shortStartIdxJobType = 14;
@@ -68,9 +69,14 @@ public class MainLoopARMG : MainLoop
         const int startIdxSRC = 18;
         const int startIdxDST = 118;
         const int startIdxCntrProp = 236;
+        
+        
+        const int startIdxGantryPos = 302;
+        const int startIdxTrolleyPos = 306;
+        const int startIdxHoistPos = 310;
 
         /////////////////////
-
+        /// 
         // Determine task info
         if (GM.listTaskInfo.Count != 0)
         {
@@ -83,8 +89,18 @@ public class MainLoopARMG : MainLoop
             WriteShiftPos(iCrane, taskInfo.dstPos, startIdxDST, taskInfo.cntrInfoSO);
             WriteContainerInfo(iCrane, taskInfo.cntrInfoSO, taskInfo.strContainerID, startIdxCntrProp);
 
+            // GM.plc[iCrane].WriteFloat(taskInfo.jobType, shortStartIdxJobType);
+
+
             // UnityEngine.Debug.Log($"List Count: {GM.listTaskInfo.Count}, jobID: {taskInfo.jobID}, jobType: {taskInfo.jobType}");
+
+            
         }
+
+        // 실제 위치와 PLC에 쓸 위치 offset 보정 
+        GM.plc[iCrane].WriteFloat(craneData.writePosGantry + Define.OffsetRMGCGantryZ, startIdxGantryPos);
+        GM.plc[iCrane].WriteFloat(craneData.writePosTrolley + Define.OffsetRMGCTrolleyX, startIdxTrolleyPos);
+        GM.plc[iCrane].WriteFloat(craneData.writePosSpreader + Define.OffsetRMGCHoistY, startIdxHoistPos );
 
         // write to PLC
         GM.plc[iCrane].WriteToPLC();

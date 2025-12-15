@@ -1,6 +1,9 @@
 using UnityEngine;
 using System;
 using Filo;
+using Unity.VisualScripting;
+using System.Collections.Generic;
+using OfficeOpenXml.FormulaParsing.ExpressionGraph;
 
 public class DrawingCrane : BaseController
 {
@@ -51,10 +54,18 @@ public class DrawingCrane : BaseController
     float ftOPTargetOld = target40ft;  // default
     int ftOPDir;
 
-    bool[] cmdTwlLockOld, cmdTwlUnlockOld;
+    
 
     bool landedContainerOld, landedFloorOld;
     private FixedJoint containerFixedJoint;
+
+    public bool isSelectedCrane;
+    public List<CameraController> listCameraController = new List<CameraController>();
+    CraneDataBase craneData;
+
+    private float cmdGantryVelFWD, cmdGantryVelBWD, cmdTrolleyVel, cmdSpreaderVel, cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
+    private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
+    private bool cmdTwlLockOld = false, cmdTwlUnlockOld = false;
 
     void Start()
     {
@@ -68,12 +79,13 @@ public class DrawingCrane : BaseController
         microMotion = new Transform[4];
         cam = new Transform[4];
 
-        // 중복 계산 방지를 위한 배열 복사
-        cmdTwlLockOld = (bool[])GM.cmdTwlLock.Clone();
-        cmdTwlUnlockOld = (bool[])GM.cmdTwlUnlock.Clone();
-
         FindObject();
         InitValues();
+        craneData = GM.arrayCraneDataBase[iSelf];
+        // Crane selected change event subscribe
+        GM.OnSelectCrane -= OnCraneSelectedChange;
+        GM.OnSelectCrane += OnCraneSelectedChange;
+        OnCraneSelectedChange();
 
         // InitLaserPos(laser_x_gap, laser_y_gap);
         // InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
@@ -88,6 +100,9 @@ public class DrawingCrane : BaseController
 
     void Update()
     {
+        // read from PLC
+        ReadFromPLC();
+
         Gantry_OP();
         Trolley_OP();
         Hoist_OP();
@@ -95,6 +110,36 @@ public class DrawingCrane : BaseController
         Feet_OP();
         TwistLock_OP();
         Landed();
+
+        // write to PLC
+        WriteToPLC();
+    }
+
+    // read from PLC
+    void ReadFromPLC()
+    {
+        // Deploy command from PLC to local cmd variables
+        cmdGantryVelFWD = craneData.readGantryVelFWD;
+        cmdGantryVelBWD = craneData.readGantryVelBWD;
+        cmdTrolleyVel = craneData.readTrolleyVel;
+        cmdSpreaderVel = craneData.readSpreaderVel;
+        cmdMM0Vel = craneData.readMM0Vel;
+        cmdMM1Vel = craneData.readMM1Vel;
+        cmdMM2Vel = craneData.readMM2Vel;
+        cmdMM3Vel = craneData.readMM3Vel;
+        cmd20ft = craneData.read20ft;
+        cmd40ft = craneData.read40ft;
+        cmd45ft = craneData.read45ft;
+        cmdTwlLock = craneData.readTwlLock;
+        cmdTwlUnlock = craneData.readTwlUnlock;
+    }
+
+    // write to PLC
+    void WriteToPLC()
+    {
+        craneData.writePosGantry = craneBody.position.z;
+        craneData.writePosTrolley = trolley.position.x;
+        craneData.writePosSpreader = spreader.position.y;
     }
 
     public virtual void FindObject()
@@ -184,6 +229,13 @@ public class DrawingCrane : BaseController
         var cam_1 = feet[1].transform.Find("Camera");
         cam[1] = cam_1.transform.Find("Camera2");
         cam[2] = cam_1.transform.Find("Camera3");
+
+        // camera controllers
+        listCameraController.Clear();
+        foreach (var camCtrl in gameObject.GetComponentsInChildren<CameraController>())
+        {
+            listCameraController.Add(camCtrl);
+        }
     }
 
     public virtual void Gantry_OP()
@@ -194,22 +246,22 @@ public class DrawingCrane : BaseController
         theta = (-craneBody.eulerAngles[1] + 90) * Mathf.Deg2Rad;  // 회전 방향 반대여서 부호 음수 처리
 
         // 두 속도 같을 때
-        if (GM.cmdGantryVelBWD[iSelf] == GM.cmdGantryVelFWD[iSelf])
+        if (cmdGantryVelBWD == cmdGantryVelFWD)
         {
             dPhi = 0;
-            vecDx = GM.cmdGantryVelBWD[iSelf] * Mathf.Cos(theta) * Time.deltaTime;
-            vecDz = GM.cmdGantryVelBWD[iSelf] * Mathf.Sin(theta) * Time.deltaTime;
+            vecDx = cmdGantryVelBWD * Mathf.Cos(theta) * Time.deltaTime;
+            vecDz = cmdGantryVelBWD * Mathf.Sin(theta) * Time.deltaTime;
         }
 
         else
         {
-            dPhi = (GM.cmdGantryVelFWD[iSelf] - GM.cmdGantryVelBWD[iSelf]) * Time.deltaTime / gantryLength;
+            dPhi = (cmdGantryVelFWD - cmdGantryVelBWD) * Time.deltaTime / gantryLength;
 
-            vecdLength = gantryLength * Math.Abs((GM.cmdGantryVelFWD[iSelf] + GM.cmdGantryVelBWD[iSelf]) / (2 * (GM.cmdGantryVelFWD[iSelf] - GM.cmdGantryVelBWD[iSelf])));
+            vecdLength = gantryLength * Math.Abs((cmdGantryVelFWD + cmdGantryVelBWD) / (2 * (cmdGantryVelFWD - cmdGantryVelBWD)));
             vecDx = vecdLength * (Mathf.Sin(theta) * (1 - Mathf.Cos(dPhi)) - Mathf.Cos(theta) * Mathf.Sin(dPhi));
             vecDz = vecdLength * (-Mathf.Sin(theta) * Mathf.Sin(dPhi) + Mathf.Cos(theta) * (Mathf.Cos(dPhi) - 1));
 
-            dirVecd = Math.Sign(Math.Abs(GM.cmdGantryVelBWD[iSelf]) - Math.Abs(GM.cmdGantryVelFWD[iSelf]));
+            dirVecd = Math.Sign(Math.Abs(cmdGantryVelBWD) - Math.Abs(cmdGantryVelFWD));
             vecDx *= dirVecd;
             vecDz *= dirVecd;
         }
@@ -220,17 +272,17 @@ public class DrawingCrane : BaseController
 
     void Trolley_OP()
     {
-        trolley.Translate(Vector3.forward * Time.deltaTime * GM.cmdTrolleyVel[iSelf]);
+        trolley.Translate(Vector3.forward * Time.deltaTime * cmdTrolleyVel);
     }
 
     public virtual void Hoist_OP()
     {
         var force = 0.0065f;
-        var speed = GM.cmdSpreaderVel[iSelf] * 138f;
+        var speed = cmdSpreaderVel * 138f;
 
         //var con_force = 0.0065f;
 
-        force = (landedContainer && !GM.cmdTwlLock[iSelf]) ? 0 : force;
+        force = (landedContainer && !cmdTwlLock) ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
         for (short j = 0; j < discs.Length; j++)
@@ -281,30 +333,30 @@ public class DrawingCrane : BaseController
     void MicroMotion_OP()
     {
         // 기계적 범위 안에서 움직이도록 하기 위함
-        if ((microMotion[0].localPosition.x <= 0.25f && GM.cmdMM0Vel[iSelf] > 0) || (microMotion[0].localPosition.x >= -0.25f && GM.cmdMM0Vel[iSelf] < 0))
+        if ((microMotion[0].localPosition.x <= 0.25f && cmdMM0Vel > 0) || (microMotion[0].localPosition.x >= -0.25f && cmdMM0Vel < 0))
         {
-            microMotion[0].Translate(Vector3.right * Time.deltaTime * GM.cmdMM0Vel[iSelf]);
+            microMotion[0].Translate(Vector3.right * Time.deltaTime * cmdMM0Vel);
         }
-        if ((microMotion[1].localPosition.z <= 0.25f && GM.cmdMM1Vel[iSelf] > 0) || (microMotion[1].localPosition.z >= -0.25f && GM.cmdMM1Vel[iSelf] < 0))
+        if ((microMotion[1].localPosition.z <= 0.25f && cmdMM1Vel > 0) || (microMotion[1].localPosition.z >= -0.25f && cmdMM1Vel < 0))
         {
-            microMotion[1].Translate(Vector3.back * Time.deltaTime * GM.cmdMM1Vel[iSelf]);
+            microMotion[1].Translate(Vector3.back * Time.deltaTime * cmdMM1Vel);
         }
-        if ((microMotion[2].localPosition.x <= 0.25f && GM.cmdMM2Vel[iSelf] > 0) || (microMotion[2].localPosition.x >= -0.25f && GM.cmdMM2Vel[iSelf] < 0))
+        if ((microMotion[2].localPosition.x <= 0.25f && cmdMM2Vel > 0) || (microMotion[2].localPosition.x >= -0.25f && cmdMM2Vel < 0))
         {
-            microMotion[2].Translate(Vector3.right * Time.deltaTime * GM.cmdMM2Vel[iSelf]);
+            microMotion[2].Translate(Vector3.right * Time.deltaTime * cmdMM2Vel);
         }
-        if ((microMotion[3].localPosition.z <= 0.25f && GM.cmdMM3Vel[iSelf] > 0) || (microMotion[3].localPosition.z >= -0.25f && GM.cmdMM3Vel[iSelf] < 0))
+        if ((microMotion[3].localPosition.z <= 0.25f && cmdMM3Vel > 0) || (microMotion[3].localPosition.z >= -0.25f && cmdMM3Vel < 0))
         {
-            microMotion[3].Translate(Vector3.back * Time.deltaTime * GM.cmdMM3Vel[iSelf]);
+            microMotion[3].Translate(Vector3.back * Time.deltaTime * cmdMM3Vel);
         }
     }
 
     void Feet_OP()
     {
         //// target position
-        if (GM.cmd20ft[iSelf]) ftOPTarget = target20ft;
-        else if (GM.cmd40ft[iSelf]) ftOPTarget = target40ft;
-        else if (GM.cmd45ft[iSelf]) ftOPTarget = target45ft;
+        if (cmd20ft) ftOPTarget = target20ft;
+        else if (cmd40ft) ftOPTarget = target40ft;
+        else if (cmd45ft) ftOPTarget = target45ft;
 
         //// init
         // Target position 바뀌었을 때 1회만
@@ -337,14 +389,14 @@ public class DrawingCrane : BaseController
     void TwistLock_OP()
     {
         // Lock. 반복실행 방지 코드 추가.
-        if (GM.cmdTwlLock[iSelf] && (cmdTwlLockOld[iSelf] != GM.cmdTwlLock[iSelf]))
+        if (cmdTwlLock && (cmdTwlLockOld != cmdTwlLock))
         {
             Debug.Log("Lock");
 
             // update value
-            cmdTwlLockOld[iSelf] = GM.cmdTwlLock[iSelf];
-            cmdTwlUnlockOld[iSelf] = false;
-            GM.cmdTwlUnlock[iSelf] = false;
+            cmdTwlLockOld = cmdTwlLock;
+            cmdTwlUnlockOld = false;
+            cmdTwlUnlock = false;
 
             // landedContainer == true 시 Container 체결
             if (landedContainer)
@@ -361,13 +413,13 @@ public class DrawingCrane : BaseController
             }
         }
 
-        else if (GM.cmdTwlUnlock[iSelf] && (cmdTwlUnlockOld[iSelf] != GM.cmdTwlUnlock[iSelf]))
+        else if (cmdTwlUnlock && (cmdTwlUnlockOld != cmdTwlUnlock))
         {
             Debug.Log("Unlock");
 
-            cmdTwlUnlockOld[iSelf] = GM.cmdTwlUnlock[iSelf];
-            cmdTwlLockOld[iSelf] = false;
-            GM.cmdTwlLock[iSelf] = false;
+            cmdTwlUnlockOld = cmdTwlUnlock;
+            cmdTwlLockOld = false;
+            cmdTwlLock = false;
 
             // 컨테이너와 spreader 연결 해제
             Destroy(containerFixedJoint);
@@ -423,6 +475,29 @@ public class DrawingCrane : BaseController
                 }
             }
         }
+    }
+
+    // Crane selected change
+    void OnCraneSelectedChange()
+    {
+        isSelectedCrane = GM.SelectedCrane == this;
+        // 선태된 크레인이 아닐경우 카메라 off, setActive false
+        
+        if (!isSelectedCrane)
+        {
+            foreach (var camCtrl in listCameraController)
+            {
+                camCtrl.CameraOff();
+            }
+        }
+        else
+        {
+            foreach (var camCtrl in listCameraController)
+            {
+                camCtrl.CameraOn();
+            }
+        }
+
     }
 
     void InitLaserPos(float gqp, float ygap)

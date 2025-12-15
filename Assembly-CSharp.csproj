@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\Crane\Drawing\DrawingARMG.cs" />
+    <Compile Include="Assets\Script\DataBase\CraneDataBase.cs" />
     <Compile Include="Assets\Script\Manager\Managers.cs" />
     <Compile Include="Assets\Script\Truck\TruckDrawing.cs" />
     <Compile Include="Assets\Script\UI\UI_Popup\UI_AlertPopup.cs" />

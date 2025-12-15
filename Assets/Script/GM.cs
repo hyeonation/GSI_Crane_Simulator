@@ -66,11 +66,13 @@ public static class GM
         get { return _selectedCrane; }
         set
         {
-            _selectedCrane = value;
+            if(_selectedCrane != value)
+            {
+                _selectedCrane = value;
+            }
             OnSelectCrane?.Invoke();
         }
     }
-
     // Camera 선택. 선택된 Camera를 조정
     public static Action OnSelectCrane;
 
@@ -78,6 +80,8 @@ public static class GM
     public static bool isDataLoaded = false;
 
     public static CommPLC[] plc;
+
+    public static List<DrawingCrane> listCranes;
 
     public static string craneTypeStr = "ARMG";
     // static values
@@ -90,19 +94,17 @@ public static class GM
     public static StackProfile stackProfile = new();
     public static List<TaskInfo> listTaskInfo = new();
 
-    public const float yard_x_interval = 2.840f;
+    public const float yard_x_interval = 2.843f;
     public const float yard_y_interval = 2.83f;
     public const float yard_z_interval = 12.96f;
-    public const float yardWSxInterval = -19;
-    public const float yardLSxInterval = 19;
+    public const float yardWSxInterval = -17.935f;
+    public const float yardLSxInterval = 18.432f;
     public const float containerYPosOnTruck = 2.7f;
 
     public const float TruckSpawnPosZ = 270f;
 
     // command data
-    public static float[] cmdGantryVelBWD, cmdGantryVelFWD, cmdTrolleyVel, cmdSpreaderVel;
-    public static float[] cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
-    public static bool[] cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
+    public static CraneDataBase[] arrayCraneDataBase; 
 
     public static float cmdTruckVel;
 
@@ -143,19 +145,11 @@ public static class GM
         }
 
         // Read DB array
-        cmdGantryVelFWD = new float[nameCranes.Length];
-        cmdGantryVelBWD = new float[nameCranes.Length];
-        cmdTrolleyVel = new float[nameCranes.Length];
-        cmdSpreaderVel = new float[nameCranes.Length];
-        cmdMM0Vel = new float[nameCranes.Length];
-        cmdMM1Vel = new float[nameCranes.Length];
-        cmdMM2Vel = new float[nameCranes.Length];
-        cmdMM3Vel = new float[nameCranes.Length];
-        cmd20ft = new bool[nameCranes.Length];
-        cmd40ft = new bool[nameCranes.Length];
-        cmd45ft = new bool[nameCranes.Length];
-        cmdTwlLock = new bool[nameCranes.Length];
-        cmdTwlUnlock = new bool[nameCranes.Length];
+        arrayCraneDataBase = new CraneDataBase[nameCranes.Length];
+        for (int i = 0; i < nameCranes.Length; i++)
+        {
+            arrayCraneDataBase[i] = new CraneDataBase();
+        }
 
         // init Stack profile
         stackProfile.InitStackProfile();

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 // Organizing data
@@ -131,18 +132,18 @@ public class MainLoop : MonoBehaviour
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
-        GM.cmdGantryVelFWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.cmdGantryVelBWD[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-        GM.cmdTrolleyVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
-        GM.cmdSpreaderVel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
-        GM.cmdMM0Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
-        GM.cmdMM1Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);
-        GM.cmdMM2Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
-        GM.cmdMM3Vel[iCrane] = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
+        GM.arrayCraneDataBase[iCrane].readGantryVelFWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.arrayCraneDataBase[iCrane].readGantryVelBWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.arrayCraneDataBase[iCrane].readTrolleyVel = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.arrayCraneDataBase[iCrane].readSpreaderVel = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.arrayCraneDataBase[iCrane].readMM0Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM0Vel);
+        GM.arrayCraneDataBase[iCrane].readMM1Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM1Vel);
+        GM.arrayCraneDataBase[iCrane].readMM2Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM2Vel);
+        GM.arrayCraneDataBase[iCrane].readMM3Vel = CommPLC.ReadFloatData(rawData, floatStartIdxMM3Vel);
 
         // Read boolean data
-        GM.cmdTwlLock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
-        GM.cmdTwlUnlock[iCrane] = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+        GM.arrayCraneDataBase[iCrane].readTwlLock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.arrayCraneDataBase[iCrane].readTwlUnlock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
     }
 
     public virtual void WriteUnitydataToPLC(int iCrane)
@@ -153,6 +154,7 @@ public class MainLoop : MonoBehaviour
         GM.plc[iCrane].WriteFloat(testFloat, startIdx);
 
 
+       
 
         // byte boolByte = 0;  // init
         // CommPLC.WriteBool(true, 0, boolByte);
@@ -173,39 +175,36 @@ public class MainLoop : MonoBehaviour
         if (Input.anyKeyDown)
         {
             // Gantry
-            GM.cmdGantryVelFWD[iCrane] = keyGantryCmd.GetSpeed();
-            GM.cmdGantryVelBWD[iCrane] = GM.cmdGantryVelFWD[iCrane];
+            GM.arrayCraneDataBase[iCrane].readGantryVelFWD = keyGantryCmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readGantryVelBWD = GM.arrayCraneDataBase[iCrane].readGantryVelFWD;
 
             // Trolley, spreader
-            GM.cmdTrolleyVel[iCrane] = keyTrolleyCmd.GetSpeed();
-            GM.cmdSpreaderVel[iCrane] = keySpreaderCmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readTrolleyVel = keyTrolleyCmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readSpreaderVel = keySpreaderCmd.GetSpeed();
 
             // Micro Motion
-            GM.cmdMM0Vel[iCrane] = keyMM0Cmd.GetSpeed();
-            GM.cmdMM1Vel[iCrane] = keyMM1Cmd.GetSpeed();
-            GM.cmdMM2Vel[iCrane] = keyMM2Cmd.GetSpeed();
-            GM.cmdMM3Vel[iCrane] = keyMM3Cmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readMM0Vel = keyMM0Cmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readMM1Vel = keyMM1Cmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readMM2Vel = keyMM2Cmd.GetSpeed();
+            GM.arrayCraneDataBase[iCrane].readMM3Vel = keyMM3Cmd.GetSpeed();
 
             // 20ft, 40ft, 45ft
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? true : GM.cmd20ft[iCrane];
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? false : GM.cmd20ft[iCrane];
-            GM.cmd20ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? false : GM.cmd20ft[iCrane];
+            GM.arrayCraneDataBase[iCrane].read20ft = Input.GetKeyDown(keyCode20ft) ? true : GM.arrayCraneDataBase[iCrane].read20ft;
+            GM.arrayCraneDataBase[iCrane].read20ft = Input.GetKeyDown(keyCode40ft) ? false : GM.arrayCraneDataBase[iCrane].read20ft;
+            GM.arrayCraneDataBase[iCrane].read20ft = Input.GetKeyDown(keyCode45ft) ? false : GM.arrayCraneDataBase[iCrane].read20ft;
 
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? false : GM.cmd40ft[iCrane];
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? true : GM.cmd40ft[iCrane];
-            GM.cmd40ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? false : GM.cmd40ft[iCrane];
-
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode20ft) ? false : GM.cmd45ft[iCrane];
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode40ft) ? false : GM.cmd45ft[iCrane];
-            GM.cmd45ft[iCrane] = Input.GetKeyDown(keyCode45ft) ? true : GM.cmd45ft[iCrane];
+            GM.arrayCraneDataBase[iCrane].read40ft = Input.GetKeyDown(keyCode20ft) ? false : GM.arrayCraneDataBase[iCrane].read40ft;
+            GM.arrayCraneDataBase[iCrane].read40ft = Input.GetKeyDown(keyCode40ft) ? true : GM.arrayCraneDataBase[iCrane].read40ft;
+            GM.arrayCraneDataBase[iCrane].read40ft = Input.GetKeyDown(keyCode45ft) ? false : GM.arrayCraneDataBase[iCrane].read40ft;
+            GM.arrayCraneDataBase[iCrane].read45ft = Input.GetKeyDown(keyCode20ft) ? false : GM.arrayCraneDataBase[iCrane].read45ft;
+            GM.arrayCraneDataBase[iCrane].read45ft = Input.GetKeyDown(keyCode40ft) ? false : GM.arrayCraneDataBase[iCrane].read45ft;
+            GM.arrayCraneDataBase[iCrane].read45ft = Input.GetKeyDown(keyCode45ft) ? true : GM.arrayCraneDataBase[iCrane].read45ft;
 
             // Twist Lock
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(keyCodeTwlLock) ? true : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlLock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? false : GM.cmdTwlLock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlLock) ? false : GM.cmdTwlUnlock[iCrane];
-            GM.cmdTwlUnlock[iCrane] = Input.GetKeyDown(keyCodeTwlUnlock) ? true : GM.cmdTwlUnlock[iCrane];
-
-            
+            GM.arrayCraneDataBase[iCrane].readTwlLock = Input.GetKeyDown(keyCodeTwlLock) ? true : GM.arrayCraneDataBase[iCrane].readTwlLock;
+            GM.arrayCraneDataBase[iCrane].readTwlLock = Input.GetKeyDown(keyCodeTwlUnlock) ? false : GM.arrayCraneDataBase[iCrane].readTwlLock;
+            GM.arrayCraneDataBase[iCrane].readTwlUnlock = Input.GetKeyDown(keyCodeTwlLock) ? false : GM.arrayCraneDataBase[iCrane].readTwlUnlock;
+            GM.arrayCraneDataBase[iCrane].readTwlUnlock = Input.GetKeyDown(keyCodeTwlUnlock) ? true : GM.arrayCraneDataBase[iCrane].readTwlUnlock;
         }
     }
     

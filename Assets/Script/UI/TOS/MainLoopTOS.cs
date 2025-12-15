@@ -303,6 +303,8 @@ public class MainLoopTOS : UI_Base
     {
         // select crane
         strCrane = DropdownInputCrane.options[index].text;
+        // select in GM
+        GM.SelectedCrane = Managers.Object.GetGroup<DrawingARMG>().FirstOrDefault(crane => crane.gameObject.name == strCrane);
         UpdateApplyText();
 
         // // index는 선택된 옵션의 순서(0부터 시작)입니다
