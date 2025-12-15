@@ -247,6 +247,8 @@ public class MainLoop : MonoBehaviour
         GM.OnSelectTruck -= initKeyCmd;
     }
 
+    
+
 
 }
 

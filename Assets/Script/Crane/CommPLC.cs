@@ -126,6 +126,18 @@ public class CommPLC
         return BitConverter.ToSingle(bytes, 0); // Convert to float
     }
 
+    public static short ReadShortData(byte[] rawData, int startIndex)
+    {
+        // short 2 bytes
+        const int lengthShortData = 2;
+
+        // get byte array
+        byte[] bytes = reverseByteArr(rawData[startIndex..(startIndex + lengthShortData)]);
+
+        // Convert byte array to short
+        return BitConverter.ToInt16(bytes, 0); // Convert to short
+    }
+
     public static bool ReadBoolData(byte[] rawData, int startIndex, int bitIndex)
     {
         // Check if the bit at bitIndex is set

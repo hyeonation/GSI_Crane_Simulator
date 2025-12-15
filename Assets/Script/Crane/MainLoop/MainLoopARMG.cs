@@ -14,7 +14,7 @@ public class MainLoopARMG : MainLoop
     public override void InitCraneSpecVar()
     {
         GM.readDBNum = 2140;
-        GM.readLength = 178;
+        GM.readLength = 186;
         GM.writeDBNum = 2130;
         GM.writeStartIdx = 0;
         GM.writeLength = 314;
@@ -37,6 +37,9 @@ public class MainLoopARMG : MainLoop
         const int boolStartPoint45ft = 2;
         const int boolStartPointTwlUnlock = 3;
 
+        const int shortStartIdxCamIndex = 178;
+        
+
         // Read raw data from PLC
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
@@ -56,6 +59,9 @@ public class MainLoopARMG : MainLoop
         GM.arrayCraneDataBase[iCrane].read45ft = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPoint45ft);
         GM.arrayCraneDataBase[iCrane].readTwlLock = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
         GM.arrayCraneDataBase[iCrane].readTwlUnlock = CommPLC.ReadBoolData(rawData, boolStartIdxSprdStatus, boolStartPointTwlUnlock);
+
+        // read cam index data
+        GM.arrayCraneDataBase[iCrane].readCam1 = CommPLC.ReadShortData(rawData, shortStartIdxCamIndex);
     }
 
 

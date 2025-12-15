@@ -66,6 +66,7 @@ public class DrawingCrane : BaseController
     private float cmdGantryVelFWD, cmdGantryVelBWD, cmdTrolleyVel, cmdSpreaderVel, cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
     private bool cmdTwlLockOld = false, cmdTwlUnlockOld = false;
+    protected short cmdCamIndex1, cmdCamIndex2, cmdCamIndex3, cmdCamIndex4;
 
     void Start()
     {
@@ -132,6 +133,7 @@ public class DrawingCrane : BaseController
         cmd45ft = craneData.read45ft;
         cmdTwlLock = craneData.readTwlLock;
         cmdTwlUnlock = craneData.readTwlUnlock;
+        cmdCamIndex1 = craneData.readCam1;
     }
 
     // write to PLC
@@ -481,23 +483,33 @@ public class DrawingCrane : BaseController
     void OnCraneSelectedChange()
     {
         isSelectedCrane = GM.SelectedCrane == this;
-        // 선태된 크레인이 아닐경우 카메라 off, setActive false
         
-        if (!isSelectedCrane)
+        // 선택된 크레인일 경우
+        if (isSelectedCrane)
         {
-            foreach (var camCtrl in listCameraController)
-            {
-                camCtrl.CameraOff();
-            }
-        }
-        else
-        {
+            //카메라 On
             foreach (var camCtrl in listCameraController)
             {
                 camCtrl.CameraOn();
             }
         }
+        // 선택된 크레인이 아닐경우
+        else
+        {
+            //카메라 Off
+            foreach (var camCtrl in listCameraController)
+            {
+                camCtrl.CameraOff();
+            }
+        }
 
+    }
+
+    // 분활된 화면에 맞게 카메라 넣기
+    public virtual void SetCameraViewport(int viewport, int camIdx)
+    {
+        
+        
     }
 
     void InitLaserPos(float gqp, float ygap)

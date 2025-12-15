@@ -856,7 +856,11 @@ public class MainLoopTOS : UI_Base
     void onClickCameraControl()
     {
         //TODO Popup Camera Control UI
-        Debug.Log("Camera Control Clicked");
+        // 0 ~ 3 랜덤 뷰포트
+        int randomViewport = UnityEngine.Random.Range(0, 4);
+        // 0 ~12 랜덤 크레인 카메라 선택
+        int randomCamera = UnityEngine.Random.Range(0, 13);
+        GM.SelectedCrane.SetCameraViewport(randomViewport, randomCamera);
     }
 }
 
