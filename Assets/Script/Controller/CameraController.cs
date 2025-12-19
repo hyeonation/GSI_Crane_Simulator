@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraController : BaseController
 {
-    
 
     public Camera cam;
     public string camName;
@@ -35,7 +34,7 @@ public class CameraController : BaseController
         }
     }
 
-    
+
     public void CameraOff()
     {
         gameObject.SetActive(false);
@@ -55,6 +54,11 @@ public class CameraController : BaseController
     {
         cam.targetDisplay = displayIdx;
     }
+    public void SetDepth(int depth)
+    {
+        cam.depth = depth;
+    }
+
 
 
 }

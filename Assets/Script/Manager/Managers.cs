@@ -26,6 +26,7 @@ public class Managers : MonoBehaviour
     ObjectManager _object = new ObjectManager();
     ResourceManager _resource = new ResourceManager();
     PoolManager _pool = new PoolManager();
+    PLCManager _plc = new PLCManager();
     
 
     SceneManagerEx _scene = new SceneManagerEx();
@@ -34,6 +35,7 @@ public class Managers : MonoBehaviour
     public static ResourceManager Resource { get { return Instance?._resource; } }
     public static PoolManager Pool { get { return Instance?._pool; } }
     public static SceneManagerEx Scene { get { return Instance?._scene; } }
+    public static PLCManager PLC { get { return Instance?._plc; } }
     #endregion
 
     public static void Init()

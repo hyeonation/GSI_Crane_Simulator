@@ -52,10 +52,8 @@ public class ResourceManager
     {
         if (go == null)
             return;
-
         if(Managers.Pool.Push(go))
             return;
-
         Object.Destroy(go, delay);
     }
 

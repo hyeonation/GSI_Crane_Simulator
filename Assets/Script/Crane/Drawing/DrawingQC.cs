@@ -94,7 +94,7 @@ public class DrawingQC : DrawingCrane
     public override void Gantry_OP()
     {
         // TODO 임시 local variable 만들어야함
-        float vecDx = GM.arrayCraneDataBase[iSelf].readGantryVelFWD * Time.deltaTime;
+        float vecDx = GM.arrayCraneDataBase[iSelf].ReadData.gantryVelFWD * Time.deltaTime;
         craneBody.position += new Vector3(vecDx, 0, 0);
     }
 
@@ -102,11 +102,11 @@ public class DrawingQC : DrawingCrane
     {
         var force = 0.0065f;
         // TODO 임시 local variable 만들어야함
-        var speed = GM.arrayCraneDataBase[iSelf].readSpreaderVel * convHoistVel;
+        var speed = GM.arrayCraneDataBase[iSelf].ReadData.spreaderVel * convHoistVel;
 
         //var con_force = 0.0065f;
         // TODO 임시 local variable 만들어야함
-        force = (landedContainer && !GM.arrayCraneDataBase[iSelf].readTwlLock) ? 0 : force;
+        force = (landedContainer && !GM.arrayCraneDataBase[iSelf].ReadData.twlStatus.locked) ? 0 : force;
         //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
 
         // disc rotation

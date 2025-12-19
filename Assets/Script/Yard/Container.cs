@@ -7,6 +7,8 @@ public class Container : MonoBehaviour
 {
     //containers
     public GameObject[] prefabs;
+    public GameObject[] Testprefabs;
+
 
     float x_interval, y_interval, z_interval;
     int num_containers;
@@ -19,6 +21,9 @@ public class Container : MonoBehaviour
     void init()
     {
 
+        // Set a specific seed for reproducible results
+        Random.InitState(42);
+
         if (GM.CraneType == Define.CraneType.RTGC)
         {
             GM.stackProfile.lengthRow = 7;
@@ -28,7 +33,7 @@ public class Container : MonoBehaviour
 
         else if (GM.CraneType == Define.CraneType.RMGC)
         {
-            
+
             GM.stackProfile.lengthRow = 9;
             GM.stackProfile.lengthBay = 16;
             GM.stackProfile.lengthTier = 6;
@@ -165,7 +170,8 @@ public class Container : MonoBehaviour
     void placementContainer(int[] idx_pos)
     {
         // make GameObject
-        GameObject newObject = mkRandomPrefab(prefabs , Vector3.zero);
+        // TDOD : Testprefabs 임시 설정
+        GameObject newObject = mkRandomPrefab(prefabs, Vector3.zero);
         newObject.transform.SetParent(transform);
 
         // stack position data

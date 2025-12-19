@@ -53,8 +53,18 @@ public class DrawingCrane : BaseController
     float ftOPTarget = target40ft;  // default
     float ftOPTargetOld = target40ft;  // default
     int ftOPDir;
+    protected CameraController[] viewPortCams = new CameraController[4];
 
-    
+    protected int CurrentBay
+    {
+        get
+        {
+            int _currentBay = Util.GetClosestIndexBinary(Define.Block_8G_Bay_Pos, craneBody.position.z + Define.OffsetRMGCGantryZ);
+            return _currentBay;
+        }
+    }
+
+
 
     bool landedContainerOld, landedFloorOld;
     private FixedJoint containerFixedJoint;
@@ -67,7 +77,64 @@ public class DrawingCrane : BaseController
     private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
     private bool cmdTwlLockOld = false, cmdTwlUnlockOld = false;
     protected short cmdCamIndex1, cmdCamIndex2, cmdCamIndex3, cmdCamIndex4;
+    private bool _ropeSlack;
 
+    #region Camera Index Property
+    public short CmdCamIndex1
+    {
+        get { return cmdCamIndex1; }
+
+        set
+        {
+            if (cmdCamIndex1 != value)
+            {
+                cmdCamIndex1 = value;
+                SetCameraViewport(0, cmdCamIndex1);
+            }
+        }
+    }
+
+    public short CmdCamIndex2
+    {
+        get { return cmdCamIndex2; }
+
+        set
+        {
+            if (cmdCamIndex2 != value)
+            {
+                cmdCamIndex2 = value;
+                SetCameraViewport(1, cmdCamIndex2);
+            }
+        }
+    }
+    public short CmdCamIndex3
+    {
+        get { return cmdCamIndex3; }
+
+        set
+        {
+            if (cmdCamIndex3 != value)
+            {
+                cmdCamIndex3 = value;
+                SetCameraViewport(2, cmdCamIndex3);
+            }
+        }
+    }
+    public short CmdCamIndex4
+    {
+        get { return cmdCamIndex4; }
+
+        set
+        {
+            if (cmdCamIndex4 != value)
+            {
+                cmdCamIndex4 = value;
+                SetCameraViewport(3, cmdCamIndex4);
+            }
+        }
+    }
+
+    #endregion
     void Start()
     {
 
@@ -82,7 +149,7 @@ public class DrawingCrane : BaseController
 
         FindObject();
         InitValues();
-        craneData = GM.arrayCraneDataBase[iSelf];
+
         // Crane selected change event subscribe
         GM.OnSelectCrane -= OnCraneSelectedChange;
         GM.OnSelectCrane += OnCraneSelectedChange;
@@ -114,34 +181,85 @@ public class DrawingCrane : BaseController
 
         // write to PLC
         WriteToPLC();
+        int currentBay = CurrentBay;
     }
 
     // read from PLC
     void ReadFromPLC()
     {
+        // get crane data from GM
+        craneData = GM.arrayCraneDataBase[iSelf];
+
         // Deploy command from PLC to local cmd variables
-        cmdGantryVelFWD = craneData.readGantryVelFWD;
-        cmdGantryVelBWD = craneData.readGantryVelBWD;
-        cmdTrolleyVel = craneData.readTrolleyVel;
-        cmdSpreaderVel = craneData.readSpreaderVel;
-        cmdMM0Vel = craneData.readMM0Vel;
-        cmdMM1Vel = craneData.readMM1Vel;
-        cmdMM2Vel = craneData.readMM2Vel;
-        cmdMM3Vel = craneData.readMM3Vel;
-        cmd20ft = craneData.read20ft;
-        cmd40ft = craneData.read40ft;
-        cmd45ft = craneData.read45ft;
-        cmdTwlLock = craneData.readTwlLock;
-        cmdTwlUnlock = craneData.readTwlUnlock;
-        cmdCamIndex1 = craneData.readCam1;
+        cmdGantryVelFWD = craneData.ReadData.gantryVelFWD;
+        cmdGantryVelBWD = craneData.ReadData.gantryVelBWD;
+        cmdTrolleyVel = craneData.ReadData.trolleyVel;
+        cmdSpreaderVel = craneData.ReadData.spreaderVel;
+        cmdMM0Vel = craneData.ReadData.MM0Vel;
+        cmdMM1Vel = craneData.ReadData.MM1Vel;
+        cmdMM2Vel = craneData.ReadData.MM2Vel;
+        cmdMM3Vel = craneData.ReadData.MM3Vel;
+        cmd20ft = craneData.ReadData.sprdStatus.on20ft;
+        cmd40ft = craneData.ReadData.sprdStatus.on40ft;
+        cmd45ft = craneData.ReadData.sprdStatus.on45ft;
+        cmdTwlLock = craneData.ReadData.twlStatus.locked;
+        cmdTwlUnlock = craneData.ReadData.twlStatus.unlocked;
+        CmdCamIndex1 = craneData.ReadData.cam1Index;
+        CmdCamIndex2 = craneData.ReadData.cam2Index;
+        CmdCamIndex3 = craneData.ReadData.cam3Index;
+        CmdCamIndex4 = craneData.ReadData.cam4Index;
     }
 
     // write to PLC
     void WriteToPLC()
     {
-        craneData.writePosGantry = craneBody.position.z;
-        craneData.writePosTrolley = trolley.position.x;
-        craneData.writePosSpreader = spreader.position.y;
+        // Sensor data to PLC
+
+        craneData.WriteData.aG_Angle = craneBody.eulerAngles.y;
+        craneData.WriteData.aG_BPos_x = rtg_B.position.x;
+        craneData.WriteData.aG_BPos_z = rtg_B.position.z;
+        craneData.WriteData.aG_FPos_x = rtg_F.position.x;
+        craneData.WriteData.aG_FPos_z = rtg_F.position.z;
+        craneData.WriteData.aT_Pos = trolley.localPosition.x;
+        craneData.WriteData.aSpreader_Pos_x = spreader.localPosition.x;
+        craneData.WriteData.aSpreader_Pos_y = spreader.localPosition.y;
+        craneData.WriteData.aSpreader_Pos_z = spreader.localPosition.z;
+        craneData.WriteData.aSpreader_Ang_x = spreader.eulerAngles.x;
+        craneData.WriteData.aSpreader_Ang_y = spreader.eulerAngles.y;
+        craneData.WriteData.aSpreader_Ang_z = spreader.eulerAngles.z;
+        craneData.WriteData.MM_1_Pos = microMotion[0].localPosition.x;
+        craneData.WriteData.MM_2_Pos = microMotion[1].localPosition.z;
+        craneData.WriteData.MM_3_Pos = microMotion[2].localPosition.x;
+        craneData.WriteData.MM_4_Pos = microMotion[3].localPosition.z;
+        //TODO : ALS_1~6
+
+        //TODO : SPSS_Stack1_Lidar_Row1~9 현재 위치 bay의 row별 컨테이너 높이  임시
+        craneData.WriteData.SPSS_Stack1_Lidar_Row1 = GM.stackProfile.arrTier[0, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row2 = GM.stackProfile.arrTier[1, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row3 = GM.stackProfile.arrTier[2, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row4 = GM.stackProfile.arrTier[3, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row5 = GM.stackProfile.arrTier[4, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row6 = GM.stackProfile.arrTier[5, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row7 = GM.stackProfile.arrTier[6, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row8 = GM.stackProfile.arrTier[7, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row9 = GM.stackProfile.arrTier[8, CurrentBay];
+
+        craneData.WriteData.Landed = landedContainer;
+        craneData.WriteData.Rope_Slack = _ropeSlack;
+        craneData.WriteData.Tw_Locked = locked;
+        craneData.WriteData.Tw_Unlocked = !locked;
+        craneData.WriteData.On20ft = cmd20ft;
+        craneData.WriteData.On40ft = cmd40ft;
+        craneData.WriteData.On45ft = cmd45ft;
+
+        craneData.WriteData.Truk_Pos_x = GM.SelectedTruck ? GM.SelectedTruck.transform.position.x : 0f;
+        craneData.WriteData.Truk_Pos_z = GM.SelectedTruck ? GM.SelectedTruck.transform.position.z : 0f;
+        craneData.WriteData.Truk_Angle = GM.SelectedTruck ? GM.SelectedTruck.transform.eulerAngles.y : 0f;
+
+        // TODO : Truck_Status_Trailer_up, down
+
+
+        GM.arrayCraneDataBase[iSelf] = craneData;
     }
 
     public virtual void FindObject()
@@ -318,17 +436,20 @@ public class DrawingCrane : BaseController
         if (speed < 0)
         {
             spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
+
             hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
-            if (locked)
-            {
-                // container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
-            }
+            // if (locked)
+            // {
+            //     // container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
+            // }
+            _ropeSlack = true;
         }
         else
         {
             // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
             // spreader.Translate(Vector3.up * Time.deltaTime * 0);
             hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
+            _ropeSlack = false;
         }
     }
 
@@ -429,6 +550,7 @@ public class DrawingCrane : BaseController
             GameObject containers = GameObject.Find("Containers");
             container.transform.SetParent(containers.transform);
 
+
         }
     }
 
@@ -480,10 +602,10 @@ public class DrawingCrane : BaseController
     }
 
     // Crane selected change
-    void OnCraneSelectedChange()
+    protected virtual void OnCraneSelectedChange()
     {
         isSelectedCrane = GM.SelectedCrane == this;
-        
+
         // 선택된 크레인일 경우
         if (isSelectedCrane)
         {
@@ -508,8 +630,8 @@ public class DrawingCrane : BaseController
     // 분활된 화면에 맞게 카메라 넣기
     public virtual void SetCameraViewport(int viewport, int camIdx)
     {
-        
-        
+
+
     }
 
     void InitLaserPos(float gqp, float ygap)

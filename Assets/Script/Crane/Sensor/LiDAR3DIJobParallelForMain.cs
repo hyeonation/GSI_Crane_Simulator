@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
@@ -29,6 +30,12 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour
     [Header("Save Settings (직접 호출 권장)")]
     public bool saveToFile = false; // 매 프레임 저장은 비권장
     public string fileName;
+    [SerializeField]
+    Transform trolley;
+    [SerializeField]
+    Transform spreader;
+
+    public string NewFolderPath{ get; set; }
 
     // Native 컨테이너들 (Persistent)
     NativeArray<RaycastCommand> _commands;
@@ -257,12 +264,20 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour
             // 매 프레임 저장은 비권장! 필요 시 외부에서 한번만 호출하도록 설계하세요.
             saveToFile = false; // 실수 방지: 한 번만 저장
             // SavePointsToFile(fileName);
-            SavePointsToFileBinary(fileName);
+            // SavePointsToFileBinary(fileName);
+
+            // create folder
+            
+            // string filePath = Path.Combine(NewFolderPath, fileName);
+            string filePath = $"{NewFolderPath}/{fileName}";
+            SavePointsToFile(filePath);
+
+            UnityEngine.Debug.Log($"LiDAR 포인트 클라우드 저장 완료: {filePath}");
         }
 
         stopwatch.Stop();
-        UnityEngine.Debug.Log($"{gameObject.name} 코드 실행 시간: {stopwatch.ElapsedMilliseconds} ms, Time.deltaTime : {Time.deltaTime} s");
-        UnityEngine.Debug.Log($"  - batch/total : {innerloopBatchCount}/{totalSteps}, minCmdPerJob: {minCommandsPerJob}");
+        // UnityEngine.Debug.Log($"{gameObject.name} 코드 실행 시간: {stopwatch.ElapsedMilliseconds} ms, Time.deltaTime : {Time.deltaTime} s");
+        // UnityEngine.Debug.Log($"  - batch/total : {innerloopBatchCount}/{totalSteps}, minCmdPerJob: {minCommandsPerJob}");
     }
 
     // ========================= 유틸 =========================
@@ -275,7 +290,8 @@ public class LiDAR3DIJobParallelForMain : MonoBehaviour
             using var sw = new StreamWriter(path);
             for (int i = 0; i < totalSteps; ++i)
             {
-                var p = _points[i];
+                Vector3 p = _points[i];
+                p -= trolley.position; // 트롤리 기준으로 좌표 변환
                 sw.WriteLine($"{p.x} {p.y} {p.z}");
             }
             UnityEngine.Debug.Log($"Saved {totalSteps} points → {path}");

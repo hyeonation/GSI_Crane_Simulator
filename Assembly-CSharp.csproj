@@ -28,7 +28,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>UNITY_2022_3_36;UNITY_2022_3;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_INITIALIZES_MEMORY_MANAGER_EXPLICITLY;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
+    <DefineConstants>UNITY_2022_3_36;UNITY_2022_3;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;UNITY_2022_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_INITIALIZES_MEMORY_MANAGER_EXPLICITLY;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169;USG0001</NoWarn>
@@ -64,11 +64,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\UI\Test_Button.cs" />
     <Compile Include="Assets\Script\Crane\Drawing\DrawingARMG.cs" />
     <Compile Include="Assets\Script\DataBase\CraneDataBase.cs" />
+    <Compile Include="Assets\Script\DataBase\CranePlcReadData.cs" />
     <Compile Include="Assets\Script\Manager\Managers.cs" />
     <Compile Include="Assets\Script\Truck\TruckDrawing.cs" />
     <Compile Include="Assets\Script\UI\UI_Popup\UI_AlertPopup.cs" />
+    <Compile Include="Assets\Script\Manager\PLCManager.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Landed.cs" />
     <Compile Include="Assets\Script\Manager\ResourceManager.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopQC.cs" />
@@ -80,8 +83,12 @@
     <Compile Include="Assets\Script\UI\UI_EventHandler.cs" />
     <Compile Include="Assets\Script\UI\UI_Popup\UI_Popup.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CablePoint.cs" />
+    <Compile Include="Assets\Script\Scenes\TestScene.cs" />
+    <Compile Include="Assets\Script\Controller\PLCController.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\InspectorQC.cs" />
+    <Compile Include="Assets\Script\Crane\Sensor\LiDAR3DIJobParallelForMainTest.cs" />
     <Compile Include="Assets\Script\Yard\ContainerInfo.cs" />
+    <Compile Include="Assets\Script\Crane\Sensor\CollectLiDARData.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Utils.cs" />
     <Compile Include="Assets\Script\Utils\Define.cs" />
     <Compile Include="Assets\Script\UI\Toast\UI_Toast.cs" />
@@ -96,6 +103,7 @@
     <Compile Include="Assets\Script\Crane\Sensor\LiDAR3D.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\PlatformController.cs" />
     <Compile Include="Assets\Script\GM.cs" />
+    <Compile Include="Assets\Script\Utils\StructConverter.cs" />
     <Compile Include="Assets\Script\Yard\Container.cs" />
     <Compile Include="Assets\Script\Yard\Line.cs" />
     <Compile Include="Assets\Script\Utils\Util.cs" />
@@ -104,6 +112,8 @@
     <Compile Include="Assets\Script\Controller\BaseController.cs" />
     <Compile Include="Assets\FiloCables\Scripts\CableSection.cs" />
     <Compile Include="Assets\Script\UI\UI_Widget\Toggle_Truck.cs" />
+    <Compile Include="Assets\Script\Contents\ContainerSpawner.cs" />
+    <Compile Include="Assets\Script\Controller\CranePLCController.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoop.cs" />
     <Compile Include="Assets\Script\Manager\CoroutineManager.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableBody.cs" />
@@ -112,6 +122,7 @@
     <Compile Include="Assets\Script\Yard\Number.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableDisc.cs" />
     <Compile Include="Assets\Script\UI\Setting\MenuController.cs" />
+    <Compile Include="Assets\Script\Utils\EndianUtils.cs" />
     <Compile Include="Assets\Script\Utils\BillboardUI_SceneViewTracker.cs" />
     <Compile Include="Assets\Script\Controller\CameraController.cs" />
     <Compile Include="Assets\Script\Crane\CommPLC.cs" />
@@ -128,6 +139,7 @@
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopARMG.cs" />
     <Compile Include="Assets\Script\Crane\Sensor\Laser.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Cable.cs" />
+    <Compile Include="Assets\Script\Controller\CraneController.cs" />
     <Compile Include="Assets\Script\Excel\CSVReader.cs" />
     <Compile Include="Assets\Script\UI\Setting\GameMode.cs" />
     <Compile Include="Assets\FiloCables\Scripts\Bodies\CableShape.cs" />
@@ -136,15 +148,18 @@
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopARTG.cs" />
     <Compile Include="Assets\Script\Manager\ObjectManager.cs" />
     <Compile Include="Assets\Script\Yard\ContainerInfoSO.cs" />
+    <Compile Include="Assets\Script\Controller\SpreaderController.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\TensionProbe.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\SPSS_Data\H_20.96193\LiDAR_PointCloud_Lidar0.txt" />
     <None Include="Assets\Packages\EPPlus.6.2.10\lib\netstandard2.1\EPPlus.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Packages\System.Drawing.Common.4.7.3\LICENSE.TXT" />
     <None Include="Assets\Packages\System.Text.Encoding.CodePages.4.7.1\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\SPSS_Data\H_20.96191\LiDAR_PointCloud_Lidar3.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Packages\System.Text.Encoding.CodePages.4.7.1\useSharedDesignerContext.txt" />
     <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll" />
@@ -152,10 +167,12 @@
     <None Include="Assets\Packages\System.Text.Encoding.CodePages.4.7.1\lib\netstandard2.0\System.Text.Encoding.CodePages.xml" />
     <None Include="Assets\Packages\System.Security.Cryptography.Pkcs.4.7.0\lib\netstandard2.1\System.Security.Cryptography.Pkcs.dll" />
     <None Include="Assets\Packages\Microsoft.Extensions.FileProviders.Physical.3.1.30\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Physical.dll" />
+    <None Include="Assets\SPSS_Data\H_20.96191\LiDAR_PointCloud_Lidar0.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.xml" />
     <None Include="Assets\Packages\System.Text.Encoding.CodePages.4.7.1\version.txt" />
     <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\LICENSE.TXT" />
+    <None Include="Assets\SPSS_Data\H_20.96193\LiDAR_PointCloud_Lidar1.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Packages\Microsoft.Extensions.Primitives.3.1.30\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll" />
     <None Include="Assets\Packages\Microsoft.Extensions.FileProviders.Physical.3.1.30\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Physical.xml" />
@@ -182,6 +199,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Packages\System.Security.Cryptography.Cng.4.7.0\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\Packages\S7netplus.0.20.0\lib\netstandard2.0\S7.Net.dll" />
+    <None Include="Assets\Material\LIDARPoint.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.4.7.1\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -196,6 +214,7 @@
     <None Include="Assets\Packages\Microsoft.Extensions.Configuration.FileExtensions.3.1.30\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Packages\Microsoft.IO.RecyclableMemoryStream.2.2.1\lib\netstandard2.1\Microsoft.IO.RecyclableMemoryStream.dll" />
+    <None Include="Assets\SPSS_Data\H_20.96191\LiDAR_PointCloud_Lidar2.txt" />
     <None Include="Assets\Packages\System.Security.Cryptography.Pkcs.4.7.0\lib\netstandard2.1\System.Security.Cryptography.Pkcs.xml" />
     <None Include="Assets\Packages\System.Drawing.Common.4.7.3\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
@@ -210,6 +229,7 @@
     <None Include="Assets\Packages\EPPlus.6.2.10\lib\netstandard2.1\EPPlus.xml" />
     <None Include="Assets\FiloCables\CHANGELOG.txt" />
     <None Include="Assets\Packages\Microsoft.IO.RecyclableMemoryStream.2.2.1\lib\netstandard2.1\Microsoft.IO.RecyclableMemoryStream.xml" />
+    <None Include="Assets\SPSS_Data\H_20.96193\LiDAR_PointCloud_Lidar3.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Packages\System.Text.Json.4.7.2\useSharedDesignerContext.txt" />
     <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\useSharedDesignerContext.txt" />
@@ -223,9 +243,11 @@
     <None Include="Assets\Packages\LiveCharts.0.9.7\readme.txt" />
     <None Include="Assets\Packages\System.Security.Cryptography.Pkcs.4.7.0\version.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\SPSS_Data\H_20.96191\LiDAR_PointCloud_Lidar1.txt" />
     <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\Packages\System.Text.Encodings.Web.4.7.2\lib\netstandard2.1\System.Text.Encodings.Web.xml" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\SPSS_Data\H_20.96193\LiDAR_PointCloud_Lidar2.txt" />
     <None Include="Assets\Packages\System.Security.Cryptography.Pkcs.4.7.0\useSharedDesignerContext.txt" />
     <None Include="Assets\Packages\Microsoft.Extensions.Configuration.Json.3.1.30\lib\netstandard2.0\Microsoft.Extensions.Configuration.Json.xml" />
     <None Include="Assets\Packages\System.Text.Encoding.CodePages.4.7.1\LICENSE.TXT" />

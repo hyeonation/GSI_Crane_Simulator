@@ -15,6 +15,7 @@ public class CommPLC
     public InfoPLC info;
     public Plc plc;
     byte[] writeDB;
+    byte boolByte;
 
     public CommPLC(
         string ip,
@@ -91,18 +92,19 @@ public class CommPLC
         Array.Copy(BitConverter.GetBytes(charData), 0, writeDB, startIdx, lengthChar);
     }
 
-    public static byte WriteBool(bool boolData, int startPoint, byte boolByte)
+    public void WriteBool(bool boolData, int startPoint)
     {
-        byte outByte = boolByte;
-        if (boolData) outByte |= (byte)(1 << startPoint);
-
-        return outByte;
+        if (boolData) boolByte |= (byte)(1 << startPoint);
     }
 
     public void WriteByte(byte boolByte, int startidx)
     {
         writeDB[startidx] = boolByte;
     }
+
+    public void BoolByteInit() => boolByte = 0;
+    public void WriteBoolByte(int startIdx) => writeDB[startIdx] = boolByte;
+
 
     byte[] FloatToByteArr(float floatData)
     {

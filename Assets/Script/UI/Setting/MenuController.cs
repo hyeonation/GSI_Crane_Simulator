@@ -14,10 +14,10 @@ public class MenuController : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI titleText;   // 상단 타이틀 텍스트
-    [SerializeField] private Button btnPLC;   
+    [SerializeField] private Button btnPLC;
     [SerializeField] private TextMeshProUGUI btnPLCText;            // "PLC Mode" 버튼
     [SerializeField] private Dropdown dropdownControlMode;    // Input Bay 드롭다운
-    [SerializeField] private Button btnStart;      
+    [SerializeField] private Button btnStart;
     [SerializeField] private Button btnSetting;           // "Setting" 버튼
     [SerializeField] private Button btnQuit;              // "Quit" 버튼
     [SerializeField] private GameObject settingPanel;       // setting 패널 오브젝트
@@ -38,7 +38,7 @@ public class MenuController : MonoBehaviour
         // if (btnExit) btnExit.GetComponent<Button>().onClick.AddListener(OnQuit);
 
         // load setting data
-        if(GM.isDataLoaded == false)
+        if (GM.isDataLoaded == false)
         {
             settingPanel.GetComponent<SettingsPanelBinder>().LoadFromDisk();
             GM.isDataLoaded = true;
@@ -67,14 +67,14 @@ public class MenuController : MonoBehaviour
             dropdownControlMode.value = enumNames.ToList().IndexOf(Define.ControlMode.Keyboard.ToString());
     }
 
-  
+
 
     public void StartSimulation()
     {
         // save setting data
         // 현재는 Crane Type 변경 시점, control mode 변경 시점에서 저장 2025-12-11
         // settingPanel.GetComponent<SettingsPanelBinder>().SaveToDisk();
-        
+
         // Crane Type에 맞게 씬 전환
         if (GM.CraneType == Define.CraneType.RTGC)
         {
@@ -83,13 +83,16 @@ public class MenuController : MonoBehaviour
 
         else if (GM.CraneType == Define.CraneType.RMGC)
         {
-            
+
             Managers.Scene.LoadScene(Define.SceneType.RMGC);
         }
 
         else if (GM.CraneType == Define.CraneType.QC)
         {
-            Managers.Scene.LoadScene(Define.SceneType.QC);
+
+            // TODO : 임시 Test 씬으로 전환
+            Managers.Scene.LoadScene(Define.SceneType.Test);
+
         }
     }
 

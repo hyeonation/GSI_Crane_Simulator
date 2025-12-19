@@ -26,5 +26,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RTGC.unity
     guid: 0591ac6f8f80b054a88fccf05ddccbec
+  - enabled: 1
+    path: Assets/Scenes/Test.unity
+    guid: 7ee8fc0d162124245b0a0aaad11308dc
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 8c6fccda3890c3443bdd3c5ba2e7371b, type: 2}

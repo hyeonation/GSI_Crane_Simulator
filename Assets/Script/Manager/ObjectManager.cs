@@ -20,30 +20,20 @@ public class ObjectManager
     /// <param name="position">생성 위치</param>
     /// <param name="prefabName">Resources 폴더 내의 프리팹 이름. 비어있으면 타입 이름으로 대체</param>
     /// <returns>생성된 오브젝트의 컨트롤러 컴포넌트</returns>
-    public T Spawn<T>(Vector3 position, int templateID = 0, Transform parent = null, bool polling = false) where T : BaseController
+    public T Spawn<T>(Vector3 position, string PrefabName, Transform parent = null, bool polling = false) where T : BaseController
     {
-        //if (!Managers.Data.AllDataDic.TryGetValue(templateID, out BaseData data))
-        //{
-        //    Debug.LogError($"[ObjectManager] AllDataDic�� �������� �ʴ� templateID�Դϴ�: {templateID}");
-        //    return null;
-        //}
-        //if (data is ISpawnableData spawnable)
-        //{
-        //    // DataManager���� �˸°� �����;���
-        //    GameObject go = Managers.Resource.Instantiate(spawnable.PrefabName, parent, polling);
-        //    if (go == null)
-        //    {
-        //        Debug.LogError($"[ObjectManager] Failed to instantiate prefab: {spawnable.PrefabName}");
-        //        return null;
-        //    }
+        
+        // DataManager���� �˸°� �����;���
+        GameObject go = Managers.Resource.Instantiate(PrefabName, parent, polling);
+        if (go == null)
+        {
+            Debug.LogError($"[ObjectManager] Failed to instantiate prefab: {PrefabName}");
+            return null;
+        }
 
-        //    go.transform.position = position;
-        //    T controller = go.GetOrAddComponent<T>();
-        //    controller.SetInfo(data);
-        //    return controller;
-        //}
-        //Debug.LogError($"[ObjectManager] ������ �� ���� ������ Ÿ���Դϴ�. ID: {templateID}, Type: {data.GetType().Name}");
-        return null;
+        go.transform.position = position;
+        T controller = go.GetOrAddComponent<T>();
+        return controller;
     }
 
     /// <summary>
@@ -54,7 +44,7 @@ public class ObjectManager
     {
         if (obj == null) return;
         Unregister(obj);
-        //Managers.Resource.Destroy(obj.gameObject);
+        Managers.Resource.Destroy(obj.gameObject);
     }
 
     /// <summary>
@@ -98,6 +88,13 @@ public class ObjectManager
             return new HashSet<T>(_allObjects[type].Cast<T>());
         }
         return new HashSet<T>(); // 없는 타입의 그룹일 경우 빈 HashSet 반환
+    }
+
+    public ContainerController SpawnRandomContainer(Vector3 position)
+    {
+        int randomIndex = UnityEngine.Random.Range(0, Define.containerPrefabs.Length);
+        string selectedPrefab = Define.containerPrefabs[randomIndex];
+        return Spawn<ContainerController>(position, selectedPrefab);
     }
 
     /// <summary>

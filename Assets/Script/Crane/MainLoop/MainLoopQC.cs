@@ -35,51 +35,33 @@ public class MainLoopQC : MainLoop
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
         // Read float data
-        GM.arrayCraneDataBase[iCrane].readGantryVelFWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
-        GM.arrayCraneDataBase[iCrane].readGantryVelBWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
-        GM.arrayCraneDataBase[iCrane].readTrolleyVel = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);    
-        GM.arrayCraneDataBase[iCrane].readSpreaderVel = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
+        GM.arrayCraneDataBase[iCrane].ReadData.gantryVelFWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelFWD);
+        GM.arrayCraneDataBase[iCrane].ReadData.gantryVelBWD = CommPLC.ReadFloatData(rawData, floatStartIdxGantryVelBWD);
+        GM.arrayCraneDataBase[iCrane].ReadData.trolleyVel = CommPLC.ReadFloatData(rawData, floatStartIdxTrolleyVel);
+        GM.arrayCraneDataBase[iCrane].ReadData.spreaderVel = CommPLC.ReadFloatData(rawData, floatStartIdxSpreaderVel);
 
         // Read boolean data
-        GM.arrayCraneDataBase[iCrane].readTwlLock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
-        GM.arrayCraneDataBase[iCrane].readTwlUnlock = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
-        GM.arrayCraneDataBase[iCrane].read20ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
-        GM.arrayCraneDataBase[iCrane].read40ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
-        GM.arrayCraneDataBase[iCrane].read45ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
+        GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.locked = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
+        GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+        GM.arrayCraneDataBase[iCrane].ReadData.sprdStatus.on20ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint20Ft);
+        GM.arrayCraneDataBase[iCrane].ReadData.sprdStatus.on40ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint40Ft);
+        GM.arrayCraneDataBase[iCrane].ReadData.sprdStatus.on45ft = CommPLC.ReadBoolData(rawData, boolStartIdxFeet, boolStartPoint45Ft);
     }
 
     public override void WriteUnitydataToPLC(int iCrane)
     {
-        byte boolByte;
 
-        // Mi 
-        boolByte = 0;  // init
-        CommPLC.WriteBool(mi.up, 0, boolByte);
-        CommPLC.WriteBool(mi.down, 1, boolByte);
-        CommPLC.WriteBool(mi.forward, 2, boolByte);
-        CommPLC.WriteBool(mi.backward, 3, boolByte);
-        CommPLC.WriteBool(mi.left, 4, boolByte);
-        CommPLC.WriteBool(mi.right, 5, boolByte);
-        CommPLC.WriteBool(mi.sprdSingle, 6, boolByte);
-        CommPLC.WriteBool(mi.sprdTwin, 7, boolByte);
-
-        GM.plc[iCrane].WriteByte(boolByte, 0);
-
-        boolByte = 0;  // init
-        CommPLC.WriteBool(mi.sprd20Ft, 0, boolByte);
-        CommPLC.WriteBool(mi.sprd40Ft, 1, boolByte);
-        CommPLC.WriteBool(mi.sprd45Ft, 2, boolByte);
-        CommPLC.WriteBool(mi.sprdTwinExpand, 3, boolByte);
-        CommPLC.WriteBool(mi.sprdTwinRetract, 4, boolByte);
-        CommPLC.WriteBool(mi.flipLsLeftUp, 5, boolByte);
-        CommPLC.WriteBool(mi.flipLsLeftDn, 6, boolByte);
-        CommPLC.WriteBool(mi.flipSsLeftUp, 7, boolByte);
-
-
-        GM.plc[iCrane].WriteShort(-1231, 230);
-
-
-        GM.plc[iCrane].WriteByte(boolByte, 1);
+        /// Mi 
+        GM.plc[iCrane].BoolByteInit();      // init boolByte
+        GM.plc[iCrane].WriteBool(mi.up, 0);
+        GM.plc[iCrane].WriteBool(mi.down, 1);
+        GM.plc[iCrane].WriteBool(mi.forward, 2);
+        GM.plc[iCrane].WriteBool(mi.backward, 3);
+        GM.plc[iCrane].WriteBool(mi.left, 4);
+        GM.plc[iCrane].WriteBool(mi.right, 5);
+        GM.plc[iCrane].WriteBool(mi.sprdSingle, 6);
+        GM.plc[iCrane].WriteBool(mi.sprdTwin, 7);
+        GM.plc[iCrane].WriteBoolByte(0); // write at index 0
 
         // int
         GM.plc[iCrane].WriteShort(-123, 216);

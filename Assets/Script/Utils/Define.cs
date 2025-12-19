@@ -22,9 +22,11 @@ public class Define
         Unknown = -1,
         StartMenu,
         RMGC,
-        RTGC,   
-        QC
-        
+        RTGC,
+        QC,
+        Test,
+
+
     }
 
     public enum ControlMode
@@ -33,7 +35,7 @@ public class Define
         Keyboard,
     }
 
-     public enum CraneType
+    public enum CraneType
     {
         RTGC,
         RMGC,
@@ -48,6 +50,12 @@ public class Define
         OnShip
     }
 
+    public enum TWLockState
+    {
+        Locked,
+        Unlocked,
+    }
+
     public const int SCREEN_WIDTH = 1920;
     public const int SCREEN_HEIGHT = 1080;
 
@@ -59,13 +67,13 @@ public class Define
 
     public static readonly Rect[] screenRects = new Rect[]
     {
-        new Rect(0.0f, 0.5f, 0.5f, 0.5f), // Slot 0
-        new Rect(0.5f, 0.5f, 0.5f, 0.5f), // Slot 1
-        new Rect(0.0f, 0.0f, 0.5f, 0.5f), // Slot 2
-        new Rect(0.5f, 0.0f, 0.5f, 0.5f)  // Slot 3
+        new Rect(0.0f, 0.5f, 0.5f, 0.5f), // Cam 1
+        new Rect(0.5f, 0.5f, 0.5f, 0.5f), // Cam 2
+        new Rect(0.0f, 0.0f, 0.5f, 0.5f), // Cam 3
+        new Rect(0.5f, 0.0f, 0.5f, 0.5f)  // Cam 4
     };
 
-    public static Dictionary<int,string> RMGCCameraIndex = new Dictionary<int, string>()
+    public static Dictionary<int, string> RMGCCameraIndex = new Dictionary<int, string>()
     {
         {0, "Gantry1"},
         {1, "Gantry2"},
@@ -81,7 +89,56 @@ public class Define
         {11, "Trolley2"},
         {12, "Spreader_Camera"},
     };
-    
+
+    public static string[] DefaultRMGCCameraNames = new string[]
+    {
+        "Gantry1",
+        "Trolley2",
+        "Gantry2",
+        "Trolley1",
+    };
+
+
+
+    public static float[] Block_8G_Bay_Pos = new float[]
+    {
+        2581.3F,
+        2594.1F,
+        2607.1F,
+        2620.1F,
+        2633.1F,
+        2646.1F,
+        2659.1F,
+        2672.1F,
+        2685.1F,
+        2698.1F,
+        2711.1F,
+        2724.1F,
+        2737.1F,
+        2750.1F,
+        2763.1F,
+        2776.1F,
+        2789.1F,
+        2802.1F,
+        2815.1F,
+        2828.1F,
+        2841.1F,
+        2854.1F,
+        2867.1F,
+        2880.1F,
+
+    };
 
     const int TruckSpeed = 5;
+
+    #region addressable load path
+    public const string AddressablePath_RMGC = "ARMG";
+    public const string AddressablePath_RTGC = "ARTG";
+    public const string AddressablePath_QC = "QC";
+
+    public const string AddressablePath_RMGCTEST = "ARMGTEST";
+
+    public static readonly string[] containerPrefabs = { "Container_G", "Container_DG", "Container_R", "Container_Y", "Container_W" };
+    # endregion
+
 }

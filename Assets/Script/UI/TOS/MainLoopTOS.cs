@@ -20,7 +20,7 @@ public class MainLoopTOS : UI_Base
     public Button btnSelectCraneDown;
     public Button btnSelectBayUp;
     public Button btnSelectBayDown;
-    
+
     public Button btnApply;
     public Button btnReset;
 
@@ -79,7 +79,7 @@ public class MainLoopTOS : UI_Base
         {"LS", 10},
     };
 
-    #region Bindings
+    #region Enums
     public enum Buttons
     {
         Btn_Menu,
@@ -109,7 +109,7 @@ public class MainLoopTOS : UI_Base
         AddListeners();
 
         #region  Bindings
-        
+
         BindButton((Type)typeof(Buttons));
         BindObject((Type)typeof(GameObjects));
 
@@ -230,7 +230,7 @@ public class MainLoopTOS : UI_Base
         options = new List<Dropdown.OptionData>();
         for (int i = 0; i < GM.stackProfile.lengthBay; i++)
         {
-            options.Add(new Dropdown.OptionData($"#{i}"));
+            options.Add(new Dropdown.OptionData($"#{Util.ConvertIndexToBay(i)}"));
         }
 
         // 생성된 옵션을 드롭다운에 설정합니다
@@ -382,13 +382,13 @@ public class MainLoopTOS : UI_Base
                 if (truckController != null)
                 {
                     ContainerController containerController = truckController.gameObject.GetComponentInChildren<ContainerController>();
-                    
+
                     // 컨테이너가 있는 경우
                     if (containerController != null)
                     {
                         string containerName = containerController.gameObject.name;
                         int idxDelete = GM.FindContainerIndex(containerName);     // find idx
-                        
+
                         // delete data
                         GM.stackProfile.listID.RemoveAt(idxDelete);
                         GM.stackProfile.listPos.RemoveAt(idxDelete);
@@ -420,7 +420,7 @@ public class MainLoopTOS : UI_Base
             int iTier = GM.stackProfile.arrTier[iRow, iBay] - 1;   // iTier = Tier - 1
 
             // select truck name
-            string selectTruckName = $"{strIRow}{iBay}";
+            string selectTruckName = $"{strIRow}{Util.ConvertIndexToBay(iBay)}";
 
             // Active 된 트럭 중 selectTruckName과 같은 트럭이 있는지 확인
             // 전체 objest 중 TruckController 그룹에서 작업 중인(활성화된) 트럭을 찾음
@@ -440,14 +440,14 @@ public class MainLoopTOS : UI_Base
                     Vector3 containerPos = truckPos;
                     containerPos.y = GM.containerYPosOnTruck;
 
-                    
+
 
                     // (트럭 + 컨테이너) 생성
 
                     // update Stack Profile data
                     GameObject newTruck = Instantiate(truckPrefab, truckPos, Quaternion.identity);
-                    newTruck.GetComponent<TruckController>().SetInfo(iRow, iBay,strIRow ,targetpos);
-                    newTruck.name = $"{strIRow}{iBay}";
+                    newTruck.GetComponent<TruckController>().SetInfo(iRow, Util.ConvertIndexToBay(iBay), strIRow, targetpos);
+                    newTruck.name = $"{strIRow}{Util.ConvertIndexToBay(iBay)}";
                     newTruck.transform.SetParent(truckParent.transform);
                     // make GameObject
                     GameObject newObject = Container.mkRandomPrefab(containerPrefabs, containerPos);
@@ -460,15 +460,15 @@ public class MainLoopTOS : UI_Base
                     GM.stackProfile.arrTier[iRow, iBay] = 1;
 
                     // newTruck.SetActive(false); // 트럭은 처음에 비활성화 상태로 생성
-                    Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{strIRow}{iBay}").gameObject.SetActive(false);
-                    
+                    Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{strIRow}{Util.ConvertIndexToBay(iBay)}").gameObject.SetActive(false);
+
                 }
 
                 // Container 있으면 삭제
                 else
                 {
                     // (트럭 + 컨테이너) 삭제
-                    GameObject truck = truckParent.transform.Find($"{strIRow}{iBay}").gameObject;
+                    GameObject truck = truckParent.transform.Find($"{strIRow}{Util.ConvertIndexToBay(iBay)}").gameObject;
 
                     //// delete data
 
@@ -492,7 +492,7 @@ public class MainLoopTOS : UI_Base
             else
             {
                 // popup 메세지 출력
-                
+
             }
 
             // update UI
@@ -582,7 +582,7 @@ public class MainLoopTOS : UI_Base
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
             strContainerID = Regex.Replace(containerIDFormat, @"\s", "");       // 공백 제거
             int cnidx = GM.FindContainerIndex(strContainerID);     // find idx
-            
+
             cntrInfoSO = GM.stackProfile.listContainerGO[cnidx].GetComponent<ContainerInfo>().feet;
 
             iRowSource = iRow;
@@ -608,7 +608,7 @@ public class MainLoopTOS : UI_Base
 
         if (btnDestination == null)
             return;
-            
+
         btnDestination.GetComponent<Image>().color = colorActive;    // active
 
         //////////////////////////
@@ -743,7 +743,7 @@ public class MainLoopTOS : UI_Base
             truckController.Job = taskInfo.jobType.ToString();
             truckController.CraneName = taskInfo.strCrane;
             truckController.transform.SetParent(truckParent.transform);
-        } 
+        }
 
 
         // initialization
@@ -756,7 +756,6 @@ public class MainLoopTOS : UI_Base
     // update current stack profile UI
     void UpdateStackProfileUI()
     {
-        //// Deactive
         // init data
         for (int iRow = 0; iRow < GM.stackProfile.lengthRow; iRow++)
         {
@@ -767,7 +766,6 @@ public class MainLoopTOS : UI_Base
         deactiveContainer(containerBlockTr[dictRow["WS"], 0]);
         deactiveContainer(containerBlockTr[dictRow["LS"], 0]);
 
-        //// Enabled
 
         // 현재 bay
         int iBayNow = DropdownInputBay.value;
@@ -818,7 +816,7 @@ public class MainLoopTOS : UI_Base
         if (GM.CmdWithPLC)
         {
             for (int i = 0; i < GM.plc.Length; i++)
-            GM.plc[i].Disconnect();        
+                GM.plc[i].Disconnect();
             // init plc
             GM.plc = new CommPLC[0];
         }
@@ -831,9 +829,10 @@ public class MainLoopTOS : UI_Base
     {
         // convert row
         int iRow = dictRow[strIRow];
+        string strIBay = Util.ConvertIndexToBay(iBay).ToString();
 
         // WS, LS 구분
-        string output = (iRow < GM.stackProfile.lengthRow) ? $"{strIRow}{iBay}-{iTier + 1}" : $"{strIRow}{iBay}";
+        string output = (iRow < GM.stackProfile.lengthRow) ? $"{strIRow}{strIBay}-{iTier + 1}" : $"{strIRow}{strIBay}";
         return output;
     }
 

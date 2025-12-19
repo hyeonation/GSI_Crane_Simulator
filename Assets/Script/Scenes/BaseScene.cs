@@ -13,16 +13,8 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
-        // EventSystem이 씬에 존재하지 않으면 생성
-        EventSystem eventSystem = GameObject.FindFirstObjectByType<EventSystem>();
-        if (eventSystem == null)
-        {
-            GameObject go = new GameObject { name = "@EventSystem" };
-            go.AddComponent<EventSystem>();
-            go.AddComponent<InputSystemUIInputModule>();
-        }
-
-        
+       
+       
     }
 
     public abstract void Clear();

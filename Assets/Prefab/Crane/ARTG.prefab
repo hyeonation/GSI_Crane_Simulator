@@ -7736,6 +7736,8 @@ MonoBehaviour:
   fillManagedListForDebug: 0
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  trolley: {fileID: 0}
+  spreader: {fileID: 0}
   pointCloud: []
 --- !u!1 &4201580681728542088
 GameObject:
@@ -8397,6 +8399,8 @@ MonoBehaviour:
   fillManagedListForDebug: 0
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  trolley: {fileID: 0}
+  spreader: {fileID: 0}
   pointCloud: []
 --- !u!1 &4458090453185874051
 GameObject:
@@ -11185,6 +11189,8 @@ MonoBehaviour:
   locked: 0
   hoistPos: 0
   gantryLength: 0
+  isSelectedCrane: 0
+  listCameraController: []
 --- !u!1 &6248306606674640061
 GameObject:
   m_ObjectHideFlags: 0
@@ -12400,6 +12406,8 @@ MonoBehaviour:
   fillManagedListForDebug: 0
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  trolley: {fileID: 0}
+  spreader: {fileID: 0}
   pointCloud: []
 --- !u!1 &6819918842756860414
 GameObject:
@@ -16200,6 +16208,8 @@ MonoBehaviour:
   fillManagedListForDebug: 0
   saveToFile: 0
   fileName: LiDAR_PointCloud.txt
+  trolley: {fileID: 0}
+  spreader: {fileID: 0}
   pointCloud: []
 --- !u!1 &9043376043476452061
 GameObject:
