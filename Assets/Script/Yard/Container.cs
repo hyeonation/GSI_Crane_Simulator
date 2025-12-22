@@ -21,12 +21,12 @@ public class Container : MonoBehaviour
     void init()
     {
 
-        // Set a specific seed for reproducible results
+        // 테스트를 위해서 랜덤 시드 고정
         Random.InitState(42);
 
         if (GM.CraneType == Define.CraneType.RTGC)
         {
-            GM.stackProfile.lengthRow = 7;
+            GM.stackProfile.lengthRow = 5;
             GM.stackProfile.lengthBay = 16;
             GM.stackProfile.lengthTier = 6;
         }
@@ -47,7 +47,8 @@ public class Container : MonoBehaviour
         }
 
         x_interval = GM.yard_x_interval;
-        y_interval = GM.yard_y_interval;
+        // TODO : yard_y_interval_Test => Test 용도, 나중에 변환 필요
+        y_interval = GM.yard_y_interval_Test;
         z_interval = GM.yard_z_interval;
         num_containers = GM.settingParams.yardContainerNumberEA;
 
@@ -74,78 +75,54 @@ public class Container : MonoBehaviour
     // 초기 시작에서 Container 공중에 뜨는 현상 없애기 위함
     void mkContainers()
     {
-        //// 컨테이너 입력 개수가 Yard 최대 개수 초과했는지 구분
-
-        // container 개수 범위 안일 때
-        if (num_containers < num_containers_max)
-        {
-            // stack_profile idx list 생성
-            List<int> list_sp_idx = new List<int>();
-            for (int i = 0; i < stack_profile_idx_max; i++)
-            {
-                list_sp_idx.Add(i);
-            }
-
-            // stack_profile 만들기
-            int idx, i_row, i_bay, i_tier, tier, random_i;
-
-            // container 개수 입력값에 도달할 때까지
-            // stack_profile 만들기
-            int num_containers_tmp = 0;
-            while (num_containers_tmp < num_containers)
-            {
-                // random idx 추출
-                // Debug.Log(list_sp_idx.Count);
-                random_i = Random.Range(0, list_sp_idx.Count);
-                idx = list_sp_idx[random_i];
-
-                // random row, bay 추출
-                i_row = idx % row_max;
-                i_bay = idx / row_max;
-                tier = GM.stackProfile.arrTier[i_row, i_bay];
-
-                // tier 최대 아니면 추가
-                if (tier < tier_max)
-                {
-                    // list_stack_profile
-                    i_tier = tier;
-                    int[] sp = { i_row, i_bay, i_tier };
-                    GM.stackProfile.listPos.Add(sp);
-
-                    // 컨테이너 개수 추가
-                    GM.stackProfile.arrTier[i_row, i_bay] = ++tier;
-                    num_containers_tmp++;
-                }
-
-                // 최댓값인 idx 삭제
-                else
-                {
-                    list_sp_idx.Remove(idx);
-                }
-            }
-        }
-
-        // container 개수 범위 초과할 때
-        else
-        {
-            // 최대 개수로 초기화
+        if (num_containers > (short)num_containers_max)
             num_containers = (short)num_containers_max;
 
-            // stack_profile, list_stack_profile
-            for (int i_row = 0; i_row < row_max; i_row++)
-            {
-                for (int i_bay = 0; i_bay < bay_max; i_bay++)
-                {
-                    GM.stackProfile.arrTier[i_row, i_bay] = tier_max;
 
-                    for (int i_tier = 1; i_tier <= tier_max; i_tier++)
-                    {
-                        int[] sp = { i_row, i_bay, i_tier };
-                        GM.stackProfile.listPos.Add(sp);
-                    }
-                }
+        List<int> list_sp_idx = new List<int>();
+        for (int i = 0; i < stack_profile_idx_max; i++)
+        {
+            list_sp_idx.Add(i);
+        }
+
+        // stack_profile 만들기
+        int idx, i_row, i_bay, i_tier, tier, random_i;
+
+        // container 개수 입력값에 도달할 때까지
+        // stack_profile 만들기
+        int num_containers_tmp = 0;
+        while (num_containers_tmp < num_containers)
+        {
+            // random idx 추출
+            // Debug.Log(list_sp_idx.Count);
+            random_i = Random.Range(0, list_sp_idx.Count);
+            idx = list_sp_idx[random_i];
+
+            // random row, bay 추출
+            i_row = idx % row_max;
+            i_bay = idx / row_max;
+            tier = GM.stackProfile.arrTier[i_row, i_bay];
+
+            // tier 최대 아니면 추가
+            if (tier < tier_max)
+            {
+                // list_stack_profile
+                i_tier = tier;
+                int[] sp = { i_row, i_bay, i_tier };
+                GM.stackProfile.listPos.Add(sp);
+
+                // 컨테이너 개수 추가
+                GM.stackProfile.arrTier[i_row, i_bay] = ++tier;
+                num_containers_tmp++;
+            }
+
+            // 최댓값인 idx 삭제
+            else
+            {
+                list_sp_idx.Remove(idx);
             }
         }
+
 
         // shuffle containers
         int[] tmp;
@@ -170,8 +147,8 @@ public class Container : MonoBehaviour
     void placementContainer(int[] idx_pos)
     {
         // make GameObject
-        // TDOD : Testprefabs 임시 설정
-        GameObject newObject = mkRandomPrefab(prefabs, Vector3.zero);
+        // TODO : Testprefabs => Test 용도, 나중에 변환 필요
+        GameObject newObject = mkRandomPrefab(Testprefabs, Vector3.zero);
         newObject.transform.SetParent(transform);
 
         // stack position data
@@ -185,7 +162,7 @@ public class Container : MonoBehaviour
                                             i_bay * z_interval);
 
         // 부모인 Containers에 transform 맞춤
-        newObject.transform.position = transform.position;      // 절대 좌표 이동
+        // newObject.transform.position = transform.position;      // 절대 좌표 이동
         newObject.transform.localPosition = spawnPosition;      // 상대 좌표 이동
         newObject.transform.rotation = transform.rotation;
     }

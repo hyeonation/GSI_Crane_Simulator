@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7870290675067762945}
   - component: {fileID: 4966753022298559700}
   - component: {fileID: -6473053229049740699}
-  - component: {fileID: 9039127471160108508}
+  - component: {fileID: 1617404606400319812}
   m_Layer: 0
   m_Name: Container_R Test
   m_TagString: Untagged
@@ -399,14 +399,14 @@ MonoBehaviour:
   feet: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
   strContainerID: 
---- !u!65 &9039127471160108508
+--- !u!65 &1617404606400319812
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6399371892387102891}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f00b0060f7f930a47afa1a9e7d20b844, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -418,5 +418,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.4161878, y: 2.92414, z: 12.23153}
+  m_Size: {x: 2.4161878, y: 2.92414, z: 12.2}
   m_Center: {x: -0.008093417, y: 0.017069697, z: 0.024060726}

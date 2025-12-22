@@ -131,6 +131,8 @@ public class Define
 
     const int TruckSpeed = 5;
 
+    public const float CameraSpeed = 1;
+
     #region addressable load path
     public const string AddressablePath_RMGC = "ARMG";
     public const string AddressablePath_RTGC = "ARTG";

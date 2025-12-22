@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 // Organizing data
 public class MainLoop : MonoBehaviour
 {
-    
+
 
     public KeyCmd keyGantryCmd, keyTrolleyCmd, keySpreaderCmd,
            keyMM0Cmd, keyMM1Cmd, keyMM2Cmd, keyMM3Cmd,
@@ -129,6 +130,10 @@ public class MainLoop : MonoBehaviour
         const int boolStartPointTwlLock = 0;
         const int boolStartPointTwlUnlock = 1;
 
+
+
+
+
         // Read raw data from PLC
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
@@ -145,6 +150,8 @@ public class MainLoop : MonoBehaviour
         // Read boolean data
         GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.locked = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlLock);
         GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked = CommPLC.ReadBoolData(rawData, boolStartIdxTwistLock, boolStartPointTwlUnlock);
+
+
     }
 
     public virtual void WriteUnitydataToPLC(int iCrane)
@@ -155,7 +162,7 @@ public class MainLoop : MonoBehaviour
         GM.plc[iCrane].WriteFloat(testFloat, startIdx);
 
 
-       
+
 
         // byte boolByte = 0;  // init
         // CommPLC.WriteBool(true, 0, boolByte);
@@ -206,9 +213,56 @@ public class MainLoop : MonoBehaviour
             GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.locked = Input.GetKeyDown(keyCodeTwlUnlock) ? false : GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.locked;
             GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked = Input.GetKeyDown(keyCodeTwlLock) ? false : GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked;
             GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked = Input.GetKeyDown(keyCodeTwlUnlock) ? true : GM.arrayCraneDataBase[iCrane].ReadData.twlStatus.unlocked;
+
+            // PLZCameraControl
+            // 1. 카메라 선택 (Select Cam)
+            ToggleSwitch(KeyCode.Keypad5,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.Select_Cam);
+
+            // 2. 좌우 이동 (Pan) - 상호 배타적
+            ToggleMutexSwitch(KeyCode.Keypad4,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanLeft,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanRight);
+
+            ToggleMutexSwitch(KeyCode.Keypad6,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanRight,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanLeft);
+
+            // 3. 상하 이동 (Tilt)
+            ToggleMutexSwitch(KeyCode.Keypad8,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltUp,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltDown);
+
+            ToggleMutexSwitch(KeyCode.Keypad2,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltDown,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltUp);
+
+            // 4. 줌 (Zoom)
+            ToggleMutexSwitch(KeyCode.KeypadPlus,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomIn,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomOut);
+
+            ToggleMutexSwitch(KeyCode.KeypadMinus,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomOut,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomIn);
+
+            // 5. 회전 (Rotation)
+            ToggleMutexSwitch(KeyCode.Keypad9,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CW,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CCW);
+
+            ToggleMutexSwitch(KeyCode.Keypad7,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CCW,
+                ref GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CW);
+
+
+
+
+
+
         }
     }
-    
+
     // GameMode 상관없이 항상 키입력 받는것
     void AlwaysCmdKeyboard()
     {
@@ -246,6 +300,27 @@ public class MainLoop : MonoBehaviour
     void Destroy()
     {
         GM.OnSelectTruck -= initKeyCmd;
+    }
+
+    private void ToggleMutexSwitch(KeyCode key, ref bool targetState, ref bool oppositeState)
+    {
+        if (Input.GetKeyDown(key))
+        {
+            if (oppositeState)
+            {
+                oppositeState = false;
+                return;
+            }
+            targetState = true;
+        }
+    }
+
+    private void ToggleSwitch(KeyCode key, ref bool targetState)
+    {
+        if (Input.GetKeyDown(key))
+        {
+            targetState = !targetState;
+        }
     }
 
 

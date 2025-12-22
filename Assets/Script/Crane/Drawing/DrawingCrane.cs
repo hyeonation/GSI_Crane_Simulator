@@ -4,6 +4,7 @@ using Filo;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.ExpressionGraph;
+using System.Linq;
 
 public class DrawingCrane : BaseController
 {
@@ -71,12 +72,15 @@ public class DrawingCrane : BaseController
 
     public bool isSelectedCrane;
     public List<CameraController> listCameraController = new List<CameraController>();
-    CraneDataBase craneData;
+    public List<CameraController> listPLZCameraController_Girder;
+    public CameraController selectedPLZCamera;
+    protected CraneDataBase craneData;
 
     private float cmdGantryVelFWD, cmdGantryVelBWD, cmdTrolleyVel, cmdSpreaderVel, cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
     private bool cmdTwlLockOld = false, cmdTwlUnlockOld = false;
     protected short cmdCamIndex1, cmdCamIndex2, cmdCamIndex3, cmdCamIndex4;
+    protected bool selected_Cam, panLeft, panRight, tiltUp, tiltDown, cw, ccw, zoomIn, zoomOut;
     private bool _ropeSlack;
 
     #region Camera Index Property
@@ -178,6 +182,7 @@ public class DrawingCrane : BaseController
         Feet_OP();
         TwistLock_OP();
         Landed();
+        PLZCamera_OP();
 
         // write to PLC
         WriteToPLC();
@@ -208,10 +213,19 @@ public class DrawingCrane : BaseController
         CmdCamIndex2 = craneData.ReadData.cam2Index;
         CmdCamIndex3 = craneData.ReadData.cam3Index;
         CmdCamIndex4 = craneData.ReadData.cam4Index;
+        selected_Cam = craneData.ReadData.pTZCamera.Select_Cam;
+        panLeft = craneData.ReadData.pTZCamera.PanLeft;
+        panRight = craneData.ReadData.pTZCamera.PanRight;
+        tiltUp = craneData.ReadData.pTZCamera.TiltUp;
+        tiltDown = craneData.ReadData.pTZCamera.TiltDown;
+        cw = craneData.ReadData.pTZCamera.CW;
+        ccw = craneData.ReadData.pTZCamera.CCW;
+        zoomIn = craneData.ReadData.pTZCamera.ZoomIn;
+        zoomOut = craneData.ReadData.pTZCamera.ZoomOut;
     }
 
     // write to PLC
-    void WriteToPLC()
+    protected virtual void WriteToPLC()
     {
         // Sensor data to PLC
 
@@ -233,16 +247,7 @@ public class DrawingCrane : BaseController
         craneData.WriteData.MM_4_Pos = microMotion[3].localPosition.z;
         //TODO : ALS_1~6
 
-        //TODO : SPSS_Stack1_Lidar_Row1~9 현재 위치 bay의 row별 컨테이너 높이  임시
-        craneData.WriteData.SPSS_Stack1_Lidar_Row1 = GM.stackProfile.arrTier[0, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row2 = GM.stackProfile.arrTier[1, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row3 = GM.stackProfile.arrTier[2, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row4 = GM.stackProfile.arrTier[3, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row5 = GM.stackProfile.arrTier[4, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row6 = GM.stackProfile.arrTier[5, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row7 = GM.stackProfile.arrTier[6, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row8 = GM.stackProfile.arrTier[7, CurrentBay];
-        craneData.WriteData.SPSS_Stack1_Lidar_Row9 = GM.stackProfile.arrTier[8, CurrentBay];
+
 
         craneData.WriteData.Landed = landedContainer;
         craneData.WriteData.Rope_Slack = _ropeSlack;
@@ -356,6 +361,9 @@ public class DrawingCrane : BaseController
         {
             listCameraController.Add(camCtrl);
         }
+
+        // Girder Camera 찾기
+        listPLZCameraController_Girder = listCameraController.Where(cc => cc.gameObject.name.Contains("Girder")).ToList();
     }
 
     public virtual void Gantry_OP()
@@ -631,6 +639,22 @@ public class DrawingCrane : BaseController
     public virtual void SetCameraViewport(int viewport, int camIdx)
     {
 
+
+    }
+
+    protected virtual void PLZCamera_OP()
+    {
+        // 선택된 크레인이 아니면 종료
+        if (!isSelectedCrane) return;
+
+        selectedPLZCamera = selected_Cam ? listPLZCameraController_Girder[0] : listPLZCameraController_Girder[1];
+
+        if (selectedPLZCamera == null) return;
+
+        selectedPLZCamera.SetCameraPan(panLeft, panRight);
+        selectedPLZCamera.SetCameraTilt(tiltUp, tiltDown);
+        selectedPLZCamera.SetCameraCW(cw, ccw);
+        selectedPLZCamera.SetCamerZoom(zoomIn, zoomOut);
 
     }
 

@@ -14,7 +14,7 @@ public class MainLoopARMG : MainLoop
     public override void InitCraneSpecVar()
     {
         GM.readDBNum = 2141;
-        GM.readLength = 44;
+        GM.readLength = 46;
         GM.writeDBNum = 2131;
         GM.writeStartIdx = 0;
         GM.writeLength = 441;
@@ -46,6 +46,17 @@ public class MainLoopARMG : MainLoop
         const int shortStartIdxCam3Index = 40;
         const int shortStartIdxCam4Index = 42;
 
+        const int boolStartIdxPLZCamera = 44;
+        const int boolStartPointPanLeft = 1;
+        const int boolStartPointPanRight = 2;
+        const int boolStartPointTiltUp = 3;
+        const int boolStartPointTiltDown = 4;
+        const int boolStartPointCW = 5;
+        const int boolStartPointCCW = 6;
+        const int boolStartZoomIn = 7;
+
+        const int boolstartIdxZoomOut = 45;
+
         // Read raw data from PLC
         var rawData = GM.plc[iCrane].ReadFromPLC();
 
@@ -72,6 +83,17 @@ public class MainLoopARMG : MainLoop
         GM.arrayCraneDataBase[iCrane].ReadData.cam2Index = CommPLC.ReadShortData(rawData, shortStartIdxCam2Index);
         GM.arrayCraneDataBase[iCrane].ReadData.cam3Index = CommPLC.ReadShortData(rawData, shortStartIdxCam3Index);
         GM.arrayCraneDataBase[iCrane].ReadData.cam4Index = CommPLC.ReadShortData(rawData, shortStartIdxCam4Index);
+
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.Select_Cam = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, 0);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanLeft = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointPanLeft);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.PanRight = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointPanRight);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltUp = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointTiltUp);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.TiltDown = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointTiltDown);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CW = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointCW);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.CCW = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartPointCCW);
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomIn = CommPLC.ReadBoolData(rawData, boolStartIdxPLZCamera, boolStartZoomIn);
+
+        GM.arrayCraneDataBase[iCrane].ReadData.pTZCamera.ZoomOut = CommPLC.ReadBoolData(rawData, boolstartIdxZoomOut, 0);
 
     }
 
@@ -121,7 +143,6 @@ public class MainLoopARMG : MainLoop
         const int startIdx_SPRD_Status = 426;
         const int startIdx_Truk_Pos_x = 430;
         const int startIdx_Truk_Pos_z = 434;
-        const int startIdx_Truk_Angle = 438;
 
         /////////////////////
         /// 

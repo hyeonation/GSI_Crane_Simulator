@@ -94,4 +94,23 @@ public class DrawingARMG : DrawingCrane
 
 
     }
+
+    protected override void WriteToPLC()
+    {
+        base.WriteToPLC();
+
+        //TODO : SPSS_Stack1_Lidar_Row1~9 현재 위치 bay의 row별 컨테이너 높이  임시
+        craneData.WriteData.SPSS_Stack1_Lidar_Row1 = GM.stackProfile.arrTier[0, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row2 = GM.stackProfile.arrTier[1, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row3 = GM.stackProfile.arrTier[2, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row4 = GM.stackProfile.arrTier[3, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row5 = GM.stackProfile.arrTier[4, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row6 = GM.stackProfile.arrTier[5, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row7 = GM.stackProfile.arrTier[6, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row8 = GM.stackProfile.arrTier[7, CurrentBay];
+        craneData.WriteData.SPSS_Stack1_Lidar_Row9 = GM.stackProfile.arrTier[8, CurrentBay];
+
+
+        GM.arrayCraneDataBase[iSelf] = craneData;
+    }
 }

@@ -8,7 +8,7 @@ public static class GM
     // command with PLC
     [HideInInspector] public static string[] nameCranes, nameTrucks;
 
-   
+
 
     [Header("Crane Type")]
     public static Action OnChangeCraneType;
@@ -66,7 +66,7 @@ public static class GM
         get { return _selectedCrane; }
         set
         {
-            if(_selectedCrane != value)
+            if (_selectedCrane != value)
             {
                 _selectedCrane = value;
             }
@@ -96,6 +96,7 @@ public static class GM
 
     public const float yard_x_interval = 2.843f;
     public const float yard_y_interval = 2.83f;
+    public const float yard_y_interval_Test = 2.93f;
     public const float yard_z_interval = 12.96f;
     public const float yardWSxInterval = -17.935f;
     public const float yardLSxInterval = 18.432f;
@@ -104,7 +105,7 @@ public static class GM
     public const float TruckSpawnPosZ = 270f;
 
     // command data
-    public static CraneDataBase[] arrayCraneDataBase; 
+    public static CraneDataBase[] arrayCraneDataBase;
 
     public static float cmdTruckVel;
 
@@ -256,11 +257,11 @@ public class StackProfile
                                 // TOS Container 선택 시 해당 row 최상단 접근 위해
                                 // Yard Overview 그릴 때도 사용 가능
     public List<int[]> listPos = new();     // [i_row, i_bay, i_tier]
-                                    // Container ID로 idx 접근하여 추출
-                                    // Scene에서 row, bay, tier 파악 용이.
-                                    // TOS에서 Bay 별 Container 그리기 용이.
-                                    // 순서는? 무작위? listID와 index만 일치시키면?
-                                    // task
+                                            // Container ID로 idx 접근하여 추출
+                                            // Scene에서 row, bay, tier 파악 용이.
+                                            // TOS에서 Bay 별 Container 그리기 용이.
+                                            // 순서는? 무작위? listID와 index만 일치시키면?
+                                            // task
     public List<GameObject> listContainerGO = new(); // Scene 내 Container GameObject 배열
 
     // Stack profile 초기화
@@ -271,6 +272,6 @@ public class StackProfile
         listContainerGO.Clear();
         arrTier = null;
     }
-        
+
 
 }

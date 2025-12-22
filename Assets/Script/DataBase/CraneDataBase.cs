@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public struct CraneDataBase 
+public struct CraneDataBase
 {
     // // read
     // public float readGantryVelBWD, readGantryVelFWD, readTrolleyVel, readSpreaderVel;
@@ -90,6 +91,23 @@ public struct Read
     public short cam2Index;
     public short cam3Index;
     public short cam4Index;
+
+
+
+    public PTZCamera pTZCamera;
+
+}
+public struct PTZCamera
+{
+    public bool Select_Cam;
+    public bool PanLeft;
+    public bool PanRight;
+    public bool TiltUp;
+    public bool TiltDown;
+    public bool CW;
+    public bool CCW;
+    public bool ZoomIn;
+    public bool ZoomOut;
 }
 
 
