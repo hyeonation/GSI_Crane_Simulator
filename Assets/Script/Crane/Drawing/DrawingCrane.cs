@@ -39,7 +39,7 @@ public class DrawingCrane : BaseController
     [HideInInspector]
     public GameObject[] cables;
     [HideInInspector]
-    public GameObject container;
+    public ContainerController container;
 
     [HideInInspector]
     public bool landedContainer, landedFloor, locked;
@@ -139,6 +139,11 @@ public class DrawingCrane : BaseController
     }
 
     #endregion
+
+    void Awake()
+    {
+
+    }
     void Start()
     {
 
@@ -532,7 +537,7 @@ public class DrawingCrane : BaseController
             // landedContainer == true 시 Container 체결
             if (landedContainer)
             {
-                container = twlLand[0].GetComponent<Landed>().container;   // 컨테이너 정보 가져오기
+                container = twlLand[0].GetComponent<Landed>().containerController;   // 컨테이너 정보 가져오기
                 Debug.Log($"Container: {container.name}");
 
                 container.transform.SetParent(spreader.transform);
@@ -541,6 +546,10 @@ public class DrawingCrane : BaseController
                 containerFixedJoint.connectedBody = spreader.GetComponent<Rigidbody>(); // spreader와 연결
                 containerFixedJoint.breakForce = Mathf.Infinity; // 충분히 큰 값
                 containerFixedJoint.breakTorque = Mathf.Infinity; // 충분히 큰 값
+                containerFixedJoint.enableCollision = false;
+
+                // 소유주 변경
+                container.currentHolder = Define.ContainerHolderType.Spreader;
             }
         }
 
@@ -555,9 +564,44 @@ public class DrawingCrane : BaseController
             // 컨테이너와 spreader 연결 해제
             Destroy(containerFixedJoint);
 
-            GameObject containers = GameObject.Find("Containers");
-            container.transform.SetParent(containers.transform);
 
+
+            if (container == null)
+            {
+                Debug.Log("Null Container");
+                return;
+            }
+
+
+            // 하단에 접촉된 오브젝트 가져오기
+            GameObject contactedUnderObject = container.contactedUnderObject;
+
+            if (contactedUnderObject == null) return;
+
+            //truck일경우 트럭을 부모로 설정
+            if (contactedUnderObject.TryGetComponent<TruckController>(out var truck))
+            {
+                //TODO : 샤시에 안정적으로 올려졌을경우만 트럭으로 넘겨주는 로직추가 필요
+
+                // Truck으로 컨테이너 옮기고 stackprofile갱신
+                container.gameObject.transform.SetParent(truck.transform);
+                container.currentHolder = Define.ContainerHolderType.Truck;
+                GM.stackProfile.RemoveContainer(container.name);
+            }
+            // yard일경우
+            else if (GM.stackProfile.TryGetGridIndexFromCenter(container.transform.position, GM.containersParent.transform.position, out int outRow, out int outBay))
+            {
+                container.gameObject.transform.SetParent(GM.cranesParent.transform);
+                GM.stackProfile.UpdateContainerStack(container.name, outRow, outBay, container.gameObject);
+                container.transform.SetParent(GM.containersParent.transform);
+            }
+            // 아무곳도 아닐경우 
+            else
+            {
+                // 필요한가?
+            }
+
+            container = null;
 
         }
     }
@@ -746,5 +790,10 @@ public class DrawingCrane : BaseController
         {
             SPSS[i].position = SPSSPostion[i];
         }
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        GM.OnSelectCrane -= OnCraneSelectedChange;
     }
 }

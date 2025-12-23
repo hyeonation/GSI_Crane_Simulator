@@ -278,7 +278,7 @@ public class MainLoopARMG : MainLoop
         startIdx += shortLength;    // number
 
         // container code
-        int idxContainerID = GM.FindContainerIndex(strContainerID);
+        int idxContainerID = GM.stackProfile.FindContainerIndex(strContainerID);
         byte[] byteContainerID = GM.stackProfile.listID[idxContainerID];
         for (int i = 0; i < byteContainerID.Length; i++)
             GM.plc[iCrane].WriteByte(byteContainerID[i], startIdx + (charLength * i));

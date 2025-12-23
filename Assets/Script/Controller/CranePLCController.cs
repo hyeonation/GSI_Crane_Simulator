@@ -4,13 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 
 public class CranePLCController : PLCController
 {
     [Header("Debug Info")]
     [SerializeField] private string ipAddress;
     [SerializeField] private string connectionStatus = "Disconnected";
-    public bool isConnected {get; private set; } = false;
+    public bool isConnected { get; private set; } = false;
 
     // 읽기 전용 데이터베이스
     CranePlcReadData redaDataBase;
@@ -30,7 +31,7 @@ public class CranePLCController : PLCController
     private byte[] serializationBufferRead;
     private byte[] serializationBufferWrite;
 
-    private readonly object bufferLock = new object(); 
+    private readonly object bufferLock = new object();
     private CancellationTokenSource cancelSource;
     private const int RECONNECT_DELAY_MS = 3000;
 
@@ -46,7 +47,7 @@ public class CranePLCController : PLCController
         writeBuffer = new byte[wLen];
         serializationBufferRead = new byte[rLen];
         serializationBufferWrite = new byte[wLen];
-        
+
         cachedSendBuffer = new byte[wLen];
 
         redaDataBase = new CranePlcReadData();
@@ -70,7 +71,7 @@ public class CranePLCController : PLCController
         PrintOffset(type, "Status");
         PrintOffset(type, "_statusFlags"); // 변경된 필드명 확인
         PrintOffset(type, "GantryBPosX");
-        
+
         Debug.Log("---------- [PLC Struct Alignment Check] End ----------");
     }
 
@@ -111,7 +112,7 @@ public class CranePLCController : PLCController
             {
                 UpdateStatus($"Connection Failed: {ex.Message}");
                 await Task.Delay(RECONNECT_DELAY_MS, token);
-                continue; 
+                continue;
             }
 
             if (plc.IsConnected)
@@ -119,7 +120,7 @@ public class CranePLCController : PLCController
                 isConnected = true;
                 UpdateStatus("Connected");
                 await DataExchangeLoopAsync(token);
-                
+
                 isConnected = false;
                 plc.Close();
                 UpdateStatus("Disconnected. Retrying...");
@@ -166,7 +167,7 @@ public class CranePLCController : PLCController
             catch (Exception e)
             {
                 Debug.LogWarning($"Communication Error: {e.Message}");
-                break; 
+                break;
             }
         }
     }
@@ -205,7 +206,7 @@ public class CranePLCController : PLCController
             // 비상 정지 로직 등...
         }
     }
-    
+
     public void SetSimulationFeedback(float currentGantryPos)
     {
         lock (bufferLock)
@@ -219,8 +220,10 @@ public class CranePLCController : PLCController
         connectionStatus = status;
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         cancelSource?.Cancel();
         if (plc != null) plc.Close();
     }

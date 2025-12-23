@@ -35,6 +35,7 @@ public class MainLoopTOS : UI_Base
     public GameObject containerBlock;
     [HideInInspector] ContainerInfoSO cntrInfoSO;
     public GameObject[] containerPrefabs;
+    public GameObject[] testContainerPrefab;
 
     public GameObject[] listTaskObj;
 
@@ -123,6 +124,8 @@ public class MainLoopTOS : UI_Base
 
         #endregion 
         // Init
+        GM.stackProfile.OnStackProfileChange -= UpdateStackProfileUI;
+        GM.stackProfile.OnStackProfileChange += UpdateStackProfileUI;
         Reset();
     }
 
@@ -387,7 +390,7 @@ public class MainLoopTOS : UI_Base
                     if (containerController != null)
                     {
                         string containerName = containerController.gameObject.name;
-                        int idxDelete = GM.FindContainerIndex(containerName);     // find idx
+                        int idxDelete = GM.stackProfile.FindContainerIndex(containerName);     // find idx
 
                         // delete data
                         GM.stackProfile.listID.RemoveAt(idxDelete);
@@ -450,7 +453,7 @@ public class MainLoopTOS : UI_Base
                     newTruck.name = $"{strIRow}{Util.ConvertIndexToBay(iBay)}";
                     newTruck.transform.SetParent(truckParent.transform);
                     // make GameObject
-                    GameObject newObject = Container.mkRandomPrefab(containerPrefabs, containerPos);
+                    GameObject newObject = Container.mkRandomPrefab(testContainerPrefab, containerPos);
                     newObject.transform.SetParent(newTruck.transform);
 
                     // update data
@@ -476,7 +479,7 @@ public class MainLoopTOS : UI_Base
                     string containerIDFormat = btn.transform.parent.Find("Tier").GetChild(0).GetComponent<TMP_Text>().text;
                     string strContainerIDTemp = Regex.Replace(containerIDFormat, @"\s", "");
 
-                    int idxDelete = GM.FindContainerIndex(strContainerIDTemp);     // find idx
+                    int idxDelete = GM.stackProfile.FindContainerIndex(strContainerIDTemp);     // find idx
 
                     // delete data
                     GM.stackProfile.listID.RemoveAt(idxDelete);
@@ -581,7 +584,7 @@ public class MainLoopTOS : UI_Base
             // update data
             string containerIDFormat = btnSource.GetChild(0).GetComponent<TMP_Text>().text;
             strContainerID = Regex.Replace(containerIDFormat, @"\s", "");       // 공백 제거
-            int cnidx = GM.FindContainerIndex(strContainerID);     // find idx
+            int cnidx = GM.stackProfile.FindContainerIndex(strContainerID);     // find idx
 
             cntrInfoSO = GM.stackProfile.listContainerGO[cnidx].GetComponent<ContainerInfo>().feet;
 
@@ -706,7 +709,7 @@ public class MainLoopTOS : UI_Base
         {
             // row string
             string _strRow = dictRow.FirstOrDefault(kvp => kvp.Value == srcPos.row).Key;
-            taskInfo.truckName = $"{_strRow}{srcPos.bay}";
+            taskInfo.truckName = $"{_strRow}{Util.ConvertIndexToBay(srcPos.bay)}";
             taskInfo.truckRow = srcPos.row;
             taskInfo.truckBay = srcPos.bay;
 
@@ -714,7 +717,7 @@ public class MainLoopTOS : UI_Base
             if (Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == taskInfo.truckName) is TruckController truckController)
             {
                 truckController.gameObject.SetActive(true);
-                truckController.Job = taskInfo.jobType.ToString();
+                truckController.Job = taskInfo.jobType;
                 truckController.CraneName = taskInfo.strCrane;
             }
         }
@@ -734,13 +737,13 @@ public class MainLoopTOS : UI_Base
             // (트럭) 생성
             GameObject newTruck = Instantiate(truckPrefab, truckPos, Quaternion.identity);
             TruckController truckController = newTruck.GetComponent<TruckController>();
-            taskInfo.truckName = $"{_strRow}{dstPos.bay}";
+            taskInfo.truckName = $"{_strRow}{Util.ConvertIndexToBay(dstPos.bay)}";
             newTruck.name = taskInfo.truckName;
             taskInfo.truckRow = dstPos.row;
             taskInfo.truckBay = dstPos.bay;
 
             truckController.SetInfo(dstPos.row, dstPos.bay, _strRow, targetpos);
-            truckController.Job = taskInfo.jobType.ToString();
+            truckController.Job = taskInfo.jobType;
             truckController.CraneName = taskInfo.strCrane;
             truckController.transform.SetParent(truckParent.transform);
         }
@@ -782,7 +785,7 @@ public class MainLoopTOS : UI_Base
             // bay 같을 때 enabled
             if (iBayNow == iBay)
             {
-                string ctID = GM.ByteArrayToString(GM.stackProfile.listID[i]);
+                string ctID = GM.stackProfile.ByteArrayToString(GM.stackProfile.listID[i]);
                 enabledContainer(containerBlockTr[iRow, iTier], ctID);
             }
         }
@@ -812,15 +815,8 @@ public class MainLoopTOS : UI_Base
 
     void onClickHome()
     {
-        // Disconnect PLCs
-        if (GM.CmdWithPLC)
-        {
-            for (int i = 0; i < GM.plc.Length; i++)
-                GM.plc[i].Disconnect();
-            // init plc
-            GM.plc = new CommPLC[0];
-        }
-        // Go to Main Scene
+        // GM Clear
+        GM.Clear();
         Managers.Scene.LoadScene(Define.SceneType.StartMenu);
     }
 
@@ -860,6 +856,11 @@ public class MainLoopTOS : UI_Base
         // 0 ~12 랜덤 크레인 카메라 선택
         int randomCamera = UnityEngine.Random.Range(0, 13);
         GM.SelectedCrane.SetCameraViewport(randomViewport, randomCamera);
+    }
+
+    void Oestroy()
+    {
+        GM.stackProfile.OnStackProfileChange -= UpdateStackProfileUI;
     }
 }
 

@@ -42,12 +42,20 @@ public class Define
         QC,
     }
 
-    public enum ContainerPosition
+    public enum ContainerHolderType
     {
-        OnYardTruck,
-        OnETruck,
-        OnYard,
-        OnShip
+        None,   // 초기화 상태 또는 아무에게도 잡히지 않은 상태 (필수)
+        Yard,   // 야적장에 적재됨
+        Truck,  // 트럭에 실림
+        Spreader
+    }
+    public enum TruckJobType
+    {
+        None,
+        //반입
+        Import,
+        //반출
+        Export
     }
 
     public enum TWLockState
@@ -144,3 +152,4 @@ public class Define
     # endregion
 
 }
+

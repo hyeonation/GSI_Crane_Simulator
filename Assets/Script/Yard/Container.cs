@@ -16,6 +16,7 @@ public class Container : MonoBehaviour
     int row_max, bay_max, tier_max;
     int num_containers_max, stack_profile_idx_max;
 
+
     void Awake() => init();
 
     void init()
@@ -176,9 +177,10 @@ public class Container : MonoBehaviour
         // Attaching a container ID
         byte[] containerIDByteArr = mkContainerID();                // 랜덤 ID 생성
         GM.stackProfile.listID.Add(containerIDByteArr);                    // ID 저장
-        newObject.name = GM.ByteArrayToString(containerIDByteArr);     // 이름 설정
-        newObject.GetComponent<ContainerController>().strContainerID = GM.ByteArrayToString(containerIDByteArr); // ContainerInfo에 ID 저장
-
+        newObject.name = GM.stackProfile.ByteArrayToString(containerIDByteArr);     // 이름 설정
+        ContainerController cc = newObject.GetComponent<ContainerController>(); // ContainerInfo에 ID 저장
+        cc.strContainerID = GM.stackProfile.ByteArrayToString(containerIDByteArr);
+        cc.currentHolder = Define.ContainerHolderType.Yard;
         GM.stackProfile.listContainerGO.Add(newObject);                             // GameObject 리스트에 추가
 
         return newObject;
@@ -203,4 +205,7 @@ public class Container : MonoBehaviour
 
         return result;
     }
+
+
+
 }

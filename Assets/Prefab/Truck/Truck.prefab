@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6416164363488250734}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Collier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7950468686403471672}
   - component: {fileID: 167082681586586785}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,8 @@ GameObject:
   - component: {fileID: 6019625641254391773}
   - component: {fileID: 7680065206893962768}
   - component: {fileID: 8017793999593321723}
-  m_Layer: 0
+  - component: {fileID: 2189505708362917263}
+  m_Layer: 10
   m_Name: corn1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -205,13 +206,28 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4794046689979297166, guid: 7db3e3a2f04081347ae71e33713334f2, type: 3}
+--- !u!114 &2189505708362917263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620142241873376135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6ecd87bba7a094c814c5a58bda18e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landed_sensor: 0
+  container: {fileID: 0}
+  containerController: {fileID: 0}
 --- !u!1 &729562090579930427
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3120603239245243986}
   - component: {fileID: 4407109481618776658}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +310,7 @@ GameObject:
   - component: {fileID: 2514421907870270212}
   - component: {fileID: 339068204221657817}
   - component: {fileID: 3568547363293194940}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +399,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6178687369686085819}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +436,8 @@ GameObject:
   - component: {fileID: 1785688785915505259}
   - component: {fileID: 1544133076048942125}
   - component: {fileID: 2564644717797110755}
-  m_Layer: 0
+  - component: {fileID: 1957930186599069648}
+  m_Layer: 10
   m_Name: corn4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,13 +524,28 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4794046689979297166, guid: 7db3e3a2f04081347ae71e33713334f2, type: 3}
+--- !u!114 &1957930186599069648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892523647924894891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6ecd87bba7a094c814c5a58bda18e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landed_sensor: 0
+  container: {fileID: 0}
+  containerController: {fileID: 0}
 --- !u!1 &1085419186583716609
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,7 +557,7 @@ GameObject:
   - component: {fileID: 7638656050527774471}
   - component: {fileID: 7741980837444121513}
   - component: {fileID: 7850090806851513849}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheels_back (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -608,7 +640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 750346246030935746}
   - component: {fileID: 6600049284951320090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -681,7 +713,8 @@ GameObject:
   - component: {fileID: 5654536637859470676}
   - component: {fileID: 4272427826286972044}
   - component: {fileID: 5457702806833423063}
-  m_Layer: 0
+  - component: {fileID: 394023703813640772}
+  m_Layer: 10
   m_Name: corn3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -768,13 +801,28 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4794046689979297166, guid: 7db3e3a2f04081347ae71e33713334f2, type: 3}
+--- !u!114 &394023703813640772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2208470798823718840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6ecd87bba7a094c814c5a58bda18e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landed_sensor: 0
+  container: {fileID: 0}
+  containerController: {fileID: 0}
 --- !u!1 &2238452623256981942
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,7 +837,7 @@ GameObject:
   - component: {fileID: 5282988841601245623}
   - component: {fileID: 7067901983154574752}
   - component: {fileID: 759582927624957233}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Truck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -910,6 +958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb3feccf58135f4b83f49ad59c60e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  truckName: 
+  Job: 0
 --- !u!1 &2435980497029348737
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,7 +973,7 @@ GameObject:
   - component: {fileID: 2591793390705436419}
   - component: {fileID: 5698378306112894750}
   - component: {fileID: 6304851526935100188}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 5th_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1078,7 +1128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8486754750392691912}
   - component: {fileID: 6416295975903247563}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1149,7 +1199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5442023136105687766}
   - component: {fileID: 6082955499616332115}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1221,7 +1271,7 @@ GameObject:
   - component: {fileID: 4587810970090718115}
   - component: {fileID: 266649406744752856}
   - component: {fileID: 7400876585081048484}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheels_back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1303,7 +1353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5281655524659175825}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1338,7 +1388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8985277485024954262}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trailer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1373,7 +1423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3573673471586980490}
   - component: {fileID: 3747212519343736137}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1443,7 +1493,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1245251889280196496}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1478,7 +1528,7 @@ GameObject:
   - component: {fileID: 8955448215455326153}
   - component: {fileID: 3682521293334943825}
   - component: {fileID: 4817284249650106757}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_front_left (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1562,7 +1612,7 @@ GameObject:
   - component: {fileID: 1283478962402197110}
   - component: {fileID: 44355099886822208}
   - component: {fileID: 1959380101449422860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_front_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1644,7 +1694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 707066917268158288}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Collier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1684,7 +1734,8 @@ GameObject:
   - component: {fileID: 2658263431865829502}
   - component: {fileID: 4616388031454529012}
   - component: {fileID: 4337765201380158583}
-  m_Layer: 0
+  - component: {fileID: 2307312270530629732}
+  m_Layer: 10
   m_Name: corn2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1771,13 +1822,28 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4794046689979297166, guid: 7db3e3a2f04081347ae71e33713334f2, type: 3}
+--- !u!114 &2307312270530629732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6793499841224266018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6ecd87bba7a094c814c5a58bda18e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landed_sensor: 0
+  container: {fileID: 0}
+  containerController: {fileID: 0}
 --- !u!1 &6991302202007779184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,7 +1855,7 @@ GameObject:
   - component: {fileID: 314423801277833595}
   - component: {fileID: 6449792753950922721}
   - component: {fileID: 4243930865564797629}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_front_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1872,7 +1938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8378758375530075652}
   - component: {fileID: 1941922818070626555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1944,7 +2010,7 @@ GameObject:
   - component: {fileID: 6653008185407078148}
   - component: {fileID: 3272001012378265763}
   - component: {fileID: 4824020727224534607}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheel_front_right (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2027,7 +2093,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1787170960989454847}
   - component: {fileID: 942678469574527195}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FL (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2098,7 +2164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6711163937387355459}
   - component: {fileID: 1117249587978915683}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2170,7 +2236,7 @@ GameObject:
   - component: {fileID: 690736835366485958}
   - component: {fileID: 5496236736215518352}
   - component: {fileID: 5858190303309007146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wheels_back (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2253,7 +2319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6903863706934950843}
   - component: {fileID: 6900116542965742781}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FR (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2368,7 +2434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -8391222552659086748, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_IsActive
@@ -2380,7 +2446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3124156979141641133, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -3124156979141641133, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_IsActive
@@ -2392,7 +2458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 11a7fc5ab61ee2d45802a6f3f53a11c0, type: 3}
       propertyPath: m_IsActive

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UI_TruckControlPopup : UI_Popup
 {
-    
+
     #region Enums
     public enum GameObjects
     {
@@ -45,7 +45,7 @@ public class UI_TruckControlPopup : UI_Popup
         GetButton((int)Buttons.Btn_Close).onClick.AddListener(OnClickClose);
         GetButton((int)Buttons.Btn_TruckDisconnect).onClick.AddListener(OnClickTruckDisconnect);
 
-            
+
         GM.OnUpdateTruckList -= Refresh;
         GM.OnUpdateTruckList += Refresh;
         SetTruckContent();
@@ -101,7 +101,7 @@ public class UI_TruckControlPopup : UI_Popup
             if (_activeTruckItems.TryGetValue(truck, out btnTruck))
             {
                 // UI가 null인 경우(예외적 파괴) 방어 코드
-                if (btnTruck == null) 
+                if (btnTruck == null)
                 {
                     btnTruck = CreateNewTruckItem(truck);
                 }
@@ -117,25 +117,25 @@ public class UI_TruckControlPopup : UI_Popup
         }
     }
 
-    
+
     private Toggle_Truck CreateNewTruckItem(TruckController truck)
     {
         Toggle_Truck btnTruck = Managers.UI.MakeSubItem<Toggle_Truck>(truckContent.transform);
         btnTruck.GetComponent<UnityEngine.UI.Toggle>().group = toggleGroup;
-        
+
         // 딕셔너리에 등록 (캐싱)
         _activeTruckItems.Add(truck, btnTruck);
-        
+
         return btnTruck;
     }
 
-    
+
     private void UpdateTruckItemUI(Toggle_Truck btnTruck, TruckController truck)
     {
         string truckStatus = truck.IsArrived ? "Arrived" : "In Transit";
-        
+
         // 기존 SetInfo 호출
-        btnTruck.SetInfo(truck.Job, truck.CraneName, truck.name, truckStatus);
+        btnTruck.SetInfo(truck.Job.ToString(), truck.CraneName, truck.name, truckStatus);
 
         // Interactable 상태 갱신
         var toggle = btnTruck.GetComponent<UnityEngine.UI.Toggle>();
@@ -167,7 +167,7 @@ public class UI_TruckControlPopup : UI_Popup
         toggleGroup.SetAllTogglesOff();
     }
 
-    
+
 
     void OnDestroy()
     {

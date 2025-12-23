@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1995291544556421763}
   - component: {fileID: 2406234300000104287}
   - component: {fileID: 5182481474217388373}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: _40ft_Low_060
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 3858765753277853304}
   - component: {fileID: 8877866895334163644}
   - component: {fileID: -6203919916406292703}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Container_W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,6 +466,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc650d7c09954641b831bd85b74b31d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  feet: {fileID: 0}
+  color: {r: 0, g: 0, b: 0, a: 0}
+  strContainerID: 
+  currentHolder: 0
+  containerSensor: {fileID: 0}
+  _contactedUnderObject: {fileID: 0}
 --- !u!1 &6480510386247229097
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +483,7 @@ GameObject:
   - component: {fileID: 8572483557942658154}
   - component: {fileID: 2373344717665327440}
   - component: {fileID: 8350551787646413657}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: _40ft_Low_061
   m_TagString: Untagged
   m_Icon: {fileID: 0}

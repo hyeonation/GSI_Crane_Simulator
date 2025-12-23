@@ -148,6 +148,7 @@
     <Compile Include="Assets\FiloCables\Scripts\CableSolver.cs" />
     <Compile Include="Assets\Script\Crane\MainLoop\MainLoopARTG.cs" />
     <Compile Include="Assets\Script\Manager\ObjectManager.cs" />
+    <Compile Include="Assets\Script\Crane\Sensor\ContainerSensor.cs" />
     <Compile Include="Assets\Script\Yard\ContainerInfoSO.cs" />
     <Compile Include="Assets\Script\Controller\SpreaderController.cs" />
     <Compile Include="Assets\FiloCables\SampleScenes\Scripts\TensionProbe.cs" />

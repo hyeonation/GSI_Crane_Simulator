@@ -55,7 +55,7 @@ public class CraneController : BaseController
     float ftOPTargetOld = target40ft;  // default
     int ftOPDir;
 
-    
+
 
     bool landedContainerOld, landedFloorOld;
     private FixedJoint containerFixedJoint;
@@ -66,21 +66,22 @@ public class CraneController : BaseController
 
     private float cmdGantryVelFWD, cmdGantryVelBWD, cmdTrolleyVel, cmdSpreaderVel, cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
     private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
-    private bool cmdTwlLockOld = false, cmdTwlUnlockOld = false;
     protected short cmdCamIndex1, cmdCamIndex2, cmdCamIndex3, cmdCamIndex4;
 
     #region Camera Index Property
-    public short CmdCamIndex1 { 
+    public short CmdCamIndex1
+    {
         get { return cmdCamIndex1; }
 
-        set { 
-            if (cmdCamIndex1 != value) 
-                {
-                    cmdCamIndex1 = value;
-                    SetCameraViewport(0, cmdCamIndex1);
-                } 
-                }
+        set
+        {
+            if (cmdCamIndex1 != value)
+            {
+                cmdCamIndex1 = value;
+                SetCameraViewport(0, cmdCamIndex1);
+            }
         }
+    }
 
     public short CmdCamIndex2
     {
@@ -138,7 +139,7 @@ public class CraneController : BaseController
 
         FindObject();
         InitValues();
-        
+
         // Crane selected change event subscribe
         GM.OnSelectCrane -= OnCraneSelectedChange;
         GM.OnSelectCrane += OnCraneSelectedChange;
@@ -306,7 +307,7 @@ public class CraneController : BaseController
         trolley.Translate(Vector3.forward * Time.deltaTime * vel);
     }
 
-    public virtual void Hoist_OP(bool isTwlLock , float hoistVel)
+    public virtual void Hoist_OP(bool isTwlLock, float hoistVel)
     {
         var force = 0.0065f;
         var speed = hoistVel * 138f;
@@ -458,7 +459,7 @@ public class CraneController : BaseController
     void OnCraneSelectedChange()
     {
         isSelectedCrane = GM.SelectedCrane == this;
-        
+
         // 선택된 크레인일 경우
         if (isSelectedCrane)
         {
