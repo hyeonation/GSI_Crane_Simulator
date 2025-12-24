@@ -61,10 +61,7 @@ public class MainLoopTOS : UI_Base
     iBaySource = defaultIdx,
     iRowDestination = defaultIdx,
     iBayDestination = defaultIdx;
-
     short jobID = 0;
-
-
     readonly Dictionary<string, int> dictRow = new()
     {
         {"A", 0},
@@ -328,7 +325,6 @@ public class MainLoopTOS : UI_Base
         //         break;
         // }
     }
-
     // Dropdown Bay 값 바뀔 때 호출되는 함수
     void OnDdInputBayValueChanged(int index)
     {
@@ -442,9 +438,6 @@ public class MainLoopTOS : UI_Base
                     truckPos.z = GM.TruckSpawnPosZ;
                     Vector3 containerPos = truckPos;
                     containerPos.y = GM.containerYPosOnTruck;
-
-
-
                     // (트럭 + 컨테이너) 생성
 
                     // update Stack Profile data
@@ -466,7 +459,6 @@ public class MainLoopTOS : UI_Base
                     Managers.Object.GetGroup<TruckController>().FirstOrDefault(truck => truck.name == $"{strIRow}{Util.ConvertIndexToBay(iBay)}").gameObject.SetActive(false);
 
                 }
-
                 // Container 있으면 삭제
                 else
                 {
@@ -490,20 +482,16 @@ public class MainLoopTOS : UI_Base
                     Destroy(truck);
                 }
             }
-
             // 작업 중인 트럭이 있는 경우
             else
             {
                 // popup 메세지 출력
 
             }
-
             // update UI
             UpdateStackProfileUI();
         }
     }
-
-
     void OnBtnRow(Transform btn)
     {
         // get data
@@ -742,7 +730,7 @@ public class MainLoopTOS : UI_Base
             taskInfo.truckRow = dstPos.row;
             taskInfo.truckBay = dstPos.bay;
 
-            truckController.SetInfo(dstPos.row, dstPos.bay, _strRow, targetpos);
+            truckController.SetInfo(dstPos.row, Util.ConvertIndexToBay(dstPos.bay), _strRow, targetpos);
             truckController.Job = taskInfo.jobType;
             truckController.CraneName = taskInfo.strCrane;
             truckController.transform.SetParent(truckParent.transform);
@@ -789,9 +777,6 @@ public class MainLoopTOS : UI_Base
                 enabledContainer(containerBlockTr[iRow, iTier], ctID);
             }
         }
-
-        //// Active
-
         // source, destination button
         if (btnSource && (iBaySource == iBayNow)) btnSource.GetComponent<Image>().color = colorActive;
         if (btnDestination && (iBayDestination == iBayNow)) btnDestination.GetComponent<Image>().color = colorActive;
@@ -911,7 +896,6 @@ public class TaskInfo
         Debug.Log($"Job Type : {jobType}");
     }
 }
-
 public struct ContainerPosition
 {
     public short block;    // Block : 8G = 21

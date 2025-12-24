@@ -57,6 +57,13 @@ public class Define
         //반출
         Export
     }
+    public enum TruckStatus
+    {
+        None,
+        Arrived,
+        InTransit,
+        FinishedJob
+    }
 
     public enum TWLockState
     {

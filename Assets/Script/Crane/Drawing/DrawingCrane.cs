@@ -26,14 +26,16 @@ public class DrawingCrane : BaseController
     public float SPSS_y_gap = 22500f;
     public float SPSS_z_gap = 2500f;
 
+
+
     [HideInInspector]
     public string nameSelf;
     [HideInInspector]
     public int iSelf;
     [HideInInspector]
     public Transform craneBody, trolley, spreader, rtg_B, rtg_F;
+    public Rigidbody rbSpreader;
     public Camera camTrolley1, camTrolley2;
-
     [HideInInspector]
     public Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     [HideInInspector]
@@ -175,7 +177,7 @@ public class DrawingCrane : BaseController
         gantryLength = Vector3.Magnitude(rtg_F.position - rtg_B.position);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // read from PLC
         ReadFromPLC();
@@ -314,6 +316,8 @@ public class DrawingCrane : BaseController
 
         // Get Objects From Spreader
         spreader = gameObject.transform.Find("Spreader");
+        rbSpreader = spreader.GetComponent<Rigidbody>();
+
 
         feet[0] = spreader.transform.Find("Spreader_0");
         var twistlock_0 = feet[0].transform.Find("TwistLock");
@@ -382,13 +386,13 @@ public class DrawingCrane : BaseController
         if (cmdGantryVelBWD == cmdGantryVelFWD)
         {
             dPhi = 0;
-            vecDx = cmdGantryVelBWD * Mathf.Cos(theta) * Time.deltaTime;
-            vecDz = cmdGantryVelBWD * Mathf.Sin(theta) * Time.deltaTime;
+            vecDx = cmdGantryVelBWD * Mathf.Cos(theta) * Time.fixedDeltaTime;
+            vecDz = cmdGantryVelBWD * Mathf.Sin(theta) * Time.fixedDeltaTime;
         }
 
         else
         {
-            dPhi = (cmdGantryVelFWD - cmdGantryVelBWD) * Time.deltaTime / gantryLength;
+            dPhi = (cmdGantryVelFWD - cmdGantryVelBWD) * Time.fixedDeltaTime / gantryLength;
 
             vecdLength = gantryLength * Math.Abs((cmdGantryVelFWD + cmdGantryVelBWD) / (2 * (cmdGantryVelFWD - cmdGantryVelBWD)));
             vecDx = vecdLength * (Mathf.Sin(theta) * (1 - Mathf.Cos(dPhi)) - Mathf.Cos(theta) * Mathf.Sin(dPhi));
@@ -405,63 +409,58 @@ public class DrawingCrane : BaseController
 
     void Trolley_OP()
     {
-        trolley.Translate(Vector3.forward * Time.deltaTime * cmdTrolleyVel);
+        trolley.Translate(Vector3.forward * Time.fixedDeltaTime * cmdTrolleyVel);
     }
 
     public virtual void Hoist_OP()
     {
-        var force = 0.0065f;
+        // 흔들림 방지를 위한 보정값
+        float force = 0.011f;
+        // float force = 0.0065f;
         var speed = cmdSpreaderVel * 138f;
 
-        //var con_force = 0.0065f;
-
-        force = (landedContainer && !cmdTwlLock) ? 0 : force;
-        //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
-
+        // force = (landedContainer && !cmdTwlLock) ? 0 : force;
+        // disc를 이용하여 spreader움직임
         for (short j = 0; j < discs.Length; j++)
         {
             if (j == 5 || j == 11)
             {
-                discs[j].Rotate(Vector3.forward * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.forward * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 0 || j == 6)
             {
-                discs[j].Rotate(Vector3.back * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.back * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 7 || j == 9 || j == 12)
             {
-                discs[j].Rotate(Vector3.right * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.right * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 2 || j == 4)
             {
-                discs[j].Rotate(Vector3.left * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.left * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 3 || j == 10)
             {
-                discs[j].Rotate(Vector3.up * speed * Time.deltaTime, Space.Self);
+                discs[j].Rotate(Vector3.up * speed * Time.fixedDeltaTime, Space.Self);
             }
             else if (j == 1 || j == 8)
             {
-                discs[j].Rotate(Vector3.down * speed * Time.deltaTime, Space.Self);
+                discs[j].Rotate(Vector3.down * speed * Time.fixedDeltaTime, Space.Self);
             }
         }
 
+        // 내려갈때 disc로만 이동시 흔들림문제 발생. 안정적이지 않음
         if (speed < 0)
         {
-            spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
-
-            hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
-            // if (locked)
-            // {
-            //     // container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
-            // }
+            // spreader를 직접 이동시켜 흔들림이 보정
+            Vector3 moveStep = Vector3.up * Time.fixedDeltaTime * speed * force;
+            rbSpreader.MovePosition(rbSpreader.position + moveStep);
             _ropeSlack = true;
         }
         else
         {
-            // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
-            // spreader.Translate(Vector3.up * Time.deltaTime * 0);
-            hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
+            // 계속 누르다가 올려올려 하면 살짝 통하고 튕김. 점프?
+
             _ropeSlack = false;
         }
     }
@@ -471,19 +470,19 @@ public class DrawingCrane : BaseController
         // 기계적 범위 안에서 움직이도록 하기 위함
         if ((microMotion[0].localPosition.x <= 0.25f && cmdMM0Vel > 0) || (microMotion[0].localPosition.x >= -0.25f && cmdMM0Vel < 0))
         {
-            microMotion[0].Translate(Vector3.right * Time.deltaTime * cmdMM0Vel);
+            microMotion[0].Translate(Vector3.right * Time.fixedDeltaTime * cmdMM0Vel);
         }
         if ((microMotion[1].localPosition.z <= 0.25f && cmdMM1Vel > 0) || (microMotion[1].localPosition.z >= -0.25f && cmdMM1Vel < 0))
         {
-            microMotion[1].Translate(Vector3.back * Time.deltaTime * cmdMM1Vel);
+            microMotion[1].Translate(Vector3.back * Time.fixedDeltaTime * cmdMM1Vel);
         }
         if ((microMotion[2].localPosition.x <= 0.25f && cmdMM2Vel > 0) || (microMotion[2].localPosition.x >= -0.25f && cmdMM2Vel < 0))
         {
-            microMotion[2].Translate(Vector3.right * Time.deltaTime * cmdMM2Vel);
+            microMotion[2].Translate(Vector3.right * Time.fixedDeltaTime * cmdMM2Vel);
         }
         if ((microMotion[3].localPosition.z <= 0.25f && cmdMM3Vel > 0) || (microMotion[3].localPosition.z >= -0.25f && cmdMM3Vel < 0))
         {
-            microMotion[3].Translate(Vector3.back * Time.deltaTime * cmdMM3Vel);
+            microMotion[3].Translate(Vector3.back * Time.fixedDeltaTime * cmdMM3Vel);
         }
     }
 
@@ -517,7 +516,7 @@ public class DrawingCrane : BaseController
             // shift spreader feet
             for (int i = 0; i < feet.Length; i++)
             {
-                feet[i].Translate(Vector3.forward * ftOPDir * spreaderFeetVel * Time.deltaTime);
+                feet[i].Translate(Vector3.forward * ftOPDir * spreaderFeetVel * Time.fixedDeltaTime);
             }
         }
     }

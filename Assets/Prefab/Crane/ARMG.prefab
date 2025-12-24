@@ -486,8 +486,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &266184860571400008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,8 +1684,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.057937622, y: 0.03, z: 0.057963878}
-  m_Center: {x: 0.0002802657, y: 0.04, z: 0.00000024214387}
+  m_Size: {x: 0.057937622, y: 0.1, z: 0.057963878}
+  m_Center: {x: 0.0002802657, y: 0, z: 0.00000024214387}
 --- !u!1 &801368083488070983
 GameObject:
   m_ObjectHideFlags: 0
@@ -2585,8 +2583,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &1035188408520041476
 GameObject:
   m_ObjectHideFlags: 0
@@ -3549,8 +3545,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &1606945548746265404
 GameObject:
   m_ObjectHideFlags: 0
@@ -3843,6 +3837,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 795186276035712490}
+  - component: {fileID: 173844652824852926}
   m_Layer: 0
   m_Name: SPSS
   m_TagString: Untagged
@@ -3869,6 +3864,18 @@ Transform:
   - {fileID: 3011296513573218913}
   m_Father: {fileID: 1237699319232307319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &173844652824852926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694356980990011028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd6fa099a88e7549a3cf20e027dc98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1756196629906149506
 GameObject:
   m_ObjectHideFlags: 0
@@ -4165,8 +4172,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.057922363, y: 0.03, z: 0.05796449}
-  m_Center: {x: -0.00028603617, y: 0.04, z: 0.000000030733645}
+  m_Size: {x: 0.057922363, y: 0.1, z: 0.05796449}
+  m_Center: {x: -0.00028603617, y: 0, z: 0.000000030733645}
 --- !u!114 &6072255829819522751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4282,8 +4289,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &2001470946057835158
 GameObject:
   m_ObjectHideFlags: 0
@@ -4983,8 +4988,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &2337791080856606331
 GameObject:
   m_ObjectHideFlags: 0
@@ -5346,8 +5349,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &2480051853509091291
 GameObject:
   m_ObjectHideFlags: 0
@@ -5448,8 +5449,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &2480473578133373646
 GameObject:
   m_ObjectHideFlags: 0
@@ -5840,7 +5839,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -6094,6 +6093,9 @@ GameObject:
   - component: {fileID: 2433646674928923631}
   - component: {fileID: 6716930817662969784}
   - component: {fileID: 3899369096656496431}
+  - component: {fileID: 1072669719334878635}
+  - component: {fileID: 3693433957079202800}
+  - component: {fileID: 7256457263364236452}
   m_Layer: 0
   m_Name: SHUTTLE580
   m_TagString: Untagged
@@ -6168,6 +6170,69 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1072669719334878635
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655100657717746090}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3644145, y: 0.717, z: 3.7561872}
+  m_Center: {x: -0.64850366, y: 0.133, z: 1.7570785}
+--- !u!65 &3693433957079202800
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655100657717746090}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3644145, y: 0.717, z: 3.7561872}
+  m_Center: {x: 0.6485037, y: 0.133, z: 1.7570785}
+--- !u!65 &7256457263364236452
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655100657717746090}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6204644, y: 0.717, z: 0.32828045}
+  m_Center: {x: 0.001675427, y: 0.133, z: 0.022382736}
 --- !u!1 &2664188344669102166
 GameObject:
   m_ObjectHideFlags: 0
@@ -7203,8 +7268,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &2854480267725973941
 GameObject:
   m_ObjectHideFlags: 0
@@ -8222,8 +8285,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &3111565580899106479
 GameObject:
   m_ObjectHideFlags: 0
@@ -8318,7 +8379,7 @@ GameObject:
   - component: {fileID: 4215582718527172626}
   - component: {fileID: 7178926696347530136}
   - component: {fileID: 5220101725786990880}
-  - component: {fileID: 2771961194966424416}
+  - component: {fileID: 266700840458942306}
   m_Layer: 0
   m_Name: LidarTest2
   m_TagString: Untagged
@@ -8391,7 +8452,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2771961194966424416
+--- !u!114 &266700840458942306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8405,13 +8466,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lidarFovHorizontal_deg: 90
   lidarFovVertical_deg: 42.4
-  lidarResHorizontal_deg: 0.175
-  lidarResVertical_deg: 0.33
-  lidarMaxDistance_m: 90
-  innerloopBatchCount: 64
-  minCommandsPerJob: 128
-  deferJobCompletion: 1
-  drawPoints: 0
+  lidarResHorizontal_deg: 0.33
+  lidarResVertical_deg: 0.175
+  lidarMaxDistance_m: 100
+  useNoise: 1
+  noiseIntensity: 0.02
+  scanRate: 10
+  saveCoordinate: 1
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 769
+  drawPoints: 1
   saveTrigger: 0
 --- !u!1 &3128244266849131530
 GameObject:
@@ -9765,8 +9830,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05792236, y: 0.03, z: 0.05796449}
-  m_Center: {x: -0.00028603524, y: 0.04, z: 0.00000027846545}
+  m_Size: {x: 0.05792236, y: 0.1, z: 0.05796449}
+  m_Center: {x: -0.00028603524, y: 0, z: 0.00000027846545}
 --- !u!114 &806811326295126181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9899,7 +9964,7 @@ GameObject:
   - component: {fileID: 3256487143616999275}
   - component: {fileID: 2510847915834116943}
   - component: {fileID: 7891923378972474556}
-  - component: {fileID: 2192759090154755767}
+  - component: {fileID: 2040962879250777666}
   m_Layer: 0
   m_Name: LidarTest0
   m_TagString: Untagged
@@ -9972,7 +10037,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2192759090154755767
+--- !u!114 &2040962879250777666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9986,13 +10051,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lidarFovHorizontal_deg: 90
   lidarFovVertical_deg: 42.4
-  lidarResHorizontal_deg: 0.175
-  lidarResVertical_deg: 0.33
-  lidarMaxDistance_m: 90
-  innerloopBatchCount: 64
-  minCommandsPerJob: 128
-  deferJobCompletion: 1
-  drawPoints: 0
+  lidarResHorizontal_deg: 0.33
+  lidarResVertical_deg: 0.175
+  lidarMaxDistance_m: 100
+  useNoise: 1
+  noiseIntensity: 0.02
+  scanRate: 10
+  saveCoordinate: 1
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 769
+  drawPoints: 1
   saveTrigger: 0
 --- !u!1 &3986813320736851650
 GameObject:
@@ -10387,6 +10456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6518279029587056796}
   - component: {fileID: 4111821252219916786}
+  - component: {fileID: 8307465753586408177}
   m_Layer: 0
   m_Name: ARMG
   m_TagString: Untagged
@@ -10438,6 +10508,7 @@ MonoBehaviour:
   spreader: {fileID: 0}
   rtg_B: {fileID: 0}
   rtg_F: {fileID: 0}
+  rbSpreader: {fileID: 0}
   camTrolley1: {fileID: 0}
   camTrolley2: {fileID: 0}
   discs: []
@@ -10459,6 +10530,33 @@ MonoBehaviour:
   listCameraController: []
   listPLZCameraController_Girder: []
   selectedPLZCamera: {fileID: 0}
+--- !u!54 &8307465753586408177
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4066498363134654162}
+  serializedVersion: 4
+  m_Mass: 183560
+  m_Drag: 0.4
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4071940116499166265
 GameObject:
   m_ObjectHideFlags: 0
@@ -10503,7 +10601,7 @@ GameObject:
   - component: {fileID: 7592303720059903852}
   - component: {fileID: 7019959554282666873}
   - component: {fileID: 8160215127079812696}
-  - component: {fileID: 6505899457241258581}
+  - component: {fileID: 4009572500354491233}
   m_Layer: 0
   m_Name: LidarTest1
   m_TagString: Untagged
@@ -10576,7 +10674,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6505899457241258581
+--- !u!114 &4009572500354491233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10590,13 +10688,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lidarFovHorizontal_deg: 90
   lidarFovVertical_deg: 42.4
-  lidarResHorizontal_deg: 0.175
-  lidarResVertical_deg: 0.33
-  lidarMaxDistance_m: 90
-  innerloopBatchCount: 64
-  minCommandsPerJob: 128
-  deferJobCompletion: 1
-  drawPoints: 0
+  lidarResHorizontal_deg: 0.33
+  lidarResVertical_deg: 0.175
+  lidarMaxDistance_m: 100
+  useNoise: 1
+  noiseIntensity: 0.02
+  scanRate: 10
+  saveCoordinate: 1
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 769
+  drawPoints: 1
   saveTrigger: 0
 --- !u!1 &4115073731719044238
 GameObject:
@@ -11035,8 +11137,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &4185454964458207835
 GameObject:
   m_ObjectHideFlags: 0
@@ -11779,8 +11879,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &4633106561124419438
 GameObject:
   m_ObjectHideFlags: 0
@@ -12468,7 +12566,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -13474,7 +13572,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6379770687955030657}
-  - component: {fileID: 4302311429021473471}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -13500,33 +13597,6 @@ Transform:
   - {fileID: 1237699319232307319}
   m_Father: {fileID: 6518279029587056796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4302311429021473471
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5249770533639004419}
-  serializedVersion: 4
-  m_Mass: 183560
-  m_Drag: 0.4
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &5257201683162083605
 GameObject:
   m_ObjectHideFlags: 0
@@ -15772,8 +15842,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &6289395475954807676
 GameObject:
   m_ObjectHideFlags: 0
@@ -15874,8 +15942,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &6325018946644282088
 GameObject:
   m_ObjectHideFlags: 0
@@ -17062,8 +17128,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05793762, y: 0.03, z: 0.0579651}
-  m_Center: {x: 0.00028026477, y: 0.04, z: -0.000000033527613}
+  m_Size: {x: 0.05793762, y: 0.1, z: 0.0579651}
+  m_Center: {x: 0.00028026477, y: 0, z: -0.000000033527613}
 --- !u!114 &1614250875684504407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17305,8 +17371,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &6947288394991443725
 GameObject:
   m_ObjectHideFlags: 0
@@ -17407,8 +17471,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &6976676005984171499
 GameObject:
   m_ObjectHideFlags: 0
@@ -18490,8 +18552,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &7670719729259337409
 GameObject:
   m_ObjectHideFlags: 0
@@ -18679,8 +18739,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.73, y: 1.16, z: 5.7912908}
-  m_Center: {x: 0.016572237, y: -0.7, z: 0.053341866}
+  m_Size: {x: 1.73, y: 0.73350143, z: 5.7912908}
+  m_Center: {x: 0.016572237, y: -1, z: 0.053341866}
 --- !u!1 &7721577202988911201
 GameObject:
   m_ObjectHideFlags: 0
@@ -20082,7 +20142,7 @@ GameObject:
   - component: {fileID: 6318593732645673224}
   - component: {fileID: 781033625393688541}
   - component: {fileID: 7053616341842226461}
-  - component: {fileID: 5314435584066843363}
+  - component: {fileID: 5262583466049492844}
   m_Layer: 0
   m_Name: LidarTest3
   m_TagString: Untagged
@@ -20155,7 +20215,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5314435584066843363
+--- !u!114 &5262583466049492844
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20169,13 +20229,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lidarFovHorizontal_deg: 90
   lidarFovVertical_deg: 42.4
-  lidarResHorizontal_deg: 0.175
-  lidarResVertical_deg: 0.33
-  lidarMaxDistance_m: 90
-  innerloopBatchCount: 64
-  minCommandsPerJob: 128
-  deferJobCompletion: 1
-  drawPoints: 0
+  lidarResHorizontal_deg: 0.33
+  lidarResVertical_deg: 0.175
+  lidarMaxDistance_m: 100
+  useNoise: 1
+  noiseIntensity: 0.02
+  scanRate: 10
+  saveCoordinate: 1
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 769
+  drawPoints: 1
   saveTrigger: 0
 --- !u!1 &8175494227320774376
 GameObject:
@@ -20371,6 +20435,9 @@ GameObject:
   - component: {fileID: 2089555964258428857}
   - component: {fileID: 5521358817897772761}
   - component: {fileID: 764341716989793208}
+  - component: {fileID: 6508490735262630045}
+  - component: {fileID: 6228810411672177714}
+  - component: {fileID: 6940368207432775477}
   m_Layer: 0
   m_Name: SHUTTLE590
   m_TagString: Untagged
@@ -20445,6 +20512,69 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6508490735262630045
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256406661583721473}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.36602092, y: 0.717, z: 3.7975981}
+  m_Center: {x: -0.6224607, y: 0.133, z: -1.7363726}
+--- !u!65 &6228810411672177714
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256406661583721473}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.35292172, y: 0.717, z: 3.79307}
+  m_Center: {x: 0.6275867, y: 0.133, z: -1.7386366}
+--- !u!65 &6940368207432775477
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8256406661583721473}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5952389, y: 0.717, z: 0.37315655}
+  m_Center: {x: -0.0007119179, y: 0.133, z: -0.015676975}
 --- !u!1 &8273917853588729083
 GameObject:
   m_ObjectHideFlags: 0
@@ -20671,8 +20801,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &8301743044812017278
 GameObject:
   m_ObjectHideFlags: 0
@@ -21443,7 +21571,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -21736,8 +21864,6 @@ MonoBehaviour:
   camName: 
   target: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  viewportIdx: -1
-  targetDisplayIdx: -1
 --- !u!1 &8768394834923630863
 GameObject:
   m_ObjectHideFlags: 0
@@ -21839,7 +21965,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

@@ -332,8 +332,8 @@ public class MainLoop : MonoBehaviour
 public class KeyCmd
 {
     float speedABS = 0f;
-    float[] direction = new float[7] { -5f, -1f, -0.1f, 0f, 0.1f, 1f, 5f };
-    int directionIdx = 3; // 0: BWD, 1: Slow BWD, 2: Stop, 3: Slow FWD, 4: FWD
+    float[] direction = new float[7] { -3f, -1f, -0.1f, 0f, 0.1f, 1f, 3f };
+    int directionIdx = 3;
 
     KeyCode keyFWD, keyBWD;
 

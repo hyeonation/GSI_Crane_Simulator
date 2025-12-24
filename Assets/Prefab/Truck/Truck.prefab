@@ -960,6 +960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   truckName: 
   Job: 0
+  _isLanded: 0
 --- !u!1 &2435980497029348737
 GameObject:
   m_ObjectHideFlags: 0

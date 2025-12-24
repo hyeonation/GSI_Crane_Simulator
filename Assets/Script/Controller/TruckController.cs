@@ -16,7 +16,7 @@ public class TruckController : BaseController
     public int Job;  // 작업 종류
     float truckSpeed = 10f;
     public bool isSelected { get; set; } = false;
-
+    public Define.TruckStatus truckStatus;
     private List<Landed> landedSensors;
     string craneName; // 할당된 크레인 이름
     public string CraneName
@@ -31,6 +31,8 @@ public class TruckController : BaseController
         get { return isArrived; }
         set { isArrived = value; }
     }
+    [SerializeField]
+    private bool _isLanded;
 
     public bool IsLanded
     {
@@ -40,9 +42,13 @@ public class TruckController : BaseController
             foreach (var sensor in landedSensors)
             {
                 if (!sensor.landed_sensor)
-                    return false;
+                {
+                    _isLanded = false;
+                    return _isLanded;
+                }
             }
-            return true;
+            _isLanded = true;
+            return _isLanded;
         }
     }
 
@@ -61,13 +67,14 @@ public class TruckController : BaseController
             return null;
         }
     }
-
+    private Rigidbody _rbTruck;
     public override bool Init()
     {
         if (!base.Init())
             return false;
 
         landedSensors = new List<Landed>(GetComponentsInChildren<Landed>());
+        _rbTruck = transform.GetComponent<Rigidbody>();
 
         return true;
     }
@@ -84,14 +91,14 @@ public class TruckController : BaseController
     public void FinishJob()
     {
         // TODO 임시 
-        Destroy(this.gameObject);
+        Managers.Resource.Destroy(this.gameObject);
     }
 
     void FixedUpdate()
     {
 
         // 목표 위치로 이동중일때 작동 
-        if (targetPosition != Vector3.zero)
+        if (targetPosition != Vector3.zero && !isArrived)
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
 
@@ -109,12 +116,17 @@ public class TruckController : BaseController
                 GM.UpdateTruckList();
             }
         }
+        if (IsLanded)
+        {
+
+        }
 
         // truck 미세조정 모드일때 선택된 트럭일경우. UI_TruckControlPopup에서 선택된 트럭을 미세조정
         if (isSelected)
         {
             transform.position += Vector3.forward * GM.cmdTruckVel * Time.fixedDeltaTime;
         }
+
 
 
     }

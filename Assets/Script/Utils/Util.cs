@@ -97,15 +97,12 @@ public static class Util
 
         return (leftDiff <= rightDiff) ? nextIndex - 1 : nextIndex;
     }
-
     public static int ConvertIndexToBay(int index)
     {
         return index * 4 + 2;
     }
-
     public static int ConvertBayToIndex(int bay)
     {
         return (bay - 2) / 4;
     }
-
 }

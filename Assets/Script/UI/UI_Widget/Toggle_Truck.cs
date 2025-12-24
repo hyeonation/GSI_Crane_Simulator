@@ -12,7 +12,7 @@ public class Toggle_Truck : UI_Base
         Txt_CraneName,
         Txt_TruckName,
         Txt_TruckStatus,
-        
+
     }
     #endregion
 

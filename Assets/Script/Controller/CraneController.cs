@@ -22,24 +22,22 @@ public class CraneController : BaseController
     public float SPSS_y_gap = 22500f;
     public float SPSS_z_gap = 2500f;
 
-    [Header("연결(Link)")]
+    [Header("연결(PLC)")]
+    [SerializeField]
     CranePlcReadData readSnapshot;
     private CranePLCController plcController;
 
     [HideInInspector]
     public string nameSelf;
     [HideInInspector]
-    public int iSelf;
-    [HideInInspector]
     public Transform craneBody, trolley, spreader, rtg_B, rtg_F;
+    protected Rigidbody _rbSpreader;
     public Camera camTrolley1, camTrolley2;
 
     [HideInInspector]
     public Transform[] discs, SPSS, microMotion, twlLand, twlLock, laser, feet, cam;
     [HideInInspector]
     public GameObject[] cables;
-    [HideInInspector]
-    public GameObject container;
 
     [HideInInspector]
     public bool landedContainer, landedFloor, locked;
@@ -54,18 +52,12 @@ public class CraneController : BaseController
     float ftOPTarget = target40ft;  // default
     float ftOPTargetOld = target40ft;  // default
     int ftOPDir;
-
-
-
-    bool landedContainerOld, landedFloorOld;
-    private FixedJoint containerFixedJoint;
-
     public bool isSelectedCrane;
     public List<CameraController> listCameraController = new List<CameraController>();
+    public List<CameraController> listPLZCameraController_Girder;
+    public CameraController selectedPLZCamera;
     private SpreaderController spreaderController;
 
-    private float cmdGantryVelFWD, cmdGantryVelBWD, cmdTrolleyVel, cmdSpreaderVel, cmdMM0Vel, cmdMM1Vel, cmdMM2Vel, cmdMM3Vel;
-    private bool cmd20ft, cmd40ft, cmd45ft, cmdTwlLock, cmdTwlUnlock;
     protected short cmdCamIndex1, cmdCamIndex2, cmdCamIndex3, cmdCamIndex4;
 
     #region Camera Index Property
@@ -145,9 +137,6 @@ public class CraneController : BaseController
         GM.OnSelectCrane += OnCraneSelectedChange;
         OnCraneSelectedChange();
 
-        // InitLaserPos(laser_x_gap, laser_y_gap);
-        // InitCameraPos(camera_x_gap, camera_y_gap, camera_z_gap);
-        // InitSPSSPos(SPSS_x_gap, SPSS_y_gap, SPSS_z_gap);
     }
 
     public virtual void InitValues()
@@ -164,7 +153,7 @@ public class CraneController : BaseController
             readSnapshot = plcController.GetReadDataSnapshot();
             Trolley_OP(readSnapshot.sT_Vel);
             Gantry_OP(readSnapshot.sG_Vel_Forward, readSnapshot.sG_Vel_Backward);
-            Hoist_OP(readSnapshot.TL_Lock, readSnapshot.sH_Vel);
+            Hoist_OP(readSnapshot.sH_Vel);
             MicroMotion_OP(readSnapshot.MM_1_Vel, readSnapshot.MM_2_Vel, readSnapshot.MM_3_Vel, readSnapshot.MM_4_Vel);
             Feet_OP(readSnapshot._20FT, readSnapshot._40FT, readSnapshot._45FT);
             TwistLock_OP(readSnapshot.TL_Lock, readSnapshot.TL_Unlock);
@@ -214,7 +203,7 @@ public class CraneController : BaseController
 
         // Get Objects From Spreader
         spreader = gameObject.transform.Find("Spreader");
-
+        _rbSpreader = spreader.GetComponent<Rigidbody>();
         feet[0] = spreader.transform.Find("Spreader_0");
         var twistlock_0 = feet[0].transform.Find("TwistLock");
 
@@ -307,58 +296,55 @@ public class CraneController : BaseController
         trolley.Translate(Vector3.forward * Time.deltaTime * vel);
     }
 
-    public virtual void Hoist_OP(bool isTwlLock, float hoistVel)
+    public virtual void Hoist_OP(float hoistVel)
     {
-        var force = 0.0065f;
+        // 흔들림 방지를 위한 보정값
+        float force = 0.011f;
+        // float force = 0.0065f;
         var speed = hoistVel * 138f;
 
-        //var con_force = 0.0065f;
-
-        force = (landedContainer && !isTwlLock) ? 0 : force;
-        //con_force = (Container_inf[i].GetComponent<Container_landed>().Con_landed[i]) ? 0 : con_force;
-
+        // force = (landedContainer && !cmdTwlLock) ? 0 : force;
+        // disc를 이용하여 spreader움직임
         for (short j = 0; j < discs.Length; j++)
         {
             if (j == 5 || j == 11)
             {
-                discs[j].Rotate(Vector3.forward * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.forward * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 0 || j == 6)
             {
-                discs[j].Rotate(Vector3.back * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.back * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 7 || j == 9 || j == 12)
             {
-                discs[j].Rotate(Vector3.right * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.right * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 2 || j == 4)
             {
-                discs[j].Rotate(Vector3.left * speed * Time.deltaTime, Space.World);
+                discs[j].Rotate(Vector3.left * speed * Time.fixedDeltaTime, Space.World);
             }
             else if (j == 3 || j == 10)
             {
-                discs[j].Rotate(Vector3.up * speed * Time.deltaTime, Space.Self);
+                discs[j].Rotate(Vector3.up * speed * Time.fixedDeltaTime, Space.Self);
             }
             else if (j == 1 || j == 8)
             {
-                discs[j].Rotate(Vector3.down * speed * Time.deltaTime, Space.Self);
+                discs[j].Rotate(Vector3.down * speed * Time.fixedDeltaTime, Space.Self);
             }
         }
 
+        // 내려갈때 disc로만 이동시 흔들림문제 발생. 안정적이지 않음
         if (speed < 0)
         {
-            spreader.Translate(Vector3.up * Time.deltaTime * speed * force);
-            hoistPos = landedContainer ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;    // 착지하면 spreader는 멈추지만 wire length는 계속 증가
-            if (locked)
-            {
-                // container.transform.Translate(Vector3.up * Time.deltaTime * speed * force);
-            }
+            // spreader를 직접 이동시켜 흔들림이 보정
+            Vector3 moveStep = Vector3.up * Time.fixedDeltaTime * speed * force;
+            _rbSpreader.MovePosition(_rbSpreader.position + moveStep);
+            // _ropeSlack = true;
         }
         else
         {
-            // Container_inf[i].transform.Translate(Vector3.up * Time.deltaTime * 0);
-            // spreader.Translate(Vector3.up * Time.deltaTime * 0);
-            hoistPos = (landedContainer) ? hoistPos + (speed / 130) * Time.deltaTime : spreader.position.y;
+            // 계속 누르다가 올려올려 하면 살짝 통하고 튕김. 점프?
+            // _ropeSlack = false;
         }
     }
 
@@ -389,7 +375,6 @@ public class CraneController : BaseController
         else if (_40FT) ftOPTarget = target40ft;
         else if (_45FT) ftOPTarget = target45ft;
 
-        //// init
         // Target position 바뀌었을 때 1회만
         float diff;
         if (ftOPTarget != ftOPTargetOld)
@@ -430,32 +415,48 @@ public class CraneController : BaseController
         landedFloor = spreader.position.y < landedHeight;
 
         // Landed 값 바뀌었을 때
-        if ((landedContainer != landedContainerOld) || (landedFloor != landedFloorOld))
+        if (landedContainer || landedFloor)
         {
-            // update value
-            landedContainerOld = landedContainer;
-            landedFloorOld = landedFloor;
-
-            // 하나라도 landed 되면 cable 늘어짐 효과 주기
-            if (landedContainer || landedFloor)
+            for (int j = 0; j < cables.Length; j++)
             {
-                for (int j = 0; j < cables.Length; j++)
-                {
-                    cables[j].GetComponent<Cable>().loosenessScale = 1;
-                }
-            }
-
-            else
-            {
-                for (int j = 0; j < cables.Length; j++)
-                {
-                    cables[j].GetComponent<Cable>().loosenessScale = 0;
-                }
+                cables[j].GetComponent<Cable>().loosenessScale = 1;
             }
         }
+
+        else
+        {
+            for (int j = 0; j < cables.Length; j++)
+            {
+                cables[j].GetComponent<Cable>().loosenessScale = 0;
+            }
+        }
+
     }
 
     // Crane selected change
+
+    // 분활된 화면에 맞게 카메라 넣기
+    public virtual void SetCameraViewport(int viewport, int camIdx)
+    {
+        // 각 Crane 종류에 맞게 오버라이드 필요
+    }
+
+    protected virtual void PLZCamera_OP()
+    {
+        // 선택된 크레인이 아니면 종료
+        if (!isSelectedCrane) return;
+
+        // selectedPLZCamera = selected_Cam ? listPLZCameraController_Girder[0] : listPLZCameraController_Girder[1];
+
+        if (selectedPLZCamera == null) return;
+
+        // selectedPLZCamera.SetCameraPan(panLeft, panRight);
+        // selectedPLZCamera.SetCameraTilt(tiltUp, tiltDown);
+        // selectedPLZCamera.SetCameraCW(cw, ccw);
+        // selectedPLZCamera.SetCamerZoom(zoomIn, zoomOut);
+
+    }
+
     void OnCraneSelectedChange()
     {
         isSelectedCrane = GM.SelectedCrane == this;
@@ -481,99 +482,10 @@ public class CraneController : BaseController
 
     }
 
-    // 분활된 화면에 맞게 카메라 넣기
-    public virtual void SetCameraViewport(int viewport, int camIdx)
+    protected override void OnDestroy()
     {
-        // 각 Crane 종류에 맞게 오버라이드 필요
+        base.OnDestroy();
+        GM.OnSelectCrane -= OnCraneSelectedChange;
     }
 
-    void InitLaserPos(float gqp, float ygap)
-    {
-        // spreader position
-        Vector3 spreader_pos = spreader.position;
-
-        //x, z preset
-        float SideLaser = 0.43f;
-        float Front_Back_Laser = 5.677f;
-        float gapMultiplier = gqp * 0.001f;
-        float ygapMultiplier = ygap * 0.001f;
-
-        //container size
-        float Container_Z = 12.19f;
-        float Container_X = 2.43f;
-
-        float halfContainerZ = Container_Z * 0.5f;
-        float halfContainerX = Container_X * 0.5f;
-
-        float y_cal = spreader_pos.y + ygapMultiplier;
-
-        Vector3[] LaserPostion = new Vector3[]
-        {
-            new Vector3(spreader_pos.x - SideLaser, y_cal, spreader_pos.z + gapMultiplier + halfContainerZ),
-            new Vector3(spreader_pos.x + halfContainerX + gapMultiplier, y_cal, spreader_pos.z + Front_Back_Laser),
-            new Vector3(spreader_pos.x + halfContainerX + gapMultiplier, y_cal, spreader_pos.z - Front_Back_Laser),
-            new Vector3(spreader_pos.x + SideLaser, y_cal, spreader_pos.z - gapMultiplier - halfContainerZ),
-            new Vector3(spreader_pos.x - halfContainerX - gapMultiplier, y_cal, spreader_pos.z - Front_Back_Laser),
-            new Vector3(spreader_pos.x - halfContainerX - gapMultiplier, y_cal, spreader_pos.z + Front_Back_Laser),
-        };
-
-        // Laser
-        for (short i = 0; i < LaserPostion.Length; i++)
-        {
-            laser[i].position = LaserPostion[i];
-        }
-    }
-
-    void InitCameraPos(float xgap, float ygap, float zgap)
-    {
-        // spreader position
-        Vector3 spreader_pos = spreader.position;
-
-        //X, Y ,Z Presset
-        float z = 11.985f;
-        float x = 2.259f;
-
-        //multiplier 0.001
-        float xgap_cal = xgap * 0.001f;
-        float ygap_cal = ygap * 0.001f;
-        float zgap_cal = zgap * 0.001f;
-
-        Vector3[] cameraPostion = new Vector3[]
-        {
-            new Vector3(spreader_pos.x + x * 0.5f - xgap_cal, spreader_pos.y + ygap_cal , spreader_pos.z + z * 0.5f + zgap_cal),
-            new Vector3(spreader_pos.x + x * 0.5f - xgap_cal, spreader_pos.y + ygap_cal , spreader_pos.z - z * 0.5f - zgap_cal),
-            new Vector3(spreader_pos.x - x * 0.5f + xgap_cal, spreader_pos.y + ygap_cal , spreader_pos.z - z * 0.5f - zgap_cal),
-            new Vector3(spreader_pos.x - x * 0.5f + xgap_cal, spreader_pos.y + ygap_cal , spreader_pos.z + z * 0.5f + zgap_cal),
-        };
-
-        for (short i = 0; cameraPostion.Length > i; i++)
-        {
-            cam[i].position = cameraPostion[i];
-        }
-    }
-
-    void InitSPSSPos(float xgap, float ygap, float zgap)
-    {
-        // Object position
-        Vector3 gantry_pos = craneBody.position;
-        Vector3 trolley_pos = trolley.position;
-
-        //multiplier
-        float xgap_cal = xgap * 0.001f;
-        float ygap_cal = ygap * 0.001f;
-        float zgap_cal = zgap * 0.001f;
-
-        Vector3[] SPSSPostion = new Vector3[]
-        {
-            new Vector3(trolley_pos.x + xgap_cal, ygap_cal, gantry_pos.z + zgap_cal),
-            new Vector3(trolley_pos.x + xgap_cal, ygap_cal, gantry_pos.z),
-            new Vector3(trolley_pos.x - xgap_cal, ygap_cal, gantry_pos.z - zgap_cal),
-            new Vector3(trolley_pos.x - xgap_cal, ygap_cal, gantry_pos.z),
-        };
-
-        for (short i = 0; SPSSPostion.Length > i; i++)
-        {
-            SPSS[i].position = SPSSPostion[i];
-        }
-    }
 }
